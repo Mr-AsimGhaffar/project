@@ -7,26 +7,38 @@ const Commercial = () => {
         <div>
           <div className="w-[100%] flex gap-5 p-1">
             <div className="w-[50%]">
-              <Button className="w-[100%]">Office</Button>
+              <Button className="w-[100%]" variant="outline">
+                Office
+              </Button>
             </div>
             <div className="w-[50%]">
-              <Button className="w-[100%]">Shop</Button>
-            </div>
-          </div>
-          <div className="w-[100%] flex gap-5 p-1">
-            <div className="w-[50%]">
-              <Button className="w-[100%]">Warehouse</Button>
-            </div>
-            <div className="w-[50%]">
-              <Button className="w-[100%]">Factory</Button>
+              <Button className="w-[100%]" variant="outline">
+                Shop
+              </Button>
             </div>
           </div>
           <div className="w-[100%] flex gap-5 p-1">
             <div className="w-[50%]">
-              <Button className="w-[100%]">Building</Button>
+              <Button className="w-[100%]" variant="outline">
+                Warehouse
+              </Button>
             </div>
             <div className="w-[50%]">
-              <Button className="w-[100%]">Other</Button>
+              <Button className="w-[100%]" variant="outline">
+                Factory
+              </Button>
+            </div>
+          </div>
+          <div className="w-[100%] flex gap-5 p-1">
+            <div className="w-[50%]">
+              <Button className="w-[100%]" variant="outline">
+                Building
+              </Button>
+            </div>
+            <div className="w-[50%]">
+              <Button className="w-[100%]" variant="outline">
+                Other
+              </Button>
             </div>
           </div>
         </div>

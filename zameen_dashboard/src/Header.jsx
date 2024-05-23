@@ -1,4 +1,3 @@
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DatePickerWithRange } from "./components/ui/DateRangePicker";
 import { Input } from "@/components/ui/input";
@@ -14,9 +13,10 @@ import { useContext, useEffect, useState } from "react";
 import Paging from "./Paging";
 import { FaAngleDown } from "react-icons/fa";
 import { FaAngleUp } from "react-icons/fa";
-import Home from "./property_type/Home";
-import Plots from "./property_type/Plots";
-import Commercial from "./property_type/Commercial";
+import PriceTag from "./header_Component/priceTag/PriceTag";
+import AreaTag from "./header_Component/areaTag/AreaTag";
+import BedsTag from "./header_Component/beds/BedsTag";
+import PropertyTag from "./header_Component/property_type/PropertyTag";
 
 const Header = () => {
   const [data, setData] = useState([]);
@@ -30,7 +30,7 @@ const Header = () => {
   const fetchCityData = async (city) => {
     try {
       const response = await fetch(
-        `https://ecdb-2407-d000-1a-5017-bcd9-edfc-c27d-37c8.ngrok-free.app/property/${city}?page_size=6&page_number=1&sort_by=id&sort_order=ASC`,
+        `https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property/${city}?page_size=6&page_number=1&sort_by=id&sort_order=ASC`,
         {
           method: "get",
           headers: new Headers({
@@ -50,7 +50,7 @@ const Header = () => {
   const searchCityData = async (city, query, page_number = 1) => {
     try {
       const response = await fetch(
-        `https://ecdb-2407-d000-1a-5017-bcd9-edfc-c27d-37c8.ngrok-free.app/property/search/${city}?query=${query}&page_size=6&page_number=${page_number}&sort_by=id&sort_order=ASC`,
+        `https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property/search/${city}?query=${query}&page_size=6&page_number=${page_number}&sort_by=id&sort_order=ASC`,
         {
           method: "get",
           headers: new Headers({
@@ -77,7 +77,7 @@ const Header = () => {
     async function fetchData() {
       try {
         const response = await fetch(
-          "https://ecdb-2407-d000-1a-5017-bcd9-edfc-c27d-37c8.ngrok-free.app/property/available-cities",
+          "https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property/available-cities",
           {
             method: "get",
             headers: new Headers({
@@ -114,6 +114,7 @@ const Header = () => {
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+
   return (
     <div>
       <div className="flex justify-between">
@@ -153,71 +154,31 @@ const Header = () => {
             </div>
             <div>
               <div>
-                {isVisible && (
+                <div
+                  className={`transition-all duration-500 ${
+                    isVisible
+                      ? "max-h-96 opacity-100"
+                      : "max-h-0 opacity-0 overflow-hidden"
+                  }`}
+                >
                   <div className="flex justify-between mt-4 rounded gap-5">
                     <div className="w-[25%]">
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="PROPERTY TYPE" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <Router>
-                            <div>
-                              <div className="flex justify-between items-center p-5">
-                                <Link to="/">
-                                  <h1 className="cursor-pointer">Home</h1>
-                                </Link>
-                                <Link to="/plots">
-                                  <h1 className="cursor-pointer">Plots</h1>
-                                </Link>
-                                <Link to="/commercial">
-                                  <h1 className="cursor-pointer">Commercial</h1>
-                                </Link>
-                              </div>
-                              <div>
-                                <Routes>
-                                  <Route path="/" element={<Home />} />
-                                  <Route path="/plots" element={<Plots />} />
-                                  <Route
-                                    path="/commercial"
-                                    element={<Commercial />}
-                                  />
-                                </Routes>
-                              </div>
-                            </div>
-                          </Router>
-                        </SelectContent>
-                      </Select>
+                      <PropertyTag />
                     </div>
                     <div className="w-[25%]">
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="PRICE" />
-                        </SelectTrigger>
-                        <SelectContent></SelectContent>
-                      </Select>
+                      <PriceTag />
                     </div>
                     <div className="w-[25%]">
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="AREA" />
-                        </SelectTrigger>
-                        <SelectContent></SelectContent>
-                      </Select>
+                      <AreaTag />
                     </div>
                     <div className="w-[25%]">
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="BEDS" />
-                        </SelectTrigger>
-                        <SelectContent></SelectContent>
-                      </Select>
+                      <BedsTag />
                     </div>
                   </div>
-                )}
+                </div>
                 <Button
                   onClick={toggleVisibility}
-                  className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-black rounded text-xs"
+                  className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-black text-xs"
                 >
                   {isVisible ? (
                     <FaAngleDown className="mr-2" />
