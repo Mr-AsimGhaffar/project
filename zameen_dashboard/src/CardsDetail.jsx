@@ -4,40 +4,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { LuDollarSign } from "react-icons/lu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { appContext } from "./Context";
+import { formatPrice } from "./utlils/formatPrice";
 
 const CardsDetail = () => {
   const [loading, setLoading] = useState(false);
   const simpleContext = useContext(appContext);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          // "https://f0ef-2407-d000-1a-5017-6955-9fff-93d2-e364.ngrok-free.app/property",
-          {
-            method: "get",
-            headers: new Headers({
-              "ngrok-skip-browser-warning": "69420",
-            }),
-          }
-        );
-        const jsonData = await response.json();
-        simpleContext.setAppState((s) => ({
-          ...s,
-          cardData: jsonData.data.properties,
-        }));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
   return (
     <main>
       <div className="grid grid-cols-3 gap-6 py-5">
@@ -48,6 +23,11 @@ const CardsDetail = () => {
               <Skeleton className="h-4 w-[250px]" />
               <Skeleton className="h-4 w-[200px]" />
             </div>
+          </div>
+        ) : simpleContext.appState.cardData.length === 0 &&
+          simpleContext.appState.isApiCall ? (
+          <div className="col-span-3 text-center py-10 text-2xl font-bold">
+            No result found. Try again
           </div>
         ) : (
           simpleContext.appState.cardData.map((item) => (
@@ -62,7 +42,7 @@ const CardsDetail = () => {
                   </div>
                   <div className="py-2">
                     <CardDescription className="text-2xl font-bold">
-                      {item.price}
+                      {formatPrice(item.price)}
                     </CardDescription>
                     <CardDescription>{item.desc}</CardDescription>
                   </div>

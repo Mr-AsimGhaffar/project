@@ -68,6 +68,7 @@ const Header = () => {
           total_count: Number(jsonData.data.total_count),
           page_number,
         },
+        isApiCall: true,
       }));
       setTotalPages(
         Math.ceil(
@@ -114,7 +115,8 @@ const Header = () => {
     const city = selectedCity;
     searchCityData(city, searchTerm, page_number);
   };
-  const toggleVisibility = () => {
+  const toggleVisibility = (e) => {
+    e.preventDefault();
     setIsVisible(!isVisible);
   };
   return (
@@ -144,6 +146,7 @@ const Header = () => {
                 <Input
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  onClick={isVisible || toggleVisibility}
                   placeholder="Location"
                 />
               </div>

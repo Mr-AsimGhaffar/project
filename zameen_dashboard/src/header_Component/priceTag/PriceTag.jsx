@@ -155,97 +155,97 @@ const PriceTag = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("8,000,000")}
                 >
                   8,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("10,000,000")}
                 >
                   10,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("12,500,000")}
                 >
                   12,500,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("15,000,000")}
                 >
                   15,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("17,500,000")}
                 >
                   17,500,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("20,000,000")}
                 >
                   20,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("25,000,000")}
                 >
                   25,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("30,000,000")}
                 >
                   30,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("40,000,000")}
                 >
                   40,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("50,000,000")}
                 >
                   50,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("75,000,000")}
                 >
                   75,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("100,000,000")}
                 >
                   100,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("200,000,000")}
                 >
                   200,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("500,000,000")}
                 >
                   500,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMin("1,000,000,000")}
                 >
                   1,000,000,000
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMax("6,500,000")}
+                  onClick={() => handleSelectMax("5,000,000,000")}
                 >
                   5,000,000,000
                 </Button>

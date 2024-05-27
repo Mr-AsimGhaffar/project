@@ -14,6 +14,7 @@ function App() {
     selectedAreaMax: "",
     selectBeds: "",
     selectedSubProperty: "",
+    isApiCall: false,
   });
   return (
     <>

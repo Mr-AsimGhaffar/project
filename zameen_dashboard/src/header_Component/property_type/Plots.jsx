@@ -10,7 +10,7 @@ const Plots = ({ onSubPropertySelect }) => {
           <Button
             className="w-[100%]"
             variant="outline"
-            onClick={() => onSubPropertySelect("Residential Plots")}
+            onClick={() => onSubPropertySelect("Residential Plot")}
           >
             Residential Plots
           </Button>
@@ -19,7 +19,7 @@ const Plots = ({ onSubPropertySelect }) => {
           <Button
             className="w-[100%]"
             variant="outline"
-            onClick={() => onSubPropertySelect("Commercial Plots")}
+            onClick={() => onSubPropertySelect("Commercial Plot")}
           >
             Commercial Plots
           </Button>
