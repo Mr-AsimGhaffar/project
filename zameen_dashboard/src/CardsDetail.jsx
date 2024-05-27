@@ -17,7 +17,7 @@ const CardsDetail = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property",
+          // "https://f0ef-2407-d000-1a-5017-6955-9fff-93d2-e364.ngrok-free.app/property",
           {
             method: "get",
             headers: new Headers({

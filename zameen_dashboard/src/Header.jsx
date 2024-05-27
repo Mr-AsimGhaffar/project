@@ -27,30 +27,32 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState(false);
   const simpleContext = useContext(appContext);
 
-  const fetchCityData = async (city) => {
-    try {
-      const response = await fetch(
-        `https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property/${city}?page_size=6&page_number=1&sort_by=id&sort_order=ASC`,
-        {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "69420",
-          }),
-        }
-      );
-      const jsonData = await response.json();
-      simpleContext.setAppState((s) => ({
-        ...s,
-        cardData: jsonData.data.properties,
-      }));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const searchCityData = async (city, query, page_number = 1) => {
     try {
+      const price_min = simpleContext.appState.selectedAmountMin?.replace(
+        /,/g,
+        ""
+      );
+      const price_max = simpleContext.appState.selectedAmountMax?.replace(
+        /,/g,
+        ""
+      );
+      const area_min = simpleContext.appState.selectedAreaMin;
+      const area_max = simpleContext.appState.selectedAreaMax;
+      const bedrooms = simpleContext.appState.selectBeds.trim();
+      const property_type = simpleContext.appState.selectedSubProperty;
       const response = await fetch(
-        `https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property/search/${city}?query=${query}&page_size=6&page_number=${page_number}&sort_by=id&sort_order=ASC`,
+        `${API_URL}/property/search/${city ?? ""}?query=${
+          query ?? ""
+        }&page_size=10&page_number=${
+          page_number ?? ""
+        }&sort_by=id&sort_order=ASC&property_type=${property_type}&area_min=${
+          area_min ?? ""
+        }&area_max=${area_max ?? ""}&price_min=${price_min ?? ""}&price_max=${
+          price_max ?? ""
+        }&bedrooms=${bedrooms ?? ""}`,
         {
           method: "get",
           headers: new Headers({
@@ -67,7 +69,11 @@ const Header = () => {
           page_number,
         },
       }));
-      setTotalPages(Number(jsonData.data.total_count));
+      setTotalPages(
+        Math.ceil(
+          Number(jsonData.data.total_count) / Number(jsonData.data.page_size)
+        )
+      );
       setCurrentPage(page_number);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -76,15 +82,12 @@ const Header = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(
-          "https://6cb8-2407-d000-1a-5017-1522-91ce-b14-71a.ngrok-free.app/property/available-cities",
-          {
-            method: "get",
-            headers: new Headers({
-              "ngrok-skip-browser-warning": "69420",
-            }),
-          }
-        );
+        const response = await fetch(`${API_URL}/property/available-cities`, {
+          method: "get",
+          headers: new Headers({
+            "ngrok-skip-browser-warning": "69420",
+          }),
+        });
         const jsonData = await response.json();
         setData(jsonData.data);
       } catch (error) {
@@ -92,7 +95,7 @@ const Header = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [API_URL]);
 
   const handleSearch = () => {
     if (searchTerm) {
@@ -114,7 +117,6 @@ const Header = () => {
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
-
   return (
     <div>
       <div className="flex justify-between">
@@ -125,7 +127,7 @@ const Header = () => {
           <form onSubmit={handleSubmit}>
             <div className="flex items-center w-[100%] gap-5">
               <div className="w-[20%] text-4xl font-bold">
-                <Select onValueChange={fetchCityData}>
+                <Select onValueChange={setSelectedCity}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select City" />
                   </SelectTrigger>
@@ -142,7 +144,7 @@ const Header = () => {
                 <Input
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search"
+                  placeholder="Location"
                 />
               </div>
               <div>

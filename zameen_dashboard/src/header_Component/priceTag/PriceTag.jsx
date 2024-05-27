@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,10 +7,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { appContext } from "@/Context";
 
 const PriceTag = () => {
   const [selectedAmountMax, setSelectedAmountMax] = useState(null);
   const [selectedAmountMin, setSelectedAmountMin] = useState(null);
+  const simpleContext = useContext(appContext);
+  useEffect(() => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMax: selectedAmountMax,
+    }));
+  }, [selectedAmountMax]);
+  useEffect(() => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMin: selectedAmountMin,
+    }));
+  }, [selectedAmountMin]);
 
   const handleSelectMax = (amount) => {
     setSelectedAmountMax(amount);
@@ -48,7 +62,6 @@ const PriceTag = () => {
       </svg>
     );
   }
-  console.log(selectedAmountMin);
   return (
     <div>
       <Select>
@@ -140,13 +153,108 @@ const PriceTag = () => {
                 >
                   6,500,000
                 </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  8,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  10,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  12,500,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  15,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  17,500,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  20,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  25,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  30,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  40,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  50,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  75,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  100,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  200,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  500,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  1,000,000,000
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleSelectMax("6,500,000")}
+                >
+                  5,000,000,000
+                </Button>
               </div>
             </div>
             <div className="flex justify-between mt-4">
               <Button variant="ghost" onClick={handleReset}>
                 Reset
               </Button>
-              <Button variant="ghost">Close</Button>
             </div>
           </div>
         </SelectContent>

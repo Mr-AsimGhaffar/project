@@ -5,7 +5,16 @@ import { appContext } from "./Context";
 import { useState } from "react";
 
 function App() {
-  const [appState, setAppState] = useState({ cardData: [], pageData: {} });
+  const [appState, setAppState] = useState({
+    cardData: [],
+    pageData: {},
+    selectedAmountMin: "",
+    selectedAmountMax: "",
+    selectedAreaMin: "",
+    selectedAreaMax: "",
+    selectBeds: "",
+    selectedSubProperty: "",
+  });
   return (
     <>
       <appContext.Provider value={{ appState, setAppState }}>

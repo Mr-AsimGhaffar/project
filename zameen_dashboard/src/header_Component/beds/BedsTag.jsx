@@ -1,3 +1,4 @@
+import { appContext } from "@/Context";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -5,10 +6,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const BedsTag = () => {
   const [selectBeds, setSelectBeds] = useState("");
+  const simpleContext = useContext(appContext);
+  useEffect(() => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectBeds: selectBeds,
+    }));
+  }, [selectBeds]);
 
   const handleSelectAllBeds = (number) => {
     setSelectBeds(number);

@@ -1,3 +1,4 @@
+import { appContext } from "@/Context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -6,10 +7,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+const marlaToSquareFeet = (marla) => {
+  return marla * 272.25; // 1 marla is approximately 272.25 square feet
+};
 const AreaTag = () => {
   const [selectedAreaMax, setSelectedAreaMax] = useState(null);
   const [selectedAreaMin, setSelectedAreaMin] = useState(null);
+  const simpleContext = useContext(appContext);
+  useEffect(() => {
+    if (selectedAreaMax !== null) {
+      const areaMaxInSquareFeet = marlaToSquareFeet(selectedAreaMax);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMax: areaMaxInSquareFeet,
+      }));
+    }
+  }, [selectedAreaMax]);
+  useEffect(() => {
+    if (selectedAreaMin !== null) {
+      const areaMiInSquareFeet = marlaToSquareFeet(selectedAreaMin);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMin: areaMiInSquareFeet,
+      }));
+    }
+  }, [selectedAreaMin]);
 
   const handleSelectMaxArea = (area) => {
     setSelectedAreaMax(area);
@@ -124,7 +147,6 @@ const AreaTag = () => {
               <Button variant="ghost" onClick={handleReset}>
                 Reset
               </Button>
-              <Button variant="ghost">Close</Button>
             </div>
           </div>
         </SelectContent>
