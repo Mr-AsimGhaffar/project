@@ -8,80 +8,72 @@ import {
   Legend,
 } from "recharts";
 import { Card } from "@/components/ui/card";
+import { useContext } from "react";
+import { appContext } from "./Context";
+import { Skeleton } from "./components/ui/skeleton";
 
-const data = [
-  {
-    name: "Jan",
-    uv: 4000,
-    pv: 6400,
-    amt: 2400,
-  },
-  {
-    name: "Feb",
-    uv: 3000,
-    pv: 4985,
-    amt: 2210,
-  },
-  {
-    name: "March",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "April",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "May",
-    uv: 1890,
-    pv: 1000,
-    amt: 2181,
-  },
-  {
-    name: "June",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "July",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+export default function Graphs() {
+  const simpleContext = useContext(appContext);
+  const graphData = Object.keys(simpleContext.appState.graphData).map(
+    (key) => ({
+      name: key,
+      value: simpleContext.appState.graphData[key],
+    })
+  );
 
-export default function App() {
+  const { loading } = simpleContext.appState;
+
   return (
     <main>
-      <Card>
-        <BarChart
-          width={800}
-          height={565}
-          data={data}
-          margin={{
-            top: 100,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-          barSize={50}
-        >
-          <XAxis
-            dataKey="name"
-            scale="point"
-            padding={{ left: 25, right: 10 }}
-          />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="pv" fill="#8884d8" background={{ fill: "#eee" }} />
-        </BarChart>
-      </Card>
+      {loading ? (
+        Array.from({ length: 1 }).map((_, index) => (
+          <div key={index} className="flex items-center space-x-4 py-10">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        ))
+      ) : graphData.length > 0 ? (
+        <Card>
+          <div>
+            <p className="text-xl font-bold text-center">Showing Properties</p>
+          </div>
+          <BarChart
+            width={1300}
+            height={565}
+            data={graphData}
+            margin={{
+              top: 100,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+            barSize={50}
+          >
+            <XAxis
+              dataKey="name"
+              tickFormatter={(name) => name.slice(0, 3)}
+              scale="point"
+              padding={{ left: 25, right: 10 }}
+            />
+            <YAxis
+              domain={["dataMin", "dataMax"]}
+              tickCount={10}
+              ticks={[
+                100, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000,
+              ]}
+            />
+            <Tooltip />
+            <Legend />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Bar dataKey="value" fill="#8884d8" background={{ fill: "#eee" }} />
+          </BarChart>
+        </Card>
+      ) : (
+        <p></p>
+      )}
     </main>
   );
 }

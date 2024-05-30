@@ -18,17 +18,6 @@ const BedsTag = () => {
     }));
   }, [selectBeds]);
 
-  // const handleSelectAllBeds = (number) => {
-  //   setSelectBeds(number);
-  // };
-  // const handleSelectBeds = (number) => {
-  //   setSelectBeds((num) => {
-  //     if (num == "All") {
-  //       return number;
-  //     }
-  //     return num.concat(", ", number).split(",").filter(Boolean).join(",");
-  //   });
-  // };
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {
       if (prevSelectBeds === "All" || number === "All") {

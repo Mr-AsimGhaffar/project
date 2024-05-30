@@ -31,6 +31,10 @@ const Header = () => {
 
   const searchCityData = async (city, query, page_number = 1) => {
     try {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        loading: true,
+      }));
       const price_min = simpleContext.appState.selectedAmountMin?.replace(
         /,/g,
         ""
@@ -68,6 +72,7 @@ const Header = () => {
           total_count: Number(jsonData.data.total_count),
           page_number,
         },
+        graphData: jsonData.data.property_count_map,
         isApiCall: true,
       }));
       setTotalPages(
@@ -78,6 +83,11 @@ const Header = () => {
       setCurrentPage(page_number);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        loading: false,
+      }));
     }
   };
   useEffect(() => {
@@ -98,7 +108,8 @@ const Header = () => {
     fetchData();
   }, [API_URL]);
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
+    e.preventDefault();
     if (searchTerm) {
       searchCityData(selectedCity, searchTerm);
     } else if (selectedCity) {

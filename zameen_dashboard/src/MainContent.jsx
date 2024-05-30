@@ -25,11 +25,12 @@ const MainContent = () => {
   }, []);
   return (
     <main>
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-5 ">
-        <div className="w-[60%]">
+      <div className="">
+        <div className="w-[100%]">
           <Graphs />
         </div>
-        <div className="w-[40%]">
+        <br />
+        <div className="w-[50%]">
           <Card>
             {data.map((item) => (
               <CardHeader key={item.id}>
