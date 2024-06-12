@@ -1,10 +1,10 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+// import {
+//   Card,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
+// import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import Graphs from "./Graphs";
 
@@ -30,7 +30,7 @@ const MainContent = () => {
           <Graphs />
         </div>
         <br />
-        <div className="w-[50%]">
+        {/* <div className="w-[50%]">
           <Card>
             {data.map((item) => (
               <CardHeader key={item.id}>
@@ -60,7 +60,7 @@ const MainContent = () => {
               </CardHeader>
             ))}
           </Card>
-        </div>
+        </div> */}
       </div>
     </main>
   );

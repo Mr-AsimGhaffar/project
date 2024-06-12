@@ -4,6 +4,10 @@ import { useState } from "react";
 import Sidebar from "./sidebar/SideBar";
 import Home from "./Home";
 import Dashboard from "./Dashboard";
+import Navbar from "./navbar/Navbar";
+import Header from "./Header";
+import CardsDetail from "./CardsDetail";
+import PropertyDetailsPage from "./property_Details/PropertyDetailsPage";
 
 function App() {
   const [appState, setAppState] = useState({
@@ -26,6 +30,7 @@ function App() {
     <BrowserRouter>
       <div className="overflow-x-hidden">
         <appContext.Provider value={{ appState, setAppState }}>
+          <Navbar />
           <Sidebar />
           <div
             className={`p-20 transition-transform duration-300  ${
@@ -37,6 +42,12 @@ function App() {
                 <Routes>
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/home" element={<Home />} />
+                  <Route path="/" element={<Header />} />
+                  <Route path="/search-results" element={<CardsDetail />} />
+                  <Route
+                    path="/property/:id"
+                    element={<PropertyDetailsPage />}
+                  />
                 </Routes>
               </div>
             ) : (

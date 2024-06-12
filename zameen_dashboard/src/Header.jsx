@@ -17,6 +17,8 @@ import PriceTag from "./header_Component/priceTag/PriceTag";
 import AreaTag from "./header_Component/areaTag/AreaTag";
 import BedsTag from "./header_Component/beds/BedsTag";
 import PropertyTag from "./header_Component/property_type/PropertyTag";
+import { Card, CardHeader } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [data, setData] = useState([]);
@@ -26,6 +28,7 @@ const Header = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
   const simpleContext = useContext(appContext);
+  const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -81,6 +84,9 @@ const Header = () => {
         )
       );
       setCurrentPage(page_number);
+      navigate("/search-results", {
+        state: { cardData: jsonData.data.properties },
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -132,82 +138,99 @@ const Header = () => {
   };
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="w-[20%] text-4xl font-bold">
-          <p>Dashboard</p>
-        </div>
-        <div className="w-[80%] p-2">
-          <form onSubmit={handleSubmit}>
-            <div className="flex items-center w-[100%] gap-5">
-              <div className="w-[20%] text-4xl font-bold">
-                <Select onValueChange={setSelectedCity}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select City" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {data.map((item) => (
-                      <SelectItem key={item} value={item}>
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="w-[40%]">
-                <Input
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onClick={isVisible || toggleVisibility}
-                  placeholder="Location"
-                />
-              </div>
-              <div>
-                <Button onClick={handleSearch}>Search</Button>
-              </div>
-              <div>
-                <DatePickerWithRange />
-              </div>
-            </div>
-            <div>
-              <div>
-                <div
-                  className={`transition-all duration-500 ${
-                    isVisible
-                      ? "max-h-96 opacity-100"
-                      : "max-h-0 opacity-0 overflow-hidden"
-                  }`}
-                >
-                  <div className="flex justify-between mt-4 rounded gap-5">
-                    <div className="w-[25%]">
-                      <PropertyTag />
-                    </div>
-                    <div className="w-[25%]">
-                      <PriceTag />
-                    </div>
-                    <div className="w-[25%]">
-                      <AreaTag />
-                    </div>
-                    <div className="w-[25%]">
-                      <BedsTag />
-                    </div>
-                  </div>
-                </div>
-                <Button
-                  onClick={toggleVisibility}
-                  className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-black text-xs"
-                >
-                  {isVisible ? (
-                    <FaAngleDown className="mr-2" />
-                  ) : (
-                    <FaAngleUp className="mr-2" />
-                  )}
-                  {isVisible ? "Less Options" : "More Options"}
-                </Button>
-              </div>
-            </div>
-          </form>
+      <div className="flex justify-between items-center">
+        <div className="text-2xl font-bold">Property Search</div>
+        <div>
+          <Button
+            className="text-lg"
+            variant="link"
+            onClick={isVisible || toggleVisibility}
+          >
+            Advance Search
+          </Button>
         </div>
       </div>
+      <br />
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between">
+            {/* <div className="w-[20%] text-4xl font-bold">
+          <p>Dashboard</p>
+        </div> */}
+            <div className="w-[100%] p-2">
+              <form onSubmit={handleSubmit}>
+                <div className="flex justify-between items-center w-[100%] gap-5">
+                  <div className=" text-4xl font-bold w-[20%]">
+                    <Select onValueChange={setSelectedCity}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select City" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {data.map((item) => (
+                          <SelectItem key={item} value={item}>
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-[50%]">
+                    <Input
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onClick={isVisible || toggleVisibility}
+                      placeholder="Location"
+                    />
+                  </div>
+                  <div className="w-[5%]">
+                    <Button onClick={handleSearch}>Search</Button>
+                  </div>
+                  <div className="flex justify-end w-[25%]">
+                    <DatePickerWithRange />
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <div
+                      className={`transition-all duration-500 ${
+                        isVisible
+                          ? "max-h-96 opacity-100"
+                          : "max-h-0 opacity-0 overflow-hidden"
+                      }`}
+                    >
+                      <div className="flex justify-between mt-4 rounded gap-5">
+                        <div className="w-[25%]">
+                          <PropertyTag />
+                        </div>
+                        <div className="w-[25%]">
+                          <PriceTag />
+                        </div>
+                        <div className="w-[25%]">
+                          <AreaTag />
+                        </div>
+                        <div className="w-[25%]">
+                          <BedsTag />
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={toggleVisibility}
+                      className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-black text-xs"
+                    >
+                      {isVisible ? (
+                        <FaAngleDown className="mr-2" />
+                      ) : (
+                        <FaAngleUp className="mr-2" />
+                      )}
+                      {isVisible ? "Less Options" : "More Options"}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
       <div className="mt-2">
         <Paging
           currentPage={currentPage}

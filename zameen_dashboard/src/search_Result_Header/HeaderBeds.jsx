@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { useContext, useEffect, useState } from "react";
 
-const BedsTag = () => {
+const HeaderBeds = () => {
   const [selectBeds, setSelectBeds] = useState("");
   const simpleContext = useContext(appContext);
   useEffect(() => {
@@ -43,7 +43,7 @@ const BedsTag = () => {
   return (
     <div>
       <Select>
-        <SelectTrigger>
+        <SelectTrigger className="rounded-3xl border-none bg-orange-500 text-white">
           <SelectValue placeholder="BEDS" />
           <div>{selectBeds}</div>
         </SelectTrigger>
@@ -130,4 +130,4 @@ const BedsTag = () => {
   );
 };
 
-export default BedsTag;
+export default HeaderBeds;
