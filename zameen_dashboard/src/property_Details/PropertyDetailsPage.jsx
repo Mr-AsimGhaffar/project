@@ -6,64 +6,14 @@ import { BiSolidDirections } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-const types = [
-  {
-    name: "Type",
-    type: "House",
-  },
-  {
-    price: "Price",
-    amount: "PKR 14.5 Crore",
-  },
-  {
-    location: "Location",
-    locationArea: "Bahri Town Rawalpindi",
-  },
-  {
-    bath: "Bath",
-    noOfBaths: "6",
-  },
-];
-const areas = [
-  {
-    name: "Area",
-    area: "1,100 sqft",
-  },
-  {
-    purpose: "Purpose",
-    category: "For Sale",
-  },
-  {
-    bedrooms: "Bedroom(s)",
-    noOfBedrooms: "2",
-  },
-  {
-    time: "Added",
-    timeElapsed: "46 minutes ago",
-  },
-];
+import PriceIndexGraph from "./PriceIndexGraph";
+import PopularityTrendGraph from "./PopularityTrendGraph";
 
-const amenities = [
-  {
-    parking: "parking Spaces",
-    lobby: "Lobby in Building",
-    window: "Double Glazed Windows",
-  },
-  {
-    main: "Main Features",
-    flooring: "Flooring",
-    electricty: "Electricity Backup",
-    disposal: "Waste Disposal",
-  },
-  {
-    floor: "Floor",
-    floorsInBuilding: "Floors in Building",
-    elevator: "Elevator: 2",
-  },
-];
 const PropertyDetailsPage = () => {
   const [activeButton, setActiveButton] = useState("Overview");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showAllRows, setShowAllRows] = useState(false);
+  const initialRowCount = 2;
   const location = useLocation();
   const { property } = location.state;
   const overviewRef = useRef(null);
@@ -79,6 +29,63 @@ const PropertyDetailsPage = () => {
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
+  const toggleShowRows = () => {
+    setShowAllRows(!showAllRows);
+  };
+  function capitalizeFirstLetter(str) {
+    if (typeof str !== "string" || str.length === 0) {
+      return str;
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  function formatPrice(numericValue) {
+    const mapping = {
+      Crore: 10000000,
+      Lakh: 100000,
+      Thousand: 1000,
+    };
+    let unit, value;
+    if (numericValue >= mapping.Crore) {
+      unit = "Crore";
+      value = numericValue / mapping.Crore;
+    } else if (numericValue >= mapping.Lakh) {
+      unit = "Lakh";
+      value = numericValue / mapping.Lakh;
+    } else {
+      unit = "Thousand";
+      value = numericValue / mapping.Thousand;
+    }
+    return `${value.toFixed(2)} ${unit}`;
+  }
+
+  function formatTimeFromNow(epochTimeInSeconds) {
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    const elapsedTimeInSeconds = currentTimeInSeconds - epochTimeInSeconds;
+    const minute = 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    const month = day * 30;
+    const year = day * 365;
+
+    if (elapsedTimeInSeconds < minute) {
+      return "Just now";
+    } else if (elapsedTimeInSeconds < hour) {
+      const minutes = Math.floor(elapsedTimeInSeconds / minute);
+      return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+    } else if (elapsedTimeInSeconds < day) {
+      const hours = Math.floor(elapsedTimeInSeconds / hour);
+      return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+    } else if (elapsedTimeInSeconds < month) {
+      const days = Math.floor(elapsedTimeInSeconds / day);
+      return `${days} ${days === 1 ? "day" : "days"} ago`;
+    } else if (elapsedTimeInSeconds < year) {
+      const months = Math.floor(elapsedTimeInSeconds / month);
+      return `${months} ${months === 1 ? "month" : "months"} ago`;
+    } else {
+      const years = Math.floor(elapsedTimeInSeconds / year);
+      return `${years} ${years === 1 ? "year" : "years"} ago`;
+    }
+  }
 
   return (
     <div>
@@ -94,21 +101,21 @@ const PropertyDetailsPage = () => {
         <div className="flex justify-left gap-10">
           <div className="flex flex-col items-center">
             <FaBed />
-            <p>7 Beds</p>
+            <p>{property.bedroom}</p>
           </div>
           <div className="flex flex-col items-center">
             <FaBath />
-            <p>6 Baths</p>
+            <p>{property.bath}</p>
           </div>
           <div className="flex flex-col items-center">
             <BiSolidDirections />
-            <p>1 Kanal</p>
+            <p>{property.area}</p>
           </div>
         </div>
         <br />
       </div>
       <div>
-        <div className="w-[50%] overflow-x-auto">
+        <div className="w-[100%] overflow-x-auto">
           <div className="flex justify-between gap-4 bg-black p-2">
             <Button
               variant="ghost"
@@ -167,49 +174,69 @@ const PropertyDetailsPage = () => {
             </Button>
           </div>
         </div>
-        <div ref={overviewRef} className="w-[50%]">
+        <div ref={overviewRef} className="w-[100%]">
           <div className="bg-gray-50">
             <p className="text-2xl p-2">Overview</p>
           </div>
           <div className="p-2">
-            <p>Details</p>
+            <p className="font-bold">Details</p>
             <div>
               <Table>
-                <div className="flex justify-between">
+                <div className="flex justify-start gap-10">
                   <div>
                     <TableBody>
-                      {types.map((name, rowIndex) => (
-                        <TableRow key={name.name} className="border-none">
-                          {Object.keys(name).map((key) => (
+                      {Object.keys(property)
+                        .filter((key) =>
+                          ["type", "price", "location", "bath"].includes(key)
+                        )
+                        .map((item, rowIndex) => (
+                          <TableRow key={item} className="border-none">
                             <TableCell
-                              key={key}
                               className={`${
                                 rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
                               }`}
                             >
-                              {name[key]}
+                              {capitalizeFirstLetter(item)}
                             </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
+                            <TableCell
+                              className={`${
+                                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                              }`}
+                            >
+                              {item === "price"
+                                ? formatPrice(property[item])
+                                : property[item]}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </div>
                   <div>
                     <TableBody>
-                      {areas.map((name, rowIndex) => (
-                        <TableRow key={name.name} className="border-none">
-                          {Object.keys(name).map((key) => (
+                      {Object.keys(property)
+                        .filter((key) =>
+                          ["area", "purpose", "bedroom", "added"].includes(key)
+                        )
+                        .map((item, rowIndex) => (
+                          <TableRow key={item} className="border-none">
                             <TableCell
-                              key={key}
                               className={`${
                                 rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
                               }`}
                             >
-                              {name[key]}
+                              {capitalizeFirstLetter(item)}
                             </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
+                            <TableCell
+                              className={`${
+                                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                              }`}
+                            >
+                              {item === "added"
+                                ? formatTimeFromNow(property[item])
+                                : property[item]}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </div>
                 </div>
@@ -231,33 +258,37 @@ const PropertyDetailsPage = () => {
           </div>
           <hr />
           <div className="p-2">
-            <p>Amenities</p>
-            <div>
+            <p className="font-bold">Amenities</p>
+            <div className="p-2">
               <Table>
-                <TableBody className="bg-gray-50">
-                  {amenities.map((main) => (
-                    <TableRow key={main.main} className="border-none">
-                      <TableCell>{main.main}</TableCell>
-                      <div className="w-[1px] h-[20px] mt-4 bg-gray-400"></div>
-                      <TableCell>
-                        {main.parking}
-                        {main.flooring}
-                        {main.floor}
-                      </TableCell>
-                      <TableCell>
-                        {main.lobby}
-                        {main.electricty}
-                        {main.floorsInBuilding}
-                      </TableCell>
-                      <TableCell>
-                        {main.window}
-                        {main.disposal}
-                        {main.elevator}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                <TableBody>
+                  {property.features
+                    .slice(
+                      0,
+                      showAllRows ? property.features.length : initialRowCount
+                    )
+                    .map((item, index) => (
+                      <TableRow
+                        key={index}
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                        } "border-none"`}
+                      >
+                        <TableCell>{item.category}</TableCell>
+                        {item.features.map((text, index) => (
+                          <TableCell key={index}>{text}</TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
+              {property.features.length > initialRowCount && (
+                <div className="mt-2 text-right">
+                  <button className="text-green-500" onClick={toggleShowRows}>
+                    {showAllRows ? "View Less" : "View More"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -271,12 +302,13 @@ const PropertyDetailsPage = () => {
           <p>Details of Home Finance...</p>
         </div>
         <div ref={priceIndexRef} className="p-4">
-          <h2>Price Index</h2>
-          <p>Details of Price Index...</p>
+          <PriceIndexGraph areaTrendData={property.area_trends} />
         </div>
         <div ref={trendsRef} className="p-4">
-          <h2>Trends</h2>
-          <p>Details of Trends...</p>
+          <PopularityTrendGraph
+            popularityTrendData={property.popularity_trends}
+            location={property.location}
+          />
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import Navbar from "./navbar/Navbar";
 import Header from "./Header";
 import CardsDetail from "./CardsDetail";
 import PropertyDetailsPage from "./property_Details/PropertyDetailsPage";
+import Footer from "./footer/Footer";
 
 function App() {
   const [appState, setAppState] = useState({
@@ -25,7 +26,9 @@ function App() {
     showDashboard: false,
     showHome: false,
     isSidebarOpen: false,
+    searchTerm: "",
   });
+  console.log(appState.showDashboard);
   return (
     <BrowserRouter>
       <div className="overflow-x-hidden">
@@ -37,25 +40,24 @@ function App() {
               appState.isSidebarOpen ? "transform translate-x-64" : ""
             }`}
           >
-            {appState.showDashboard ? (
-              <div>
-                <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/" element={<Header />} />
-                  <Route path="/search-results" element={<CardsDetail />} />
-                  <Route
-                    path="/property/:id"
-                    element={<PropertyDetailsPage />}
-                  />
-                </Routes>
-              </div>
-            ) : (
+            {/* {appState.showDashboard ? ( */}
+            <div>
               <Routes>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/header" element={<Header />} />
+                <Route path="/search-results" element={<CardsDetail />} />
+                <Route path="/property/:id" element={<PropertyDetailsPage />} />
               </Routes>
-            )}
+            </div>
+            {/* ) : (
+              <Routes>
+                <Route path="/" element={<Home />} />
+              </Routes>
+            )} */}
           </div>
+          <Footer />
         </appContext.Provider>
       </div>
     </BrowserRouter>

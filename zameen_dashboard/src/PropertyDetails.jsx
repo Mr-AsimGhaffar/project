@@ -11,8 +11,8 @@ const PropertyDetails = ({ propertyListingData }) => {
   const totalProperties = Object.values(propertyListingData)
     .map(Number)
     .reduce((total, num) => total + num, 0);
-  const commercialPropertiesCount = propertyListingData["Commercial Plot"] || 0;
-  const totalPlotsCount = propertyListingData["Residential Plot"] || 0;
+  // const commercialPropertiesCount = propertyListingData["Commercial Plot"] || 0;
+  // const totalPlotsCount = propertyListingData["Residential Plot"] || 0;
 
   return (
     <main>
@@ -29,7 +29,7 @@ const PropertyDetails = ({ propertyListingData }) => {
             </CardHeader>
           </Card>
         </div>
-        <div>
+        {/* <div>
           <Card>
             <CardHeader>
               <CardTitle>Commercial Plots</CardTitle>
@@ -40,8 +40,8 @@ const PropertyDetails = ({ propertyListingData }) => {
               <CardDescription>Listed</CardDescription>
             </CardHeader>
           </Card>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Card>
             <CardHeader>
               <CardTitle>Residential Plots</CardTitle>
@@ -52,7 +52,7 @@ const PropertyDetails = ({ propertyListingData }) => {
               <CardDescription>Listed</CardDescription>
             </CardHeader>
           </Card>
-        </div>
+        </div> */}
       </div>
     </main>
   );

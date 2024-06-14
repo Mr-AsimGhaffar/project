@@ -1,20 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { DatePickerWithRange } from "./components/ui/DateRangePicker";
+// import { DatePickerWithRange } from "./components/ui/DateRangePicker";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { appContext } from "./Context";
 import { useContext, useEffect, useState } from "react";
 import Paging from "./Paging";
-import { FaAngleDown } from "react-icons/fa";
-import { FaAngleUp } from "react-icons/fa";
+// import { FaAngleDown } from "react-icons/fa";
+// import { FaAngleUp } from "react-icons/fa";
 import PriceTag from "./header_Component/priceTag/PriceTag";
-import AreaTag from "./header_Component/areaTag/AreaTag";
+// import AreaTag from "./header_Component/areaTag/AreaTag";
 import BedsTag from "./header_Component/beds/BedsTag";
 import PropertyTag from "./header_Component/property_type/PropertyTag";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -85,7 +85,10 @@ const Header = () => {
       );
       setCurrentPage(page_number);
       navigate("/search-results", {
-        state: { cardData: jsonData.data.properties },
+        state: {
+          cardData: jsonData.data.properties,
+          totalCount: jsonData.data.total_count,
+        },
       });
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -159,7 +162,7 @@ const Header = () => {
         </div> */}
             <div className="w-[100%] p-2">
               <form onSubmit={handleSubmit}>
-                <div className="flex justify-between items-center w-[100%] gap-5">
+                {/* <div className="flex justify-between items-center w-[100%] gap-5">
                   <div className=" text-4xl font-bold w-[20%]">
                     <Select onValueChange={setSelectedCity}>
                       <SelectTrigger>
@@ -188,32 +191,57 @@ const Header = () => {
                   <div className="flex justify-end w-[25%]">
                     <DatePickerWithRange />
                   </div>
-                </div>
+                </div> */}
                 <div>
                   <div>
-                    <div
+                    {/* <div
                       className={`transition-all duration-500 ${
                         isVisible
                           ? "max-h-96 opacity-100"
                           : "max-h-0 opacity-0 overflow-hidden"
                       }`}
-                    >
-                      <div className="flex justify-between mt-4 rounded gap-5">
-                        <div className="w-[25%]">
-                          <PropertyTag />
-                        </div>
-                        <div className="w-[25%]">
-                          <PriceTag />
-                        </div>
-                        <div className="w-[25%]">
+                    > */}
+                    <div className="flex justify-between mt-4 rounded gap-5">
+                      <div className="w-[25%]">
+                        <p className="text-sm">Location</p>
+                        <Input
+                          value={searchTerm}
+                          onChange={(e) => {
+                            simpleContext.setAppState((s) => ({
+                              ...s,
+                              searchTerm: e.target.value,
+                            }));
+                            setSearchTerm(e.target.value);
+                          }}
+                          // onClick={isVisible || toggleVisibility}
+                          placeholder="Enter Location"
+                        />
+                      </div>
+                      <div className="w-[25%]">
+                        <p className="text-sm">Price Range</p>
+                        <PriceTag />
+                      </div>
+                      <div className="w-[25%]">
+                        <p className="text-sm">Property Type</p>
+                        <PropertyTag />
+                      </div>
+
+                      {/* <div className="w-[25%]">
                           <AreaTag />
-                        </div>
-                        <div className="w-[25%]">
-                          <BedsTag />
-                        </div>
+                        </div> */}
+                      <div className="w-[25%]">
+                        <p className="text-sm">Bedrooms</p>
+                        <BedsTag />
                       </div>
                     </div>
-                    <Button
+                    <br />
+                    <div>
+                      <Button onClick={handleSearch} className="w-[24%]">
+                        Search
+                      </Button>
+                    </div>
+                    {/* </div> */}
+                    {/* <Button
                       onClick={toggleVisibility}
                       className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-black text-xs"
                     >
@@ -223,7 +251,7 @@ const Header = () => {
                         <FaAngleUp className="mr-2" />
                       )}
                       {isVisible ? "Less Options" : "More Options"}
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               </form>

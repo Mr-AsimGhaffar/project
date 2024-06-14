@@ -27,6 +27,8 @@ const CardsDetail = () => {
   const simpleContext = useContext(appContext);
   const location = useLocation();
   const cardData = location.state?.cardData || simpleContext.appState.cardData;
+  const totalCount =
+    location.state?.totalCount || simpleContext.appState.pageData.total_count;
 
   const handleToggleExpand = (id) => {
     setExpandedCards((prev) => ({
@@ -38,7 +40,12 @@ const CardsDetail = () => {
   return (
     <main>
       <div>
-        <p className="text-lg font-bold">249 Results in New York, US</p>
+        <div className="text-lg font-bold">
+          {totalCount} Results &nbsp;
+          <span className="text-sm text-gray-500">
+            in {simpleContext.appState.searchTerm}
+          </span>
+        </div>
       </div>
       <br />
       <form>
