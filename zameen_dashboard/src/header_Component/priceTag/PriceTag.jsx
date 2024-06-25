@@ -8,36 +8,70 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { appContext } from "@/Context";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 
 const PriceTag = () => {
   const [selectedAmountMax, setSelectedAmountMax] = useState(null);
   const [selectedAmountMin, setSelectedAmountMin] = useState(null);
   const simpleContext = useContext(appContext);
   useEffect(() => {
+    // const storedSelectedAmountMax = loadFromLocalStorage("selectedAmountMax");
+    // if (storedSelectedAmountMax) {
+    // setSelectedAmountMax(storedSelectedAmountMax);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMax: selectedAmountMax,
     }));
-  }, [selectedAmountMax]);
+    // }
+  }, [simpleContext]);
+
   useEffect(() => {
+    // const storedSelectedAmountMin = loadFromLocalStorage("selectedAmountMin");
+    // if (storedSelectedAmountMin) {
+    // setSelectedAmountMin(storedSelectedAmountMin);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMin: selectedAmountMin,
     }));
-  }, [selectedAmountMin]);
+    // }
+  }, [simpleContext]);
 
   const handleSelectMax = (amount) => {
-    setSelectedAmountMax(amount);
+    const newValue = amount;
+    setSelectedAmountMax(newValue);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMax: newValue,
+    }));
+    saveToLocalStorage("selectedAmountMax", newValue);
   };
   const handleSelectMin = (amount) => {
-    setSelectedAmountMin(amount);
+    const newValue = amount;
+    setSelectedAmountMin(newValue);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMin: newValue,
+    }));
+    saveToLocalStorage("selectedAmountMin", newValue);
   };
   const handleMinChange = (e) => {
-    setSelectedAmountMin(e.target.value);
+    const newValue = e.target.value;
+    setSelectedAmountMin(newValue);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMin: newValue,
+    }));
+    saveToLocalStorage("selectedAmountMin", newValue);
   };
 
   const handleMaxChange = (e) => {
-    setSelectedAmountMax(e.target.value);
+    const newValue = e.target.value;
+    setSelectedAmountMax(newValue);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMax: newValue,
+    }));
+    saveToLocalStorage("selectedAmountMax", newValue);
   };
   const handleReset = () => {
     setSelectedAmountMin(null);

@@ -8,8 +8,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useContext } from "react";
+import { appContext } from "./Context";
 
-const Paging = ({ currentPage, totalPages, onPageChange }) => {
+const Paging = ({ onPageChange }) => {
+  const simpleContext = useContext(appContext);
+  const current_Page = simpleContext.appState.currentPage;
+  const total_Pages = simpleContext.appState.totalPages;
   return (
     <div>
       <Pagination>
@@ -17,8 +22,8 @@ const Paging = ({ currentPage, totalPages, onPageChange }) => {
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              onClick={() => onPageChange(currentPage - 1)}
-              disabled={currentPage === 1}
+              onClick={() => onPageChange(current_Page - 1)}
+              disabled={current_Page === 1}
             />
           </PaginationItem>
 
@@ -27,14 +32,14 @@ const Paging = ({ currentPage, totalPages, onPageChange }) => {
           </PaginationItem>
           <PaginationItem>
             <PaginationLink href="#">
-              {currentPage} / {totalPages}
+              {current_Page} / {total_Pages}
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
             <PaginationNext
               href="#"
-              onClick={() => onPageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              onClick={() => onPageChange(current_Page + 1)}
+              disabled={current_Page === total_Pages}
             />
           </PaginationItem>
         </PaginationContent>

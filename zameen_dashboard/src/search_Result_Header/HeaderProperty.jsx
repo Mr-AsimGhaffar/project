@@ -9,20 +9,29 @@ import { appContext } from "@/Context";
 import Home from "../header_Component/property_type/Home";
 import Plots from "../header_Component/property_type/Plots";
 import Commercial from "../header_Component/property_type/Commercial";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 
 const HeaderProperty = () => {
-  const [selectedPropertyType, setSelectedPropertyType] = useState("Home");
-  const [selectedSubProperty, setSelectedSubProperty] = useState("");
   const simpleContext = useContext(appContext);
+  const [selectedPropertyType, setSelectedPropertyType] = useState("Home");
+  const [selectedSubProperty, setSelectedSubProperty] = useState(
+    simpleContext.appState.selectedSubProperty
+  );
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
       selectedSubProperty: selectedSubProperty,
     }));
-  }, [selectedSubProperty]);
+  }, [simpleContext]);
 
   const handleSubPropertySelect = (subProperty) => {
-    setSelectedSubProperty(subProperty);
+    const newValue = subProperty;
+    setSelectedSubProperty(newValue);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedSubProperty: newValue,
+    }));
+    saveToLocalStorage("selectedSubProperty", newValue);
   };
 
   return (

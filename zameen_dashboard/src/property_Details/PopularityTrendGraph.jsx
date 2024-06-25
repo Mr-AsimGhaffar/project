@@ -16,8 +16,11 @@ export default function PopularityTrendGraph({
   popularityTrendData,
   location,
 }) {
-  const months = Object.keys(popularityTrendData.trends);
+  const months = Object.keys(popularityTrendData.trends || {});
   const [selectedMonth, setSelectedMonth] = useState(months[0]);
+  if (months.length === 0) {
+    return <></>;
+  }
 
   function formatDateToMonthYear(dateString) {
     const date = new Date(dateString);
@@ -148,6 +151,6 @@ export default function PopularityTrendGraph({
 }
 
 PopularityTrendGraph.propTypes = {
-  popularityTrendData: PropTypes.string.isRequired,
+  popularityTrendData: PropTypes.array.isRequired,
   location: PropTypes.string.isRequired,
 };

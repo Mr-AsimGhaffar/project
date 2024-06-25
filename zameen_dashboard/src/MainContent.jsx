@@ -26,9 +26,9 @@ const MainContent = () => {
   return (
     <main>
       <div className="">
-        <div className="w-[100%]">
+        {/* <div className="w-[100%]">
           <Graphs />
-        </div>
+        </div> */}
         <br />
         {/* <div className="w-[50%]">
           <Card>

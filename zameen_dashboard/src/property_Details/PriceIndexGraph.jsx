@@ -10,8 +10,7 @@ import {
 } from "recharts";
 
 export default function PriceIndexGraph({ areaTrendData }) {
-  const pricePercentage = areaTrendData.index.index_values || [];
-  console.log(pricePercentage);
+  const pricePercentage = areaTrendData.index?.index_values || [];
   if (pricePercentage.length === 0) {
     return <></>;
   }
@@ -137,5 +136,5 @@ export default function PriceIndexGraph({ areaTrendData }) {
   );
 }
 PriceIndexGraph.propTypes = {
-  areaTrendData: PropTypes.string.isRequired,
+  areaTrendData: PropTypes.array.isRequired,
 };

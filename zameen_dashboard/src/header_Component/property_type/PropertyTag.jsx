@@ -9,6 +9,7 @@ import Home from "./Home";
 import Plots from "./Plots";
 import Commercial from "./Commercial";
 import { appContext } from "@/Context";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 
 const PropertyTag = () => {
   const [selectedPropertyType, setSelectedPropertyType] = useState("Home");
@@ -19,10 +20,16 @@ const PropertyTag = () => {
       ...s,
       selectedSubProperty: selectedSubProperty,
     }));
-  }, [selectedSubProperty]);
+  }, [simpleContext]);
 
   const handleSubPropertySelect = (subProperty) => {
-    setSelectedSubProperty(subProperty);
+    const newValue = subProperty;
+    setSelectedSubProperty(newValue);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedSubProperty: newValue,
+    }));
+    saveToLocalStorage("selectedSubProperty", newValue);
   };
 
   return (

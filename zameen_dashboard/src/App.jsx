@@ -27,8 +27,10 @@ function App() {
     showHome: false,
     isSidebarOpen: false,
     searchTerm: "",
+    totalPages: 1,
+    currentPage: 1,
   });
-  console.log(appState.showDashboard);
+
   return (
     <BrowserRouter>
       <div className="overflow-x-hidden">

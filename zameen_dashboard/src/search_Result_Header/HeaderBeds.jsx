@@ -6,17 +6,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
 
 const HeaderBeds = () => {
-  const [selectBeds, setSelectBeds] = useState("");
   const simpleContext = useContext(appContext);
+  const [selectBeds, setSelectBeds] = useState(
+    simpleContext.appState.selectBeds
+  );
   useEffect(() => {
+    // const storedBeds = loadFromLocalStorage("selectBeds");
+    // if (storedBeds) {
+    // setSelectBeds(storedBeds);
     simpleContext.setAppState((s) => ({
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [selectBeds]);
+    // }
+  }, []);
 
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {
@@ -25,15 +32,22 @@ const HeaderBeds = () => {
       }
       if (prevSelectBeds.includes(number)) {
         const updatedBeds = prevSelectBeds
-          .split("-")
+          .split(",")
           .filter((bed) => bed !== number)
-          .join("-");
+          .join(",");
         return updatedBeds === "" ? "All" : updatedBeds;
       } else {
-        return [...prevSelectBeds.split("-"), number].filter(Boolean).join("-");
+        return [...prevSelectBeds.split(","), number].filter(Boolean).join(",");
       }
     });
   };
+  useEffect(() => {
+    saveToLocalStorage("selectBeds", selectBeds);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectBeds: selectBeds,
+    }));
+  }, [selectBeds]);
 
   const buttonStyles = (bedType) => ({
     backgroundColor: selectBeds.includes(bedType) ? "#2C2C2C" : "#FFFFFF",
@@ -43,7 +57,7 @@ const HeaderBeds = () => {
   return (
     <div>
       <Select>
-        <SelectTrigger className="rounded-3xl border-none bg-orange-500 text-white">
+        <SelectTrigger className="rounded-3xl border-none bg-gray-800 text-white">
           <SelectValue placeholder="BEDS" />
           <div>{selectBeds}</div>
         </SelectTrigger>

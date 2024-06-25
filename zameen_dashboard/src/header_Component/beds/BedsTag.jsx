@@ -6,17 +6,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
 
 const BedsTag = () => {
   const [selectBeds, setSelectBeds] = useState("");
   const simpleContext = useContext(appContext);
   useEffect(() => {
+    // const storedBeds = loadFromLocalStorage("selectBeds");
+    // if (storedBeds) {
+    // setSelectBeds(storedBeds);
     simpleContext.setAppState((s) => ({
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [selectBeds]);
+    // }
+  }, []);
 
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {
@@ -25,15 +30,22 @@ const BedsTag = () => {
       }
       if (prevSelectBeds.includes(number)) {
         const updatedBeds = prevSelectBeds
-          .split("-")
+          .split(",")
           .filter((bed) => bed !== number)
-          .join("-");
+          .join(",");
         return updatedBeds === "" ? "All" : updatedBeds;
       } else {
-        return [...prevSelectBeds.split("-"), number].filter(Boolean).join("-");
+        return [...prevSelectBeds.split(","), number].filter(Boolean).join(",");
       }
     });
   };
+  useEffect(() => {
+    saveToLocalStorage("selectBeds", selectBeds);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectBeds: selectBeds,
+    }));
+  }, [selectBeds]);
 
   const buttonStyles = (bedType) => ({
     backgroundColor: selectBeds.includes(bedType) ? "#2C2C2C" : "#FFFFFF",

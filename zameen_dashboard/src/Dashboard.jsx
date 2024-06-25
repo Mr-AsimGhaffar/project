@@ -1,6 +1,5 @@
-import CardsDetail from "./CardsDetail";
+import FeaturedProperty from "./FeaturedProperty";
 import Header from "./Header";
-import MainContent from "./MainContent";
 
 import PropertyListing from "./PropertyListing";
 
@@ -9,8 +8,8 @@ const Dashboard = () => {
     <div>
       <PropertyListing />
       <Header />
-      <CardsDetail />
-      <MainContent />
+      <br />
+      <FeaturedProperty />
     </div>
   );
 };

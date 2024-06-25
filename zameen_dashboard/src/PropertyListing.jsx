@@ -7,6 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
 import PropertyDetails from "./PropertyDetails";
+import { formatPrice } from "./utlils/formatPrice";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -49,7 +50,7 @@ const PropertyListing = () => {
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-6 py-5">
+      <div className="grid md:grid-cols-4 gap-6 py-5">
         {displayedData
           .map((item, index) => ({
             id: index,
@@ -66,7 +67,7 @@ const PropertyListing = () => {
                   <br />
                   <div>
                     <CardDescription className="text-3xl font-bold">
-                      {item.amount}
+                      {formatPrice(item.amount)}
                     </CardDescription>
                   </div>
                   <CardDescription>Listed</CardDescription>
