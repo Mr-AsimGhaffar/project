@@ -1,10 +1,8 @@
-# React + Vite
-
-Zameen Dashboard
+# Zameen Dashboard
 
 Zameen Dashboard is a property listing application that allows users to explore and search for various properties. The dashboard includes features such as viewing total properties, property listings, featured properties, and similar properties. Users can also refine their search using multiple filters to find specific types of properties.
 
-Features
+# Features
 
 Total Properties: View the total number of properties available.
 Property Listings: Browse through the list of all properties.
@@ -18,4 +16,4 @@ Area
 Number of Beds
 Property Type (home, plots, commercial, etc.)
 
-Installation
+# Installation
