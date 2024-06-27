@@ -12,7 +12,14 @@ services:
       - ./:/app
       - /app/node_modules
     restart: "unless-stopped"
+    networks:
+      - backend
 
 volumes:
   data:
     driver: local
+
+networks:
+  backend:
+    external: true
+    name: scrapper_zameen_backend_backend
