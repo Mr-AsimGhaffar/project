@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { appContext } from "./Context";
 import { useState } from "react";
-import Sidebar from "./sidebar/SideBar";
-import Home from "./Home";
-import Dashboard from "./Dashboard";
-import Navbar from "./navbar/Navbar";
-import Header from "./Header";
-import CardsDetail from "./CardsDetail";
-import PropertyDetailsPage from "./property_Details/PropertyDetailsPage";
-import Footer from "./footer/Footer";
+import { appContext } from "./contexts/Context";
+import Navbar from "./components/navbar/Navbar";
+import Sidebar from "./components/sidebar/SideBar";
+import Dashboard from "./pages/Dashboard";
+import Home from "./components/Home";
+import Header from "./components/Header";
+import CardsDetail from "./pages/CardsDetail";
+import PropertyDetailsPage from "./pages/property_Details/PropertyDetailsPage";
+import Footer from "./components/footer/Footer";
 
 function App() {
   const [appState, setAppState] = useState({

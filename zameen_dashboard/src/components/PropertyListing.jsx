@@ -1,13 +1,8 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { Button } from "./components/ui/button";
 import PropertyDetails from "./PropertyDetails";
-import { formatPrice } from "./utlils/formatPrice";
+import { Button } from "./ui/button";
+import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { formatPrice } from "@/utlils/formatPrice";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

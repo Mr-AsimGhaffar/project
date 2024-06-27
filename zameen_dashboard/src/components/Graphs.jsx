@@ -7,10 +7,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { Card } from "@/components/ui/card";
 import { useContext } from "react";
-import { appContext } from "./Context";
-import { Skeleton } from "./components/ui/skeleton";
+import { appContext } from "@/contexts/Context";
+import { Skeleton } from "./ui/skeleton";
+import { Card } from "./ui/card";
 
 export default function Graphs() {
   const simpleContext = useContext(appContext);

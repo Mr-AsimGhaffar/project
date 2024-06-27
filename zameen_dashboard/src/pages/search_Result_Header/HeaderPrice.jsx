@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { appContext } from "@/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { appContext } from "@/contexts/Context";
 
 const HeaderPrice = () => {
   const simpleContext = useContext(appContext);

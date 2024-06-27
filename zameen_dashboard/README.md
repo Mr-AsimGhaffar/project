@@ -1,8 +1,21 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Zameen Dashboard
 
-Currently, two official plugins are available:
+Zameen Dashboard is a property listing application that allows users to explore and search for various properties. The dashboard includes features such as viewing total properties, property listings, featured properties, and similar properties. Users can also refine their search using multiple filters to find specific types of properties.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Features
+
+Total Properties: View the total number of properties available.
+Property Listings: Browse through the list of all properties.
+Featured Properties: Highlighted properties for quick access.
+Similar Properties: Find properties similar to a selected one.
+Search Filters:
+Select City
+Search Bar
+Price Range
+Area
+Number of Beds
+Property Type (home, plots, commercial, etc.)
+
+Installation

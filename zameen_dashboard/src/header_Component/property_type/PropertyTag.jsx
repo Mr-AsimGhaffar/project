@@ -8,7 +8,7 @@ import {
 import Home from "./Home";
 import Plots from "./Plots";
 import Commercial from "./Commercial";
-import { appContext } from "@/Context";
+import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 
 const PropertyTag = () => {

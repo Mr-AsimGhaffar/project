@@ -8,20 +8,20 @@ import { useState, useContext, useEffect } from "react";
 // import { LuDollarSign } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import { Skeleton } from "@/components/ui/skeleton";
-import { appContext } from "./Context";
-import { formatPrice } from "./utlils/formatPrice";
-import { Input } from "./components/ui/input";
-import HeaderFilter from "./search_Result_Header/HeaderFilter";
-import HeaderPrice from "./search_Result_Header/HeaderPrice";
-import HeaderBeds from "./search_Result_Header/HeaderBeds";
-import HeaderProperty from "./search_Result_Header/HeaderProperty";
-import Recommended from "./cards_Details/Recommended";
 // import Popular from "./cards_Details/Popular";
 // import Nearest from "./cards_Details/Nearest";
 import { Link } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
-import Paging from "./Paging";
-import { saveToLocalStorage } from "./utlils/SaveLocalStorage";
+import { appContext } from "@/contexts/Context";
+import HeaderPrice from "./search_Result_Header/HeaderPrice";
+import HeaderBeds from "./search_Result_Header/HeaderBeds";
+import HeaderProperty from "./search_Result_Header/HeaderProperty";
+import HeaderFilter from "./search_Result_Header/HeaderFilter";
+import Recommended from "@/components/cards_Details/Recommended";
+import Paging from "@/components/Paging";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { Input } from "@/components/ui/input";
+import { formatPrice } from "@/utlils/formatPrice";
 
 const CardsDetail = () => {
   const simpleContext = useContext(appContext);
@@ -38,7 +38,6 @@ const CardsDetail = () => {
   const totalCount = simpleContext.appState.pageData.total_count;
 
   const API_URL = import.meta.env.VITE_API_URL;
-  // console.log("state", sortBy);
   const searchCityData = async (
     city,
     query,
@@ -46,7 +45,6 @@ const CardsDetail = () => {
     sort_by = "id",
     sort_order = "ASC"
   ) => {
-    // console.log(sort_by);
     try {
       simpleContext.setAppState((s) => ({
         ...s,

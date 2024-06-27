@@ -1,10 +1,10 @@
 // src/components/Sidebar.jsx
 import { useState, useContext } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { appContext } from "../Context";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { CardDescription } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { appContext } from "@/contexts/Context";
+import { CardDescription } from "../ui/card";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { useContext } from "react";
+import { appContext } from "@/contexts/Context";
 import {
   Pagination,
   PaginationContent,
@@ -7,9 +9,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { useContext } from "react";
-import { appContext } from "./Context";
+} from "./ui/pagination";
 
 const Paging = ({ onPageChange }) => {
   const simpleContext = useContext(appContext);

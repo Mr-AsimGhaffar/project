@@ -5,11 +5,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { appContext } from "@/Context";
-import Home from "../header_Component/property_type/Home";
-import Plots from "../header_Component/property_type/Plots";
-import Commercial from "../header_Component/property_type/Commercial";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { appContext } from "@/contexts/Context";
+import Home from "@/header_Component/property_type/Home";
+import Plots from "@/header_Component/property_type/Plots";
+import Commercial from "@/header_Component/property_type/Commercial";
 
 const HeaderProperty = () => {
   const simpleContext = useContext(appContext);

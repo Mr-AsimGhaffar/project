@@ -1,19 +1,14 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { formatPrice } from "@/utlils/formatPrice";
 import { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
-import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
-import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
-import { Button } from "./components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
+import { formatPrice } from "@/utlils/formatPrice";
+import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -46,7 +41,7 @@ export default function FeaturedProperty() {
     setShowAll(false);
   };
   const handleClick = (item) => {
-    navigate(`/property/${item.id}`, { state: { property: item } });
+    navigate(`/property/${item.id}`, { state: { id: item.id } });
     window.scrollTo(0, 0);
   };
 

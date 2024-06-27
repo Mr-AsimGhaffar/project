@@ -18,7 +18,7 @@ const PropertyDetailsPage = () => {
   const [showAllRows, setShowAllRows] = useState(false);
   const initialRowCount = 2;
   const location = useLocation();
-  const { id } = location.state;
+  const { id } = location.state || {};
   const overviewRef = useRef(null);
   const locationRef = useRef(null);
   const similarPropertyRef = useRef(null);
@@ -33,7 +33,6 @@ const PropertyDetailsPage = () => {
       try {
         const response = await fetch(`${API_URL}/property/${id}`);
         const jsonData = await response.json();
-        console.log(jsonData);
         setData(jsonData.data);
       } catch (error) {
         console.error("Error fetching data:", error);

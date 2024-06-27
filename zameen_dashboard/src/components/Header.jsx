@@ -1,23 +1,25 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+import { useContext, useEffect, useState } from "react";
+import { FaAngleDown } from "react-icons/fa";
+import { FaAngleUp } from "react-icons/fa";
+
+import { useNavigate } from "react-router-dom";
+import { appContext } from "@/contexts/Context";
+import { Button } from "./ui/button";
+import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { Card, CardHeader } from "./ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { appContext } from "./Context";
-import { useContext, useEffect, useState } from "react";
-import { FaAngleDown } from "react-icons/fa";
-import { FaAngleUp } from "react-icons/fa";
-import PriceTag from "./header_Component/priceTag/PriceTag";
-import AreaTag from "./header_Component/areaTag/AreaTag";
-import BedsTag from "./header_Component/beds/BedsTag";
-import PropertyTag from "./header_Component/property_type/PropertyTag";
-import { Card, CardHeader } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
-import { saveToLocalStorage } from "./utlils/SaveLocalStorage";
+} from "./ui/select";
+import PriceTag from "@/header_Component/priceTag/PriceTag";
+import AreaTag from "@/header_Component/areaTag/AreaTag";
+import BedsTag from "@/header_Component/beds/BedsTag";
+import PropertyTag from "@/header_Component/property_type/PropertyTag";
 
 const Header = () => {
   const [data, setData] = useState([]);

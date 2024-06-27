@@ -4,7 +4,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatPrice } from "@/utlils/formatPrice";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
+import { formatPrice } from "@/utlils/formatPrice";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

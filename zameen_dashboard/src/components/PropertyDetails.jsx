@@ -1,11 +1,6 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import PropTypes from "prop-types";
-import { formatPrice } from "./utlils/formatPrice";
+import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { formatPrice } from "@/utlils/formatPrice";
 
 const PropertyDetails = ({ propertyListingData }) => {
   const totalProperties = Object.values(propertyListingData)

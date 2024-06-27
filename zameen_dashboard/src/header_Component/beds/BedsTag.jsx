@@ -1,4 +1,3 @@
-import { appContext } from "@/Context";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -6,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
 
