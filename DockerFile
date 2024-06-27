@@ -15,4 +15,4 @@ EXPOSE 3000
 
 # Cmd script
 RUN npm run build
-CMD ["serve", "-s", "dist"]
+CMD ["npm", "run", "prod"]
