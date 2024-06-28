@@ -19,17 +19,37 @@ Property Type (home, plots, commercial, etc.)
 # Installation
 
 Clone the repository:
-git clone https://github.com/your-username/zameen-dashboard.git
+git clone https://github.com/your-username/project.git
 Navigate to project directory:
 Navigate to project directory cd zameen_dashboard
 Install dependencies:
 npm install
-Start development server:
-npm start
+
+Using Docker:
+
+1. Build the Docker iamge (docker build -t project )
+2. Run the Docker container (docker run -p 3000:3000 zameen-dashboard)
+3. Start the development server (npm run dev)
+
+Using Docker and Nginx:
+
+1. Build the Docker image for production (docker build -t project )
+2. Run the Docker container (docker run -p 80:80 project)
+
+Github Actions:
+
+1. A deploy.yml file is included for automated deployment using GitHub Actions. Ensure you have configured the necessary secrets and settings in your GitHub repository
 
 # Usage
 
-Once the development server is running, you can access the application at http://localhost:3000. Use the various filters to search and explore properties according to your preferences.
+1. Find the number of properties listed on front page.
+2. To view properties, navigate through the dashboard.
+3. Use the search filters to find specific properties based on your criteria
+4. User will be able to view the total number of properties available.
+5. User can also see featured properties.
+6. User can also view properties similar to a selected one.
+7. User can also see the price Index graph and Trends graph.
+8. Map functionality is also added to view the pinpoint location of the property.
 
 # Contribution
 
