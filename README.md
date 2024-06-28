@@ -67,9 +67,9 @@ Thank you for considering contributing to this project!
 
 [Asim Ghaffar](https://github.com/Mr-AsimGhaffar)
 [Mohammad Abdullah](https://github.com/Muhammad-Abdullah012)
-[Kashi Khan](m.kashi.khan93@gmail.com)
+[Kashi Khan](https://github.com/kashikhan1)
 
 # Contact
 
 If you have any questions or suggestions, feel free to open an issue or contact the project maintainer at
-[asim.ghaffar71@gmail.com].
+[asim.ghaffar71@gmail.com], [not.muhammad.abdullah68@gmail.com]
