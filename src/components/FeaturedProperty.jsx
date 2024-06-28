@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
-import { formatPrice } from "@/utlils/formatPrice";
+import { priceConversion } from "@/utlils/priceConversion";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "./skeleton/Skeleton";
 
@@ -93,7 +93,7 @@ export default function FeaturedProperty() {
                     </div>
                     <div className="py-2 font-bold">
                       <CardDescription>
-                        PKR {formatPrice(item.price)}
+                        PKR {priceConversion(item.price)}
                       </CardDescription>
                       <CardDescription>{item.location}</CardDescription>
                       <br />
@@ -101,18 +101,18 @@ export default function FeaturedProperty() {
                         <div className="flex justify-left gap-5">
                           <div className="flex flex-row items-center gap-1">
                             <FaBed />
-                            <p>{item.bedroom}</p>
+                            <p>{item.bedroom || "-"}</p>
                           </div>
                           <div className="flex flex-row items-center gap-1">
                             <FaBath />
-                            <p>{item.bath}</p>
+                            <p>{item.bath || "-"}</p>
                           </div>
                           <div className="flex flex-row items-center gap-1">
                             <BiSolidDirections />
                             <p>
                               {convertMarlaToSquareFeet(
                                 item.area.split(" ")[0]
-                              )}{" "}
+                              ) || "-"}{" "}
                               sqft
                             </p>
                           </div>

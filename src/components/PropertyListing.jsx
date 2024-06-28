@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropertyDetails from "./PropertyDetails";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { formatPrice } from "@/utlils/formatPrice";
+import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "./skeleton/Skeleton";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -70,7 +70,7 @@ const PropertyListing = () => {
                   <br />
                   <div>
                     <CardDescription className="text-3xl font-bold">
-                      {formatPrice(item.amount)}
+                      {priceConversion(item.amount)}
                     </CardDescription>
                   </div>
                   <CardDescription>Listed</CardDescription>

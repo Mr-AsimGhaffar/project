@@ -12,6 +12,7 @@ import SimilarProperty from "./SimilarProperty";
 import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import LocationMap from "./LocationMap";
 import SkeletonCard from "../../components/skeleton/Skeleton";
+import { priceConversion } from "../../utlils/priceConversion";
 
 const PropertyDetailsPage = () => {
   const [activeButton, setActiveButton] = useState("Overview");
@@ -63,25 +64,6 @@ const PropertyDetailsPage = () => {
     }
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-  function formatPrice(numericValue) {
-    const mapping = {
-      Crore: 10000000,
-      Lakh: 100000,
-      Thousand: 1000,
-    };
-    let unit, value;
-    if (numericValue >= mapping.Crore) {
-      unit = "Crore";
-      value = numericValue / mapping.Crore;
-    } else if (numericValue >= mapping.Lakh) {
-      unit = "Lakh";
-      value = numericValue / mapping.Lakh;
-    } else {
-      unit = "Thousand";
-      value = numericValue / mapping.Thousand;
-    }
-    return `${value.toFixed(2)} ${unit}`;
-  }
 
   return (
     <div>
@@ -108,15 +90,15 @@ const PropertyDetailsPage = () => {
         <div className="flex justify-left gap-10">
           <div className="flex flex-col items-center">
             <FaBed />
-            <p>{property.bedroom}</p>
+            <p>{property.bedroom || "-"}</p>
           </div>
           <div className="flex flex-col items-center">
             <FaBath />
-            <p>{property.bath}</p>
+            <p>{property.bath || "-"}</p>
           </div>
           <div className="flex flex-col items-center">
             <BiSolidDirections />
-            <p>{property.area}</p>
+            <p>{property.area || "-"}</p>
           </div>
         </div>
         <br />
@@ -211,7 +193,7 @@ const PropertyDetailsPage = () => {
                               }`}
                             >
                               {item === "price"
-                                ? formatPrice(property[item])
+                                ? priceConversion(property[item])
                                 : property[item]}
                             </TableCell>
                           </TableRow>
@@ -253,6 +235,8 @@ const PropertyDetailsPage = () => {
           <hr />
           <br />
           <div className="p-2">
+            <p className="font-bold">Description</p>
+            <br />
             <p className={`${isExpanded ? "" : "line-clamp-2"}`}>
               {property.desc}
             </p>
@@ -266,6 +250,7 @@ const PropertyDetailsPage = () => {
           <hr />
           <div className="p-2">
             <p className="font-bold">Amenities</p>
+            <br />
             <div className="p-2">
               <Table>
                 <TableBody>

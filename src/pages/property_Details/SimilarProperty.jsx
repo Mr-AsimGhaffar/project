@@ -14,7 +14,8 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
-import { formatPrice } from "@/utlils/formatPrice";
+import { priceConversion } from "@/utlils/priceConversion";
+import SkeletonCard from "../../components/skeleton/Skeleton";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -38,6 +39,7 @@ const responsive = {
 
 export default function SimilarProperty({ location, similarPropertyId }) {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,15 +58,20 @@ export default function SimilarProperty({ location, similarPropertyId }) {
         setData(jsonData.data.properties);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
   }, [similarPropertyId]);
 
   const handleClick = (item) => {
-    navigate(`/property/${item.id}`, { state: { property: item } });
+    navigate(`/property/${item.id}`, { state: { id: item.id } });
     window.scrollTo(0, 0);
   };
+  if (loading) {
+    return <SkeletonCard />;
+  }
 
   return (
     <div>
@@ -94,7 +101,7 @@ export default function SimilarProperty({ location, similarPropertyId }) {
                     </div>
                     <div className="py-2 font-bold">
                       <CardDescription>
-                        PKR {formatPrice(item.price)}
+                        PKR {priceConversion(item.price)}
                       </CardDescription>
                       <CardDescription>{item.location}</CardDescription>
                       <br />
@@ -102,18 +109,18 @@ export default function SimilarProperty({ location, similarPropertyId }) {
                         <div className="flex justify-left gap-5">
                           <div className="flex flex-row items-center gap-1">
                             <FaBed />
-                            <p>{item.bedroom}</p>
+                            <p>{item.bedroom || "-"}</p>
                           </div>
                           <div className="flex flex-row items-center gap-1">
                             <FaBath />
-                            <p>{item.bath}</p>
+                            <p>{item.bath || "-"}</p>
                           </div>
                           <div className="flex flex-row items-center gap-1">
                             <BiSolidDirections />
                             <p>
                               {convertMarlaToSquareFeet(
                                 item.area.split(" ")[0]
-                              )}{" "}
+                              ) || "-"}{" "}
                               sqft
                             </p>
                           </div>

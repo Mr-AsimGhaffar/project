@@ -8,6 +8,9 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { formatPrice } from "../../utlils/formatPrice";
+import { formatIsoToMonthYear } from "../../utlils/formatIsoToMonthYear";
+import { formatIsoToYear } from "../../utlils/formatIsoToYear";
 
 export default function PriceIndexGraph({ areaTrendData }) {
   const pricePercentage = areaTrendData.index?.index_values || [];
@@ -18,20 +21,6 @@ export default function PriceIndexGraph({ areaTrendData }) {
   const firstIndex = pricePercentage[0];
   const percentage =
     ((lastIndex.avg_price - firstIndex.avg_price) / firstIndex.avg_price) * 100;
-
-  function formatIsoToMonthYear(isoDateString) {
-    const date = new Date(isoDateString);
-    const options = { year: "numeric", month: "long" };
-    return new Intl.DateTimeFormat("en-US", options).format(date);
-  }
-  function formatPrice(price) {
-    return price.toLocaleString("en-US");
-  }
-  function formatIsoToYear(isoDateString) {
-    const date = new Date(isoDateString);
-    const options = { year: "numeric" };
-    return new Intl.DateTimeFormat("en-US", options).format(date);
-  }
   return (
     <div>
       <div className="bg-gray-50">

@@ -11,6 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { formatDateToMonthYear } from "../../utlils/dateToMonthYear";
 
 export default function PopularityTrendGraph({
   popularityTrendData,
@@ -20,12 +21,6 @@ export default function PopularityTrendGraph({
   const [selectedMonth, setSelectedMonth] = useState(months[0]);
   if (months.length === 0) {
     return <></>;
-  }
-
-  function formatDateToMonthYear(dateString) {
-    const date = new Date(dateString);
-    const options = { month: "short", year: "numeric" };
-    return new Intl.DateTimeFormat("en-US", options).format(date);
   }
   const data = popularityTrendData.trends[selectedMonth];
 

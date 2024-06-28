@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { formatPrice } from "@/utlils/formatPrice";
+import { priceConversion } from "@/utlils/priceConversion";
 
 const PropertyDetails = ({ propertyListingData }) => {
   const totalProperties = Object.values(propertyListingData)
@@ -16,7 +16,7 @@ const PropertyDetails = ({ propertyListingData }) => {
               <CardTitle>Total Properties</CardTitle>
               <br />
               <CardDescription className="text-3xl font-bold">
-                {formatPrice(totalProperties)}
+                {priceConversion(totalProperties)}
               </CardDescription>
               <CardDescription>Listed</CardDescription>
             </CardHeader>

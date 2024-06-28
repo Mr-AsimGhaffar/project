@@ -21,7 +21,8 @@ import Recommended from "@/components/cards_Details/Recommended";
 import Paging from "@/components/Paging";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
-import { formatPrice } from "@/utlils/formatPrice";
+import { priceConversion } from "@/utlils/priceConversion";
+import { formatPrice } from "../utlils/formatPrice";
 
 const CardsDetail = () => {
   const simpleContext = useContext(appContext);
@@ -150,7 +151,7 @@ const CardsDetail = () => {
     <main>
       <div>
         <div className="text-lg font-bold">
-          <span>{totalCount} Results</span>{" "}
+          <span>{formatPrice(totalCount)} Results</span>{" "}
           <span className="text-sm text-gray-500">
             in {simpleContext.appState.searchTerm}
           </span>
@@ -246,7 +247,7 @@ const CardsDetail = () => {
                     </div>
                     <div className="py-2">
                       <CardDescription className="text-2xl font-bold">
-                        {formatPrice(item.price)}
+                        {priceConversion(item.price)} PKR
                       </CardDescription>
                       <CardDescription
                         className={`overflow-hidden ${

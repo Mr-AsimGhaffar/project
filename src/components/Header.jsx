@@ -24,7 +24,7 @@ import PropertyTag from "@/header_Component/property_type/PropertyTag";
 const Header = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState("islamabad");
   const [isVisible, setIsVisible] = useState(false);
   const simpleContext = useContext(appContext);
   const navigate = useNavigate();
@@ -169,7 +169,7 @@ const Header = () => {
                   <div className=" text-4xl font-bold">
                     <Select onValueChange={setSelectedCity}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select City" />
+                        <SelectValue placeholder="Islamabad" />
                       </SelectTrigger>
                       <SelectContent>
                         {data.map((item) => (
