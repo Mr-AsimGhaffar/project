@@ -4,17 +4,17 @@ Zameen Dashboard is a property listing application that allows users to explore 
 
 # Features
 
-Total Properties: View the total number of properties available.
-Property Listings: Browse through the list of all properties.
-Featured Properties: Highlighted properties for quick access.
-Similar Properties: Find properties similar to a selected one.
-Search Filters:
-Select City
-Search Bar
-Price Range
-Area
-Number of Beds
-Property Type (home, plots, commercial, etc.)
+1. Total Properties: View the total number of properties available.
+2. Property Listings: Browse through the list of all properties.
+3. Featured Properties: Highlighted properties for quick access.
+4. Similar Properties: Find properties similar to a selected one.
+5. Search Filters: 6. Select City 7. Search Bar 8. Price Range 9. Area 10. Number of Beds 11. Property Type (home, plots, commercial, etc.)
+
+# Prerequisites
+
+- [Node.js](https://nodejs.org/)
+- [Docker](https://www.docker.com/)
+- [Git](https://git-scm.com/)
 
 # Installation
 
@@ -67,7 +67,7 @@ Thank you for considering contributing to this project!
 
 [Asim Ghaffar](https://github.com/Mr-AsimGhaffar)
 [Mohammad Abdullah](https://github.com/Muhammad-Abdullah012)
-[Kashi Khan]()
+[Kashi Khan](m.kashi.khan93@gmail.com)
 
 # Contact
 
