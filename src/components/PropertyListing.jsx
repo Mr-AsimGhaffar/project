@@ -3,12 +3,14 @@ import PropertyDetails from "./PropertyDetails";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { formatPrice } from "@/utlils/formatPrice";
+import SkeletonCard from "./skeleton/Skeleton";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const PropertyListing = () => {
   const [propertyListingData, setPropertyListingData] = useState({});
   const [viewAll, setViewAll] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -23,6 +25,8 @@ const PropertyListing = () => {
         setPropertyListingData(jsonData.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
@@ -34,6 +38,10 @@ const PropertyListing = () => {
   const displayedData = viewAll
     ? Object.keys(propertyListingData)
     : Object.keys(propertyListingData).slice(0, 4);
+
+  if (loading) {
+    return <SkeletonCard />;
+  }
   return (
     <main>
       <PropertyDetails propertyListingData={propertyListingData} />

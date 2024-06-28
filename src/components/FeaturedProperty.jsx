@@ -9,12 +9,14 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import { formatPrice } from "@/utlils/formatPrice";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
+import SkeletonCard from "./skeleton/Skeleton";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function FeaturedProperty() {
   const [featuredData, setfeaturedData] = useState([]);
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +32,8 @@ export default function FeaturedProperty() {
         setfeaturedData(jsonData.data.properties);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
@@ -44,6 +48,10 @@ export default function FeaturedProperty() {
     navigate(`/property/${item.id}`, { state: { id: item.id } });
     window.scrollTo(0, 0);
   };
+
+  if (loading) {
+    return <SkeletonCard />;
+  }
 
   return (
     <div>

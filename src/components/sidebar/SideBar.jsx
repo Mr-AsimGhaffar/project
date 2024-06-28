@@ -49,18 +49,18 @@ const Sidebar = () => {
               <Avatar>
                 <AvatarImage src="/img/avatar2.png" alt="item img" />
               </Avatar>
-              <p>Asim Ghaffar</p>
-              <CardDescription>asim.ghaffar@gmail.com</CardDescription>
+              {/* <p>Asim Ghaffar</p> */}
+              <CardDescription>test@gmail.com/ Test User</CardDescription>
             </li>
           </ul>
         </div>
-        <ul className="p-4">
+        {/* <ul className="p-4">
           <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
             <Link to="/home" onClick={handleHomeClick}>
               Home
             </Link>
           </li>
-        </ul>
+        </ul> */}
         <ul className="p-4">
           <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
             <Link to="/dashboard" onClick={handleDashboardClick}>

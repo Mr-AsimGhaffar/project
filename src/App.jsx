@@ -4,7 +4,7 @@ import { appContext } from "./contexts/Context";
 import Navbar from "./components/navbar/Navbar";
 import Sidebar from "./components/sidebar/SideBar";
 import Dashboard from "./pages/Dashboard";
-import Home from "./components/Home";
+// import Home from "./components/Home";
 import Header from "./components/Header";
 import CardsDetail from "./pages/CardsDetail";
 import PropertyDetailsPage from "./pages/property_Details/PropertyDetailsPage";
@@ -45,9 +45,10 @@ function App() {
             {/* {appState.showDashboard ? ( */}
             <div>
               <Routes>
+                <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Home />} />
+                {/* <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} /> */}
                 <Route path="/header" element={<Header />} />
                 <Route path="/search-results" element={<CardsDetail />} />
                 <Route path="/property/:id" element={<PropertyDetailsPage />} />
