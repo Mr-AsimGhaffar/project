@@ -11,6 +11,7 @@ import PopularityTrendGraph from "./PopularityTrendGraph";
 import SimilarProperty from "./SimilarProperty";
 import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import LocationMap from "./LocationMap";
+import SkeletonCard from "../../components/skeleton/Skeleton";
 
 const PropertyDetailsPage = () => {
   const [activeButton, setActiveButton] = useState("Overview");
@@ -43,7 +44,7 @@ const PropertyDetailsPage = () => {
 
   const property = data[0];
   if (data.length === 0) {
-    return <p>loading...</p>;
+    return <SkeletonCard />;
   }
 
   const scrollToSection = (ref, buttonName) => {
