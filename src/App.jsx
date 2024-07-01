@@ -33,13 +33,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="overflow-x-hidden">
+      <div>
         <appContext.Provider value={{ appState, setAppState }}>
           <Navbar />
           <Sidebar />
           <div
             className={`p-20 transition-transform duration-300  ${
-              appState.isSidebarOpen ? "transform translate-x-64" : ""
+              appState.isSidebarOpen ? "transform -translate-x-0" : ""
             }`}
           >
             {/* {appState.showDashboard ? ( */}

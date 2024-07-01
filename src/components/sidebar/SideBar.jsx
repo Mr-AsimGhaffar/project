@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { appContext } from "@/contexts/Context";
 import { CardDescription } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +34,7 @@ const Sidebar = () => {
         <FaBars className="text-2xl text-black" />
       </div>
       <div
-        className={`fixed top-0 left-0 w-64 h-full bg-gray-800 text-white transition-transform transform ${
+        className={`z-40 fixed top-0 left-0 w-64 h-full bg-gray-800 text-white transition-transform transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

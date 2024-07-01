@@ -29,6 +29,9 @@ export default function PopularityTrendGraph({
       ? "No Change"
       : prev_position - position;
   };
+  const itemHeight = 30;
+  const paddingHeight = 80;
+  const chartHeight = data.length * itemHeight + paddingHeight;
   return (
     <div>
       <div className="bg-gray-50">
@@ -50,18 +53,6 @@ export default function PopularityTrendGraph({
                 {formatDateToMonthYear(item)}
               </Button>
             ))}
-            {/* <Button>May 2024</Button>
-            <Button>Apr 2024</Button>
-            <Button>Mar 2024</Button>
-            <Button>Feb 2024</Button>
-            <Button>Jan 2024</Button>
-            <Button>Dec 2023</Button>
-            <Button>Nov 2023</Button>
-            <Button>Oct 2023</Button>
-            <Button>Sep 2023</Button>
-            <Button>Aug 2023</Button>
-            <Button>Jul 2023</Button>
-            <Button>Jun 2023</Button> */}
           </div>
         </div>
         <div className="p-5 flex justify-between gap-20">
@@ -70,35 +61,17 @@ export default function PopularityTrendGraph({
             {data.map((item, index) => (
               <p key={index}>{index + 1}</p>
             ))}
-            {/* <p>1</p>
-            <p>2</p>
-            <p>3</p>
-            <p>4</p>
-            <p>5</p>
-            <p>6</p>
-            <p>7</p>
-            <p>8</p>
-            <p>9</p> */}
           </div>
           <div className="w-[30%] flex flex-col gap-2">
             <p>LOCALITY</p>
             {data.map((item) => (
               <p key={item.id}>{item.title}</p>
             ))}
-            {/* <p>Bahria Enclave</p>
-            <p>Bahria Garden City</p>
-            <p>Bahria Golf City</p>
-            <p>Bahria Enclave 2</p>
-            <p>Bahria Oriental Garden</p>
-            <p>Pearl Square Residency</p>
-            <p>Grande Palladium</p>
-            <p>Avenue Villas</p>
-            <p>Defence View Mall</p> */}
           </div>
           <div className="w-[50%]">
             <p>PERCENTAGE OF TOTAL SEARCHES (%)</p>
             <div>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={chartHeight}>
                 <BarChart
                   layout="vertical"
                   data={data.map((item) => ({
@@ -129,15 +102,6 @@ export default function PopularityTrendGraph({
                 {performance(item.position, item.prev_position)}
               </p>
             ))}
-            {/* <p>No Change</p>
-            <p>No Change</p>
-            <p>No Change</p>
-            <p>No Change</p>
-            <p>No Change</p>
-            <p>+1</p>
-            <p>-1</p>
-            <p>New Entry</p>
-            <p>New Entry</p> */}
           </div>
         </div>
       </div>

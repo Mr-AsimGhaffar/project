@@ -41,7 +41,7 @@ const PropertyDetailsPage = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [id]);
 
   const property = data[0];
   if (data.length === 0) {
@@ -192,9 +192,11 @@ const PropertyDetailsPage = () => {
                                 rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
                               }`}
                             >
-                              {item === "price"
-                                ? priceConversion(property[item])
-                                : property[item]}
+                              {property[item]
+                                ? item === "price"
+                                  ? priceConversion(property[item])
+                                  : property[item]
+                                : "-"}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -220,9 +222,11 @@ const PropertyDetailsPage = () => {
                                 rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
                               }`}
                             >
-                              {item === "added"
-                                ? formatTimeFromNow(property[item])
-                                : property[item]}
+                              {property[item]
+                                ? item === "added"
+                                  ? formatTimeFromNow(property[item])
+                                  : property[item]
+                                : "-"}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -248,41 +252,43 @@ const PropertyDetailsPage = () => {
             </div>
           </div>
           <hr />
-          <div className="p-2">
-            <p className="font-bold">Amenities</p>
-            <br />
+          {property.features && property.features.length > 0 && (
             <div className="p-2">
-              <Table>
-                <TableBody>
-                  {property.features
-                    .slice(
-                      0,
-                      showAllRows ? property.features.length : initialRowCount
-                    )
-                    .map((item, index) => (
-                      <TableRow
-                        key={index}
-                        className={`${
-                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        } "border-none"`}
-                      >
-                        <TableCell>{item.category}</TableCell>
-                        {item.features.map((text, index) => (
-                          <TableCell key={index}>{text}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-              {property.features.length > initialRowCount && (
-                <div className="mt-2 text-right">
-                  <button className="text-green-500" onClick={toggleShowRows}>
-                    {showAllRows ? "View Less" : "View More"}
-                  </button>
-                </div>
-              )}
+              <p className="font-bold">Amenities</p>
+              <br />
+              <div className="p-2">
+                <Table>
+                  <TableBody>
+                    {property.features
+                      .slice(
+                        0,
+                        showAllRows ? property.features.length : initialRowCount
+                      )
+                      .map((item, index) => (
+                        <TableRow
+                          key={index}
+                          className={`${
+                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                          } "border-none"`}
+                        >
+                          <TableCell>{item.category}</TableCell>
+                          {item.features.map((text, index) => (
+                            <TableCell key={index}>{text}</TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+                {property.features.length > initialRowCount && (
+                  <div className="mt-2 text-right">
+                    <button className="text-green-500" onClick={toggleShowRows}>
+                      {showAllRows ? "View Less" : "View More"}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <br />
         <div ref={locationRef} className="p-4">
