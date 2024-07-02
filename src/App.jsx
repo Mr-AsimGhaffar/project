@@ -7,7 +7,7 @@ import Dashboard from "./pages/Dashboard";
 // import Home from "./components/Home";
 import Header from "./components/Header";
 import CardsDetail from "./pages/CardsDetail";
-import PropertyDetailsPage from "./pages/property_Details/PropertyDetailsPage";
+import PropertyDetailsPage from "./pages/propertyDetails/PropertyDetailsPage";
 import Footer from "./components/footer/Footer";
 
 function App() {

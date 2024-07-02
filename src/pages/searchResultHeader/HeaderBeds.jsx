@@ -15,15 +15,11 @@ const HeaderBeds = () => {
     simpleContext.appState.selectBeds
   );
   useEffect(() => {
-    // const storedBeds = loadFromLocalStorage("selectBeds");
-    // if (storedBeds) {
-    // setSelectBeds(storedBeds);
     simpleContext.setAppState((s) => ({
       ...s,
       selectBeds: selectBeds,
     }));
-    // }
-  }, []);
+  }, [selectBeds, simpleContext]);
 
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {
@@ -47,7 +43,7 @@ const HeaderBeds = () => {
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [selectBeds]);
+  }, [selectBeds, simpleContext]);
 
   const buttonStyles = (bedType) => ({
     backgroundColor: selectBeds.includes(bedType) ? "#2C2C2C" : "#FFFFFF",
@@ -143,5 +139,4 @@ const HeaderBeds = () => {
     </div>
   );
 };
-
 export default HeaderBeds;

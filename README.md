@@ -18,23 +18,26 @@ Zameen Dashboard is a property listing application that allows users to explore 
 
 # Installation
 
-Clone the repository:
-git clone https://github.com/your-username/project.git
-Navigate to project directory:
-Navigate to project directory cd zameen_dashboard
-Install dependencies:
-npm install
+1. Clone the repository:
+2. git clone https://github.com/your-username/project.git
+3. Navigate to project directory:
+4. Navigate to project directory cd project-name.
+5. Install dependencies:
+   - npm install
+6. To run the program locally. Run the command:
+   - npm run dev
 
-Using Docker:
+- Using Docker and nginx:
 
-1. Build the Docker iamge (docker build -t project )
-2. Run the Docker container (docker run -p 3000:3000 zameen-dashboard)
-3. Start the development server (npm run dev)
-
-Using Docker and Nginx:
-
-1. Build the Docker image for production (docker build -t project )
-2. Run the Docker container (docker run -p 80:80 project)
+1. Build react app for production:
+   - npm run build
+2. Create a file named "Dockerfile" in the root of your project
+3. Create nginx.conf in the root of your project
+4. Build the Docker image using the Dockerfile:
+   - docker build -t project-name
+5. Run the Docker container using the image you just built:
+   - docker run -p 80:80 project-name
+6. Access your application by going to browser and go to "http://localhost/". You should see your React app running.
 
 Github Actions:
 

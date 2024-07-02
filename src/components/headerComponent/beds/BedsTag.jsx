@@ -13,15 +13,11 @@ const BedsTag = () => {
   const [selectBeds, setSelectBeds] = useState("");
   const simpleContext = useContext(appContext);
   useEffect(() => {
-    // const storedBeds = loadFromLocalStorage("selectBeds");
-    // if (storedBeds) {
-    // setSelectBeds(storedBeds);
     simpleContext.setAppState((s) => ({
       ...s,
       selectBeds: selectBeds,
     }));
-    // }
-  }, []);
+  }, [simpleContext, selectBeds]);
 
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {
@@ -45,7 +41,7 @@ const BedsTag = () => {
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [selectBeds]);
+  }, [simpleContext, selectBeds]);
 
   const buttonStyles = (bedType) => ({
     backgroundColor: selectBeds.includes(bedType) ? "#2C2C2C" : "#FFFFFF",

@@ -13,8 +13,10 @@ import {
 
 const Paging = ({ onPageChange }) => {
   const simpleContext = useContext(appContext);
-  const current_Page = simpleContext.appState.currentPage;
-  const total_Pages = simpleContext.appState.totalPages;
+  const { appState } = simpleContext;
+  const { currentPage: current_Page, totalPages: total_Pages } = appState;
+  // const current_Page = simpleContext.appState.currentPage;
+  // const total_Pages = simpleContext.appState.totalPages;
   return (
     <div>
       <Pagination>

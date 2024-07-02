@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-// import { IoMdOptions } from "react-icons/io";
 import PropTypes from "prop-types";
 
 const HeaderFilter = ({ onSortChange }) => {

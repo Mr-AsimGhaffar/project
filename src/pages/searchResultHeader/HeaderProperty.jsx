@@ -7,9 +7,9 @@ import {
 } from "@/components/ui/select";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
-import Home from "@/header_Component/property_type/Home";
-import Plots from "@/header_Component/property_type/Plots";
-import Commercial from "@/header_Component/property_type/Commercial";
+import Plots from "../../components/headerComponent/property_type/Plots";
+import Commercial from "../../components/headerComponent/property_type/Commercial";
+import Home from "../../components/headerComponent/property_type/Home";
 
 const HeaderProperty = () => {
   const simpleContext = useContext(appContext);
@@ -22,7 +22,7 @@ const HeaderProperty = () => {
       ...s,
       selectedSubProperty: selectedSubProperty,
     }));
-  }, [simpleContext]);
+  }, [simpleContext, selectedSubProperty]);
 
   const handleSubPropertySelect = (subProperty) => {
     const newValue = subProperty;

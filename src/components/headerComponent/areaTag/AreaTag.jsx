@@ -9,7 +9,7 @@ import {
 import { appContext } from "@/contexts/Context";
 import { useContext, useEffect, useState } from "react";
 const marlaToSquareFeet = (marla) => {
-  return marla * 272.25; // 1 marla is approximately 272.25 square feet
+  return marla * 272.25;
 };
 const AreaTag = () => {
   const [selectedAreaMax, setSelectedAreaMax] = useState(null);
@@ -23,7 +23,7 @@ const AreaTag = () => {
         selectedAreaMax: areaMaxInSquareFeet,
       }));
     }
-  }, [selectedAreaMax]);
+  }, [selectedAreaMax, simpleContext]);
   useEffect(() => {
     if (selectedAreaMin !== null) {
       const areaMiInSquareFeet = marlaToSquareFeet(selectedAreaMin);
@@ -32,21 +32,12 @@ const AreaTag = () => {
         selectedAreaMin: areaMiInSquareFeet,
       }));
     }
-  }, [selectedAreaMin]);
+  }, [selectedAreaMin, simpleContext]);
 
-  const handleSelectMaxArea = (area) => {
-    setSelectedAreaMax(area);
-  };
-  const handleSelectMinArea = (area) => {
-    setSelectedAreaMin(area);
-  };
-  const handleMinChangeArea = (e) => {
-    setSelectedAreaMin(e.target.value);
-  };
-
-  const handleMaxChangeArea = (e) => {
-    setSelectedAreaMax(e.target.value);
-  };
+  const handleSelectMaxArea = (area) => setSelectedAreaMax(area);
+  const handleSelectMinArea = (area) => setSelectedAreaMin(area);
+  const handleMinChangeArea = (e) => setSelectedAreaMin(e.target.value);
+  const handleMaxChangeArea = (e) => setSelectedAreaMax(e.target.value);
   const handleReset = () => {
     setSelectedAreaMin(null);
     setSelectedAreaMax(null);

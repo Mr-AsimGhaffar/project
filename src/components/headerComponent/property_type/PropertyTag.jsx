@@ -20,7 +20,7 @@ const PropertyTag = () => {
       ...s,
       selectedSubProperty: selectedSubProperty,
     }));
-  }, [simpleContext]);
+  }, [simpleContext, selectedSubProperty]);
 
   const handleSubPropertySelect = (subProperty) => {
     const newValue = subProperty;

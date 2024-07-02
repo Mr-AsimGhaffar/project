@@ -19,31 +19,27 @@ export default function FeaturedProperty() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`${API_URL}/property/featured`, {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "69420",
-          }),
-        });
-        const jsonData = await response.json();
-        setfeaturedData(jsonData.data.properties);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchData() {
+    try {
+      const response = await fetch(`${API_URL}/property/featured`, {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      });
+      const jsonData = await response.json();
+      setfeaturedData(jsonData.data.properties);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
+  }
+  useEffect(() => {
     fetchData();
   }, []);
-  const handleViewAll = () => {
-    setShowAll(true);
-  };
-  const handleViewLess = () => {
-    setShowAll(false);
-  };
+  const handleViewAll = () => setShowAll(true);
+  const handleViewLess = () => setShowAll(false);
   const handleClick = (item) => {
     navigate(`/property/${item.id}`, { state: { id: item.id } });
     window.scrollTo(0, 0);
@@ -95,27 +91,35 @@ export default function FeaturedProperty() {
                       <CardDescription>
                         PKR {priceConversion(item.price)}
                       </CardDescription>
-                      <CardDescription>{item.location}</CardDescription>
+                      <CardDescription className="truncate">
+                        {item.location}
+                      </CardDescription>
                       <br />
                       <CardDescription>
-                        <div className="flex justify-left gap-5">
-                          <div className="flex flex-row items-center gap-1">
-                            <FaBed />
-                            <p>{item.bedroom || "-"}</p>
-                          </div>
-                          <div className="flex flex-row items-center gap-1">
-                            <FaBath />
-                            <p>{item.bath || "-"}</p>
-                          </div>
-                          <div className="flex flex-row items-center gap-1">
-                            <BiSolidDirections />
-                            <p>
-                              {convertMarlaToSquareFeet(
-                                item.area.split(" ")[0]
-                              ) || "-"}{" "}
-                              sqft
-                            </p>
-                          </div>
+                        <div className="flex justify-left gap-3 text-xs">
+                          {item.bedroom && (
+                            <div className="flex flex-row items-center gap-1">
+                              <FaBed />
+                              <p>{item.bedroom}</p>
+                            </div>
+                          )}
+                          {item.bath && (
+                            <div className="flex flex-row items-center gap-1">
+                              <FaBath />
+                              <p>{item.bath}</p>
+                            </div>
+                          )}
+                          {item.area && (
+                            <div className="flex flex-row items-center gap-1">
+                              <BiSolidDirections />
+                              <p>
+                                {convertMarlaToSquareFeet(
+                                  item.area.split(" ")[0]
+                                )}{" "}
+                                sqft
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </CardDescription>
                     </div>

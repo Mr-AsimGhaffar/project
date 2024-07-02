@@ -1,9 +1,7 @@
 import { Input } from "@/components/ui/input";
-
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { FaAngleUp } from "react-icons/fa";
-
 import { useNavigate } from "react-router-dom";
 import { appContext } from "@/contexts/Context";
 import { Button } from "./ui/button";
@@ -16,10 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import PriceTag from "@/header_Component/priceTag/PriceTag";
-import AreaTag from "@/header_Component/areaTag/AreaTag";
-import BedsTag from "@/header_Component/beds/BedsTag";
-import PropertyTag from "@/header_Component/property_type/PropertyTag";
+import PriceTag from "./headerComponent/priceTag/PriceTag";
+import AreaTag from "./headerComponent/areaTag/AreaTag";
+import BedsTag from "./headerComponent/beds/BedsTag";
+import PropertyTag from "./headerComponent/property_type/PropertyTag";
 
 const Header = () => {
   const [data, setData] = useState([]);
@@ -31,52 +29,70 @@ const Header = () => {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const searchCityData = async (city, query, page_number = 1) => {
+  const searchCityData = async (city, query, pageNumber = 1) => {
     try {
       simpleContext.setAppState((s) => ({
         ...s,
         loading: true,
       }));
-      const price_min = simpleContext.appState.selectedAmountMin?.replace(
-        /,/g,
-        ""
-      );
-      const price_max = simpleContext.appState.selectedAmountMax?.replace(
-        /,/g,
-        ""
-      );
-      const area_min = simpleContext.appState.selectedAreaMin;
-      const area_max = simpleContext.appState.selectedAreaMax;
-      const bedrooms = simpleContext.appState.selectBeds.trim();
-      const property_type = simpleContext.appState.selectedSubProperty;
-      const response = await fetch(
-        `${API_URL}/property/search/${city ?? ""}?query=${
-          query ?? ""
-        }&page_size=10&page_number=${
-          page_number ?? ""
-        }&sort_by=id&sort_order=ASC&property_type=${property_type}&area_min=${
-          area_min ?? ""
-        }&area_max=${area_max ?? ""}&price_min=${price_min ?? ""}&price_max=${
-          price_max ?? ""
-        }&bedrooms=${bedrooms ?? ""}`,
-        {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "69420",
-          }),
-        }
-      );
+
+      const {
+        selectedAmountMin,
+        selectedAmountMax,
+        selectedAreaMin,
+        selectedAreaMax,
+        selectBeds,
+        selectedSubProperty,
+      } = simpleContext.appState;
+
+      const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
+
+      const priceMin = cleanValue(selectedAmountMin);
+      const priceMax = cleanValue(selectedAmountMax);
+      const areaMin = selectedAreaMin ?? "";
+      const areaMax = selectedAreaMax ?? "";
+      const bedrooms = selectBeds.trim() ?? "";
+      const propertyType = selectedSubProperty ?? "";
+
+      const buildUrl = (baseUrl, params) => {
+        const queryParams = new URLSearchParams(params);
+        return `${baseUrl}?${queryParams.toString()}`;
+      };
+
+      const url = buildUrl(`${API_URL}/property/search/${city ?? ""}`, {
+        query: query ?? "",
+        page_size: 10,
+        page_number: pageNumber,
+        sort_by: "id",
+        sort_order: "ASC",
+        property_type: propertyType,
+        area_min: areaMin,
+        area_max: areaMax,
+        price_min: priceMin,
+        price_max: priceMax,
+        bedrooms: bedrooms,
+      });
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      });
+
       const jsonData = await response.json();
+
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: jsonData.data.properties,
         pageData: {
           total_count: Number(jsonData.data.total_count),
-          page_number,
+          page_number: pageNumber,
         },
         graphData: jsonData.data.property_count_map,
         isApiCall: true,
       }));
+
       navigate("/search-results", {
         state: {
           cardData: jsonData.data.properties,
@@ -92,42 +108,34 @@ const Header = () => {
       }));
     }
   };
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`${API_URL}/property/available-cities`, {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "69420",
-          }),
-        });
-        const jsonData = await response.json();
-        setData(jsonData.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_URL}/property/available-cities`, {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      });
+      const jsonData = await response.json();
+      setData(jsonData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-    fetchData();
   }, [API_URL]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
-    // const storedSearchTerm = loadFromLocalStorage("searchTerm");
-    // if (storedSearchTerm) {
-    // setSearchTerm(storedSearchTerm);
     simpleContext.setAppState((s) => ({
       ...s,
       searchTerm: searchTerm,
     }));
-    // }
-  }, [simpleContext]);
+  }, [simpleContext, searchTerm]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchTerm) {
-      searchCityData(selectedCity, searchTerm);
-    } else if (selectedCity) {
-      searchCityData(selectedCity);
-    }
+    searchCityData(selectedCity, searchTerm);
   };
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -142,9 +150,7 @@ const Header = () => {
     e.preventDefault();
     handleSearch();
   };
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
+  const toggleVisibility = () => setIsVisible(!isVisible);
   return (
     <div>
       <div className="flex justify-between items-center">

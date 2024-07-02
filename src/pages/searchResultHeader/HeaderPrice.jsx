@@ -23,14 +23,14 @@ const HeaderPrice = () => {
       ...s,
       selectedAmountMax: selectedAmountMax,
     }));
-  }, [simpleContext]);
+  }, [simpleContext, selectedAmountMax]);
 
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMin: selectedAmountMin,
     }));
-  }, [simpleContext]);
+  }, [simpleContext, selectedAmountMin]);
 
   const handleSelectMax = (amount) => {
     const newValue = amount;

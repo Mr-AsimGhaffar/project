@@ -4,7 +4,7 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import PriceIndexGraph from "./PriceIndexGraph";
 import PopularityTrendGraph from "./PopularityTrendGraph";
@@ -30,18 +30,18 @@ const PropertyDetailsPage = () => {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`${API_URL}/property/${id}`);
-        const jsonData = await response.json();
-        setData(jsonData.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_URL}/property/${id}`);
+      const jsonData = await response.json();
+      setData(jsonData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
+  }, [id, API_URL]);
+  useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [fetchData]);
 
   const property = data[0];
   if (data.length === 0) {
@@ -52,12 +52,8 @@ const PropertyDetailsPage = () => {
     setActiveButton(buttonName);
     ref.current.scrollIntoView({ behavior: "smooth" });
   };
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-  const toggleShowRows = () => {
-    setShowAllRows(!showAllRows);
-  };
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
+  const toggleShowRows = () => setShowAllRows(!showAllRows);
   function capitalizeFirstLetter(str) {
     if (typeof str !== "string" || str.length === 0) {
       return str;
@@ -87,19 +83,25 @@ const PropertyDetailsPage = () => {
           </div>
         </div>
         <br />
-        <div className="flex justify-left gap-10">
-          <div className="flex flex-col items-center">
-            <FaBed />
-            <p>{property.bedroom || "-"}</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <FaBath />
-            <p>{property.bath || "-"}</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <BiSolidDirections />
-            <p>{property.area || "-"}</p>
-          </div>
+        <div className="flex gap-10">
+          {property.bedroom && (
+            <div className="flex flex-row items-center gap-1">
+              <FaBed />
+              <p>{property.bedroom}</p>
+            </div>
+          )}
+          {property.bath && (
+            <div className="flex flex-row items-center gap-1">
+              <FaBath />
+              <p>{property.bath}</p>
+            </div>
+          )}
+          {property.area && (
+            <div className="flex flex-row items-center gap-1">
+              <BiSolidDirections />
+              <p>{property.area}</p>
+            </div>
+          )}
         </div>
         <br />
       </div>

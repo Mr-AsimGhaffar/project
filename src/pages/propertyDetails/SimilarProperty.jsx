@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -42,28 +42,28 @@ export default function SimilarProperty({ location, similarPropertyId }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `${API_URL}/property/similar?id=${similarPropertyId}`,
-          {
-            method: "get",
-            headers: new Headers({
-              "ngrok-skip-browser-warning": "69420",
-            }),
-          }
-        );
-        const jsonData = await response.json();
-        setData(jsonData.data.properties);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/property/similar?id=${similarPropertyId}`,
+        {
+          method: "get",
+          headers: new Headers({
+            "ngrok-skip-browser-warning": "69420",
+          }),
+        }
+      );
+      const jsonData = await response.json();
+      setData(jsonData.data.properties);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    fetchData();
   }, [similarPropertyId]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleClick = (item) => {
     navigate(`/property/${item.id}`, { state: { id: item.id } });
@@ -81,7 +81,7 @@ export default function SimilarProperty({ location, similarPropertyId }) {
       <div className="p-3 cursor-pointer">
         <Carousel responsive={responsive}>
           {data.map((item) => (
-            <Card key={item.id}>
+            <Card key={item.id} className="m-4">
               <div onClick={() => handleClick(item)}>
                 {item.cover_photo_url && (
                   <img
@@ -103,27 +103,36 @@ export default function SimilarProperty({ location, similarPropertyId }) {
                       <CardDescription>
                         PKR {priceConversion(item.price)}
                       </CardDescription>
-                      <CardDescription>{item.location}</CardDescription>
+                      <CardDescription className="truncate">
+                        {item.location}
+                      </CardDescription>
                       <br />
+
                       <CardDescription>
-                        <div className="flex justify-left gap-5">
-                          <div className="flex flex-row items-center gap-1">
-                            <FaBed />
-                            <p>{item.bedroom || "-"}</p>
-                          </div>
-                          <div className="flex flex-row items-center gap-1">
-                            <FaBath />
-                            <p>{item.bath || "-"}</p>
-                          </div>
-                          <div className="flex flex-row items-center gap-1">
-                            <BiSolidDirections />
-                            <p>
-                              {convertMarlaToSquareFeet(
-                                item.area.split(" ")[0]
-                              ) || "-"}{" "}
-                              sqft
-                            </p>
-                          </div>
+                        <div className="flex justify-left gap-3 text-xs">
+                          {item.bedroom && (
+                            <div className="flex flex-row items-center gap-1">
+                              <FaBed />
+                              <p>{item.bedroom}</p>
+                            </div>
+                          )}
+                          {item.bath && (
+                            <div className="flex flex-row items-center gap-1">
+                              <FaBath />
+                              <p>{item.bath}</p>
+                            </div>
+                          )}
+                          {item.area && (
+                            <div className="flex flex-row items-center gap-1">
+                              <BiSolidDirections />
+                              <p>
+                                {convertMarlaToSquareFeet(
+                                  item.area.split(" ")[0]
+                                )}{" "}
+                                sqft
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </CardDescription>
                     </div>

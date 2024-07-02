@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 import { formatPrice } from "../../utlils/formatPrice";
 import { formatIsoToMonthYear } from "../../utlils/formatIsoToMonthYear";
@@ -39,8 +40,8 @@ export default function PriceIndexGraph({ areaTrendData }) {
       <div>
         <p className="text-xl p-3">PRICE (PKR)</p>
       </div>
-      <div className="flex justify-between">
-        <div className="w-[30%] text-center">
+      <div className="grid lg:grid-cols-12 grid-cols-1">
+        <div className="col-span-3 text-center">
           <p>Current Price (May 2024)</p>
           <p>PKR {formatPrice(areaTrendData.index.avg_price)}</p>
           <br />
@@ -89,36 +90,38 @@ export default function PriceIndexGraph({ areaTrendData }) {
             </div>
           </div>
         </div>
-        <div className="w-[70%]">
-          <LineChart
-            width={900}
-            height={400}
-            data={areaTrendData.index.index_values
-              .map((item) => ({
-                name: formatIsoToYear(item.month_year),
-                price: item.avg_price,
-              }))
-              .reverse()}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis
-              domain={[0, "dataMax"]}
-              type="number"
-              tickFormatter={formatPrice}
-              width={100}
-            />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="price"
-              stroke="green"
-              dot={false}
-              activeDot={{ r: 7 }}
-              strokeWidth={3}
-            />
-          </LineChart>
+        <div className="col-span-9" style={{ width: "100%", height: "100%" }}>
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart
+              width={900}
+              height={400}
+              data={areaTrendData.index.index_values
+                .map((item) => ({
+                  name: formatIsoToYear(item.month_year),
+                  price: item.avg_price,
+                }))
+                .reverse()}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis
+                domain={[0, "dataMax"]}
+                type="number"
+                tickFormatter={formatPrice}
+                width={100}
+              />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="green"
+                dot={false}
+                activeDot={{ r: 7 }}
+                strokeWidth={3}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

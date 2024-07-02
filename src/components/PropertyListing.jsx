@@ -12,32 +12,32 @@ const PropertyListing = () => {
   const [viewAll, setViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(`${API_URL}/property/count`, {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "69420",
-          }),
-        });
-        const jsonData = await response.json();
-        setPropertyListingData(jsonData.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchData() {
+    try {
+      const response = await fetch(`${API_URL}/property/count`, {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      });
+      const jsonData = await response.json();
+      setPropertyListingData(jsonData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
+  }
+  useEffect(() => {
     fetchData();
-  }, [API_URL]);
-  const toggleView = () => {
-    setViewAll((prev) => !prev);
-  };
+  }, []);
 
+  const toggleView = () => setViewAll((prev) => !prev);
+
+  const propertyListingKeys = Object.keys(propertyListingData);
   const displayedData = viewAll
-    ? Object.keys(propertyListingData)
-    : Object.keys(propertyListingData).slice(0, 4);
+    ? propertyListingKeys
+    : propertyListingKeys.slice(0, 4);
 
   if (loading) {
     return <SkeletonCard />;
@@ -73,7 +73,6 @@ const PropertyListing = () => {
                       {priceConversion(item.amount)}
                     </CardDescription>
                   </div>
-                  <CardDescription>Listed</CardDescription>
                 </CardHeader>
               </Card>
             </div>

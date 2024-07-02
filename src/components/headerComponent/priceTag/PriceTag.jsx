@@ -15,26 +15,18 @@ const PriceTag = () => {
   const [selectedAmountMin, setSelectedAmountMin] = useState(null);
   const simpleContext = useContext(appContext);
   useEffect(() => {
-    // const storedSelectedAmountMax = loadFromLocalStorage("selectedAmountMax");
-    // if (storedSelectedAmountMax) {
-    // setSelectedAmountMax(storedSelectedAmountMax);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMax: selectedAmountMax,
     }));
-    // }
-  }, [simpleContext]);
+  }, [simpleContext, selectedAmountMax]);
 
   useEffect(() => {
-    // const storedSelectedAmountMin = loadFromLocalStorage("selectedAmountMin");
-    // if (storedSelectedAmountMin) {
-    // setSelectedAmountMin(storedSelectedAmountMin);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMin: selectedAmountMin,
     }));
-    // }
-  }, [simpleContext]);
+  }, [simpleContext, selectedAmountMin]);
 
   const handleSelectMax = (amount) => {
     const newValue = amount;

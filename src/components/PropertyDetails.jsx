@@ -18,7 +18,6 @@ const PropertyDetails = ({ propertyListingData }) => {
               <CardDescription className="text-3xl font-bold">
                 {priceConversion(totalProperties)}
               </CardDescription>
-              <CardDescription>Listed</CardDescription>
             </CardHeader>
           </Card>
         </div>
