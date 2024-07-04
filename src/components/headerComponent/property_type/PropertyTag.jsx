@@ -12,77 +12,80 @@ import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 
 const PropertyTag = () => {
-  const [selectedPropertyType, setSelectedPropertyType] = useState("Home");
-  const [selectedSubProperty, setSelectedSubProperty] = useState("");
+  const [propertyState, setPropertyState] = useState({
+    selectedPropertyType: "Home",
+    selectedSubProperty: "",
+  });
   const simpleContext = useContext(appContext);
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
-      selectedSubProperty: selectedSubProperty,
+      propertyState: propertyState,
     }));
-  }, [simpleContext, selectedSubProperty]);
+  }, [simpleContext, propertyState]);
 
   const handleSubPropertySelect = (subProperty) => {
     const newValue = subProperty;
-    setSelectedSubProperty(newValue);
-    simpleContext.setAppState((s) => ({
-      ...s,
+    setPropertyState((prevState) => ({
+      ...prevState,
       selectedSubProperty: newValue,
     }));
     saveToLocalStorage("selectedSubProperty", newValue);
   };
 
+  const handlePropertyTypeChange = (propertyType) => {
+    setPropertyState({
+      selectedPropertyType: propertyType,
+      selectedSubProperty: "",
+    });
+  };
   return (
     <div>
       <Select>
         <SelectTrigger>
           <SelectValue placeholder="PROPERTY TYPE" />
-          <div>{selectedSubProperty || selectedPropertyType}</div>
+          <div>
+            {propertyState.selectedSubProperty ||
+              propertyState.selectedPropertyType}
+          </div>
         </SelectTrigger>
         <SelectContent className="w-[100%]">
           <div className="flex justify-between items-center p-5">
             <h1
               className={`cursor-pointer hover:text-blue-500 ${
-                selectedPropertyType === "Home" && "text-blue-500"
+                propertyState.selectedPropertyType === "Home" && "text-blue-500"
               }`}
-              onClick={() => {
-                setSelectedPropertyType("Home");
-                setSelectedSubProperty("");
-              }}
+              onClick={() => handlePropertyTypeChange("Home")}
             >
               Home
             </h1>
             <h1
               className={`cursor-pointer hover:text-blue-500 ${
-                selectedPropertyType === "Plots" && "text-blue-500"
+                propertyState.selectedPropertyType === "Plots" &&
+                "text-blue-500"
               }`}
-              onClick={() => {
-                setSelectedPropertyType("Plots");
-                setSelectedSubProperty("");
-              }}
+              onClick={() => handlePropertyTypeChange("Plots")}
             >
               Plots
             </h1>
             <h1
               className={`cursor-pointer hover:text-blue-500 ${
-                selectedPropertyType === "Commercial" && "text-blue-500"
+                propertyState.selectedPropertyType === "Commercial" &&
+                "text-blue-500"
               }`}
-              onClick={() => {
-                setSelectedPropertyType("Commercial");
-                setSelectedSubProperty("");
-              }}
+              onClick={() => handlePropertyTypeChange("Commercial")}
             >
               Commercial
             </h1>
           </div>
           <div>
-            {selectedPropertyType === "Home" && (
+            {propertyState.selectedPropertyType === "Home" && (
               <Home onSubPropertySelect={handleSubPropertySelect} />
             )}
-            {selectedPropertyType === "Plots" && (
+            {propertyState.selectedPropertyType === "Plots" && (
               <Plots onSubPropertySelect={handleSubPropertySelect} />
             )}
-            {selectedPropertyType === "Commercial" && (
+            {propertyState.selectedPropertyType === "Commercial" && (
               <Commercial onSubPropertySelect={handleSubPropertySelect} />
             )}
           </div>

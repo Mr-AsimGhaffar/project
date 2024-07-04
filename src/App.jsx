@@ -19,8 +19,10 @@ function App() {
     selectedAreaMin: "",
     selectedAreaMax: "",
     selectBeds: "",
-    selectedSubProperty: "",
-    graphData: {},
+    propertyState: {
+      selectedPropertyType: "Home",
+      selectedSubProperty: "",
+    },
     isApiCall: false,
     loading: false,
     showDashboard: false,

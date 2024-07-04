@@ -17,28 +17,59 @@ const Paging = ({ onPageChange }) => {
   const { currentPage: current_Page, totalPages: total_Pages } = appState;
   // const current_Page = simpleContext.appState.currentPage;
   // const total_Pages = simpleContext.appState.totalPages;
+  const renderPaginationLinks = () => {
+    let pages = [];
+    const additionalPages = current_Page === 9 ? 4 : 0;
+    const totalDisplayedPages = Math.min(9 + additionalPages, total_Pages);
+
+    for (let i = 1; i <= totalDisplayedPages; i++) {
+      pages.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            isActive={i === current_Page}
+            href="#"
+            onClick={() => onPageChange(i)}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return pages;
+  };
   return (
     <div>
       <Pagination>
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
+              isActive
               href="#"
               onClick={() => onPageChange(current_Page - 1)}
               disabled={current_Page === 1}
             />
           </PaginationItem>
-
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">
-              {current_Page} / {total_Pages}
-            </PaginationLink>
-          </PaginationItem>
+          {renderPaginationLinks()}
+          {current_Page < total_Pages - 4 && (
+            <>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  isActive={current_Page === total_Pages}
+                  href="#"
+                  onClick={() => onPageChange(total_Pages)}
+                >
+                  {total_Pages}
+                </PaginationLink>
+              </PaginationItem>
+            </>
+          )}
           <PaginationItem>
             <PaginationNext
+              isActive
               href="#"
               onClick={() => onPageChange(current_Page + 1)}
               disabled={current_Page === total_Pages}
