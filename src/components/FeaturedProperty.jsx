@@ -10,8 +10,7 @@ import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import { priceConversion } from "@/utlils/priceConversion";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "./skeleton/Skeleton";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { fetchFeaturedProperties } from "../utlils/fetchApi";
 
 export default function FeaturedProperty() {
   const [featuredData, setfeaturedData] = useState([]);
@@ -19,25 +18,20 @@ export default function FeaturedProperty() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  async function fetchData() {
-    try {
-      const response = await fetch(`${API_URL}/property/featured`, {
-        method: "get",
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
-      });
-      const jsonData = await response.json();
-      setfeaturedData(jsonData.data.properties);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
   useEffect(() => {
-    fetchData();
+    async function loadData() {
+      try {
+        const data = await fetchFeaturedProperties();
+        setfeaturedData(data);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
   }, []);
+
   const handleViewAll = () => setShowAll(true);
   const handleViewLess = () => setShowAll(false);
   const handleClick = (item) => {

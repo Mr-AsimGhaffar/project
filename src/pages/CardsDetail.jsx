@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
@@ -20,8 +20,10 @@ import { Input } from "@/components/ui/input";
 import { priceConversion } from "@/utlils/priceConversion";
 import { formatPrice } from "../utlils/formatPrice";
 import Recommended from "../components/cardsDetails/Recommended";
+import { searchCityData } from "../utlils/fetchApi";
 
 const CardsDetail = () => {
+  const isInitialRender = useRef(true);
   const simpleContext = useContext(appContext);
   const [expandedCards, setExpandedCards] = useState({});
   const [searchTerm, setSearchTerm] = useState(
@@ -38,16 +40,14 @@ const CardsDetail = () => {
     pageData: { total_count: totalCount },
   } = simpleContext.appState;
 
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
 
-  const searchCityData = async (
+  const fetchCityData = async (
     city,
     query,
-    page_number = 1,
-    sort_by = "id",
-    sort_order = "ASC"
+    page_number,
+    sort_by,
+    sort_order
   ) => {
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
@@ -56,33 +56,27 @@ const CardsDetail = () => {
         selectedAmountMin,
         selectedAmountMax,
         selectBeds,
-        selectedSubProperty,
+        propertyState,
       } = simpleContext.appState;
 
-      const price_min = cleanValue(selectedAmountMin);
-      const price_max = cleanValue(selectedAmountMax);
-      const bedrooms = selectBeds.trim();
-      const property_type = selectedSubProperty;
+      const filters = {
+        price_min: cleanValue(selectedAmountMin),
+        price_max: cleanValue(selectedAmountMax),
+        bedrooms: selectBeds.trim(),
+        property_type:
+          propertyState.selectedSubProperty ??
+          propertyState.selectedPropertyType,
+      };
 
-      const url = `${API_URL}/property/search/${city ?? ""}?query=${
-        query ?? ""
-      }&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type}&area_min=&area_max=&price_min=${
-        price_min ?? ""
-      }&price_max=${price_max ?? ""}&bedrooms=${bedrooms ?? ""}`;
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const jsonData = await response.json();
-      const { properties, total_count, page_size } = jsonData.data;
+      const data = await searchCityData(
+        city,
+        query,
+        page_number,
+        sort_by,
+        sort_order,
+        filters
+      );
+      const { properties, total_count, page_size } = data;
 
       simpleContext.setAppState((s) => ({
         ...s,
@@ -108,15 +102,31 @@ const CardsDetail = () => {
     }));
   }, [searchTerm, simpleContext]);
 
-  // useEffect(() => {
-  //   searchCityData(selectedCity, searchTerm, currentPage, sortBy, sortOrder);
-  // }, [
-  //   simpleContext.appState.selectBeds,
-  //   simpleContext.appState.selectedAmountMin,
-  //   simpleContext.appState.selectedAmountMax,
-  //   simpleContext.appState.selectedPropertyType,
-  //   simpleContext.appState.selectedSubProperty,
-  // ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCityData(
+        selectedCity,
+        searchTerm,
+        currentPage,
+        sortBy,
+        sortOrder
+      );
+    };
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+    } else {
+      fetchData();
+    }
+  }, [
+    selectedCity,
+    currentPage,
+    sortBy,
+    sortOrder,
+    simpleContext.appState.selectBeds,
+    simpleContext.appState.selectedAmountMin,
+    simpleContext.appState.selectedAmountMax,
+    simpleContext.appState.propertyState.selectedSubProperty,
+  ]);
 
   const handleToggleExpand = (id) => {
     setExpandedCards((prev) => ({
@@ -126,19 +136,22 @@ const CardsDetail = () => {
   };
   const { loading } = simpleContext.appState;
 
-  const handleSearch = (sort_by = sortBy, sort_order = sortOrder) =>
-    searchCityData(undefined, searchTerm || "", 1, sort_by, sort_order);
+  const handleSearch = (sort_by = sortBy, sort_order = sortOrder) => {
+    fetchCityData(selectedCity, searchTerm || "", 1, sort_by, sort_order);
+    setSelectedCity(selectedCity);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSearch();
   };
   const handlePageChange = (page_number) =>
-    searchCityData(selectedCity, searchTerm, page_number, sortBy, sortOrder);
+    fetchCityData(selectedCity, searchTerm, page_number, sortBy, sortOrder);
 
   const handleChange = (e) => {
     const newValue = e.target.value;
     setSearchTerm(newValue);
+    setSelectedCity(selectedCity);
     simpleContext.setAppState((s) => ({
       ...s,
       searchTerm: newValue,

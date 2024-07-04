@@ -13,6 +13,7 @@ import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import LocationMap from "./LocationMap";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { priceConversion } from "../../utlils/priceConversion";
+import { fetchPropertyDetails } from "../../utlils/fetchApi";
 
 const PropertyDetailsPage = () => {
   const [activeButton, setActiveButton] = useState("Overview");
@@ -28,17 +29,14 @@ const PropertyDetailsPage = () => {
   const trendsRef = useRef(null);
   const [data, setData] = useState([]);
 
-  const API_URL = import.meta.env.VITE_API_URL;
-
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch(`${API_URL}/property/${id}`);
-      const jsonData = await response.json();
-      setData(jsonData.data);
+      const propertyDetails = await fetchPropertyDetails(id);
+      setData(propertyDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, [id, API_URL]);
+  }, [id]);
   useEffect(() => {
     fetchData();
   }, [fetchData]);

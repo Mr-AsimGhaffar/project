@@ -18,6 +18,8 @@ import PriceTag from "./headerComponent/priceTag/PriceTag";
 import AreaTag from "./headerComponent/areaTag/AreaTag";
 import BedsTag from "./headerComponent/beds/BedsTag";
 import PropertyTag from "./headerComponent/property_type/PropertyTag";
+import Spinner from "./spinner/Spinner";
+import { fetchAvailableCities, searchCityData } from "../utlils/fetchApi";
 
 const Header = () => {
   const [data, setData] = useState([]);
@@ -27,9 +29,30 @@ const Header = () => {
   const simpleContext = useContext(appContext);
   const navigate = useNavigate();
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const fetchData = useCallback(async () => {
+    try {
+      const cities = await fetchAvailableCities();
+      setData(cities);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, []);
 
-  const searchCityData = async (city, query, pageNumber = 1) => {
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      searchTerm: searchTerm,
+    }));
+  }, [simpleContext, searchTerm]);
+
+  const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
     try {
       simpleContext.setAppState((s) => ({
         ...s,
@@ -42,61 +65,43 @@ const Header = () => {
         selectedAreaMin,
         selectedAreaMax,
         selectBeds,
-        selectedSubProperty,
+        propertyState,
       } = simpleContext.appState;
 
-      const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
-
-      const priceMin = cleanValue(selectedAmountMin);
-      const priceMax = cleanValue(selectedAmountMax);
-      const areaMin = selectedAreaMin ?? "";
-      const areaMax = selectedAreaMax ?? "";
-      const bedrooms = selectBeds.trim() ?? "";
-      const propertyType = selectedSubProperty ?? "";
-
-      const buildUrl = (baseUrl, params) => {
-        const queryParams = new URLSearchParams(params);
-        return `${baseUrl}?${queryParams.toString()}`;
+      const filters = {
+        price_min: cleanValue(selectedAmountMin),
+        price_max: cleanValue(selectedAmountMax),
+        area_min: selectedAreaMin,
+        area_max: selectedAreaMax,
+        bedrooms: selectBeds,
+        property_type:
+          propertyState.selectedSubProperty ??
+          propertyState.selectedPropertyType,
       };
 
-      const url = buildUrl(`${API_URL}/property/search/${city ?? ""}`, {
-        query: query ?? "",
-        page_size: 10,
-        page_number: pageNumber,
-        sort_by: "id",
-        sort_order: "ASC",
-        property_type: propertyType,
-        area_min: areaMin,
-        area_max: areaMax,
-        price_min: priceMin,
-        price_max: priceMax,
-        bedrooms: bedrooms,
-      });
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
-      });
-
-      const jsonData = await response.json();
+      const data = await searchCityData(
+        selectedCity,
+        searchTerm,
+        1,
+        "id",
+        "ASC",
+        filters
+      );
 
       simpleContext.setAppState((s) => ({
         ...s,
-        cardData: jsonData.data.properties,
+        cardData: data.properties,
         pageData: {
-          total_count: Number(jsonData.data.total_count),
-          page_number: pageNumber,
+          total_count: Number(data.total_count),
+          page_number: 1,
         },
-        graphData: jsonData.data.property_count_map,
         isApiCall: true,
       }));
 
       navigate("/search-results", {
         state: {
-          cardData: jsonData.data.properties,
-          totalCount: jsonData.data.total_count,
+          cardData: data.properties,
+          totalCount: data.total_count,
         },
       });
     } catch (error) {
@@ -107,35 +112,6 @@ const Header = () => {
         loading: false,
       }));
     }
-  };
-  const fetchData = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_URL}/property/available-cities`, {
-        method: "get",
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
-      });
-      const jsonData = await response.json();
-      setData(jsonData.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }, [API_URL]);
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    simpleContext.setAppState((s) => ({
-      ...s,
-      searchTerm: searchTerm,
-    }));
-  }, [simpleContext, searchTerm]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    searchCityData(selectedCity, searchTerm);
   };
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -151,6 +127,7 @@ const Header = () => {
     handleSearch();
   };
   const toggleVisibility = () => setIsVisible(!isVisible);
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -255,32 +232,7 @@ const Header = () => {
                   </div>
                 </div>
               </form>
-              {simpleContext.appState.loading && (
-                <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center">
-                  <div
-                    role="status"
-                    className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                      viewBox="0 0 100 101"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                        fill="currentColor"
-                      />
-                      <path
-                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                        fill="currentFill"
-                      />
-                    </svg>
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
-              )}
+              {simpleContext.appState.loading && <Spinner />}
             </div>
           </div>
         </CardHeader>

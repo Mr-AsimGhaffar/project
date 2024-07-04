@@ -16,8 +16,7 @@ import { BiSolidDirections } from "react-icons/bi";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "../../components/skeleton/Skeleton";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { fetchSimilarProperties } from "../../utlils/fetchApi";
 
 const responsive = {
   desktop: {
@@ -44,23 +43,15 @@ export default function SimilarProperty({ location, similarPropertyId }) {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/property/similar?id=${similarPropertyId}`,
-        {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "69420",
-          }),
-        }
-      );
-      const jsonData = await response.json();
-      setData(jsonData.data.properties);
+      const data = await fetchSimilarProperties(similarPropertyId);
+      setData(data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error loading data:", error);
     } finally {
       setLoading(false);
     }
   }, [similarPropertyId]);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
