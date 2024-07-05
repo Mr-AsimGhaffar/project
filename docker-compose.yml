@@ -5,7 +5,7 @@ services:
     container_name: frontend_container
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     ports:
       - "4000:5000"
     volumes:
