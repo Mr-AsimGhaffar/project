@@ -17,6 +17,7 @@ import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchSimilarProperties } from "../../utlils/fetchApi";
+import { toast } from "react-toastify";
 
 const responsive = {
   desktop: {
@@ -46,7 +47,14 @@ export default function SimilarProperty({ location, similarPropertyId }) {
       const data = await fetchSimilarProperties(similarPropertyId);
       setData(data);
     } catch (error) {
-      console.error("Error loading data:", error);
+      const errorMessage =
+        error.message || "Failed to fetch featured properties.";
+      console.error("Error fetching featured properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 10000,
+      });
+      throw error;
     } finally {
       setLoading(false);
     }

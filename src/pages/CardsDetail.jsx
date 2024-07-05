@@ -30,8 +30,6 @@ const CardsDetail = () => {
   const [searchTerm, setSearchTerm] = useState(
     simpleContext.appState.searchTerm
   );
-  const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedCity, setSelectedCity] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [sortBy, setSortBy] = useState("id");
@@ -118,7 +116,7 @@ const CardsDetail = () => {
       await searchCityData(
         selectedCity,
         searchTerm,
-        currentPage,
+        simpleContext.appState.currentPage,
         sortBy,
         sortOrder
       );
@@ -130,7 +128,7 @@ const CardsDetail = () => {
     }
   }, [
     selectedCity,
-    currentPage,
+    simpleContext.appState.currentPage,
     sortBy,
     sortOrder,
     simpleContext.appState.selectBeds,
@@ -307,8 +305,8 @@ const CardsDetail = () => {
       </div>
       <div className="mt-2">
         <Paging
-          currentPage={currentPage}
-          totalPages={totalPages}
+          currentPage={simpleContext.appState.currentPage}
+          totalPages={simpleContext.appState.totalPages}
           onPageChange={handlePageChange}
         />
       </div>

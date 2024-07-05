@@ -5,6 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchPropertyCount } from "../utlils/fetchApi";
+import { toast } from "react-toastify";
 
 const PropertyListing = () => {
   const [propertyListingData, setPropertyListingData] = useState({});
@@ -17,7 +18,14 @@ const PropertyListing = () => {
         const data = await fetchPropertyCount();
         setPropertyListingData(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        const errorMessage =
+          error.message || "Failed to fetch featured properties.";
+        console.error("Error fetching featured properties:", errorMessage);
+        toast.error(errorMessage, {
+          position: "top-center",
+          autoClose: 10000,
+        });
+        throw error;
       } finally {
         setLoading(false);
       }

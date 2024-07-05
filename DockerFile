@@ -10,7 +10,7 @@ WORKDIR /app
 RUN npm install
 
 # Build the project
-RUN npm run build
+RUN npm run build --no-cache
 
 # Ensure the dist directory exists
 RUN ls -alh dist

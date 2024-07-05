@@ -95,6 +95,10 @@ const Header = () => {
           total_count: Number(data.total_count),
           page_number: 1,
         },
+        totalPages: Math.ceil(
+          Number(data.total_count) / Number(data.page_size)
+        ),
+        currentPage: data.page_number,
         isApiCall: true,
       }));
 
