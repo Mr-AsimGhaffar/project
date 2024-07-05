@@ -4,31 +4,25 @@ import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "./skeleton/Skeleton";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { fetchPropertyCount } from "../utlils/fetchApi";
 
 const PropertyListing = () => {
   const [propertyListingData, setPropertyListingData] = useState({});
   const [viewAll, setViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  async function fetchData() {
-    try {
-      const response = await fetch(`${API_URL}/property/count`, {
-        method: "get",
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
-      });
-      const jsonData = await response.json();
-      setPropertyListingData(jsonData.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchPropertyCount();
+        setPropertyListingData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, []);
 

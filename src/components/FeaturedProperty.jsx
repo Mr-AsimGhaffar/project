@@ -11,6 +11,7 @@ import { priceConversion } from "@/utlils/priceConversion";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchFeaturedProperties } from "../utlils/fetchApi";
+import { toast } from "react-toastify";
 
 export default function FeaturedProperty() {
   const [featuredData, setfeaturedData] = useState([]);
@@ -24,7 +25,14 @@ export default function FeaturedProperty() {
         const data = await fetchFeaturedProperties();
         setfeaturedData(data);
       } catch (error) {
-        console.error("Error loading data:", error);
+        const errorMessage =
+          error.message || "Failed to fetch featured properties.";
+        console.error("Error fetching featured properties:", errorMessage);
+        toast.error(errorMessage, {
+          position: "top-center",
+          autoClose: 10000,
+        });
+        throw error;
       } finally {
         setLoading(false);
       }

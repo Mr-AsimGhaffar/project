@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 async function fetchFeaturedProperties() {
@@ -8,6 +10,10 @@ async function fetchFeaturedProperties() {
         "ngrok-skip-browser-warning": "69420",
       }),
     });
+    if (!response.ok) {
+      const errorMessage = `HTTP error! Status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
     const jsonData = await response.json();
     return jsonData.data.properties;
   } catch (error) {
@@ -27,10 +33,20 @@ async function fetchSimilarProperties(similarPropertyId) {
         }),
       }
     );
+    if (!response.ok) {
+      const errorMessage = `HTTP error! Status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
     const jsonData = await response.json();
     return jsonData.data.properties;
   } catch (error) {
-    console.error("Error fetching similar properties:", error);
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: toast,
+      autoClose: 10000,
+    });
     throw error;
   }
 }
@@ -43,10 +59,20 @@ async function fetchPropertyDetails(id) {
         "ngrok-skip-browser-warning": "69420",
       }),
     });
+    if (!response.ok) {
+      const errorMessage = `HTTP error! Status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
     const jsonData = await response.json();
     return jsonData.data;
   } catch (error) {
-    console.error("Error fetching similar properties:", error);
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: toast,
+      autoClose: 10000,
+    });
     throw error;
   }
 }
@@ -76,13 +102,19 @@ async function searchCityData(
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorMessage = `HTTP error! Status: ${response.status}`;
+      throw new Error(errorMessage);
     }
 
     const jsonData = await response.json();
     return jsonData.data;
   } catch (error) {
-    console.error("Error fetching city data:", error);
+    const errorMessage = error.message || "Error fetching city data.";
+    console.error("Error fetching city data:", errorMessage);
+    toast.error(errorMessage, {
+      position: toast,
+      autoClose: 10000,
+    });
     throw error;
   }
 }
@@ -95,10 +127,46 @@ async function fetchAvailableCities() {
         "ngrok-skip-browser-warning": "69420",
       }),
     });
+    if (!response.ok) {
+      const errorMessage = `HTTP error! Status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
     const jsonData = await response.json();
     return jsonData.data;
   } catch (error) {
-    console.error("Error fetching available cities:", error);
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: toast,
+      autoClose: 10000,
+    });
+    throw error;
+  }
+}
+
+export async function fetchPropertyCount() {
+  try {
+    const response = await fetch(`${API_URL}/property/count`, {
+      method: "get",
+      headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+      }),
+    });
+    if (!response.ok) {
+      const errorMessage = `HTTP error! Status: ${response.status}`;
+      throw new Error(errorMessage);
+    }
+    const jsonData = await response.json();
+    return jsonData.data;
+  } catch (error) {
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: toast,
+      autoClose: 10000,
+    });
     throw error;
   }
 }

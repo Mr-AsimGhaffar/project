@@ -1,13 +1,16 @@
-FROM node:lts
-
-# Copy Dir
-COPY . ./app
+FROM node:lts AS build
 
 # Work to Dir
 WORKDIR /app
 
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
 # Install Node Package
 RUN npm install
+
+# Copy rest of the application
+COPY . .
 
 # Build the project
 RUN npm run build
@@ -15,8 +18,14 @@ RUN npm run build
 # Ensure the dist directory exists
 RUN ls -alh dist
 
+# Stage 2: Serve the built project
+FROM node:lts-slim
+
 # Install 'serve' globally
 RUN npm install -g serve
+
+# Copy the build output from the previous stage
+COPY --from=build /app/dist /app/dist
 
 # Expose the port the app runs on
 EXPOSE 5000

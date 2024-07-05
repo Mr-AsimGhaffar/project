@@ -9,6 +9,8 @@ import Header from "./components/Header";
 import CardsDetail from "./pages/CardsDetail";
 import PropertyDetailsPage from "./pages/propertyDetails/PropertyDetailsPage";
 import Footer from "./components/footer/Footer";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [appState, setAppState] = useState({
@@ -39,6 +41,7 @@ function App() {
         <appContext.Provider value={{ appState, setAppState }}>
           <Navbar />
           <Sidebar />
+          <ToastContainer />
           <div
             className={`p-20 transition-transform duration-300  ${
               appState.isSidebarOpen ? "transform -translate-x-0" : ""

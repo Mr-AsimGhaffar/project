@@ -21,6 +21,7 @@ import { priceConversion } from "@/utlils/priceConversion";
 import { formatPrice } from "../utlils/formatPrice";
 import Recommended from "../components/cardsDetails/Recommended";
 import { searchCityData } from "../utlils/fetchApi";
+import { toast } from "react-toastify";
 
 const CardsDetail = () => {
   const isInitialRender = useRef(true);
@@ -77,7 +78,10 @@ const CardsDetail = () => {
         filters
       );
       const { properties, total_count, page_size } = data;
-
+      if (!data.ok) {
+        const errorMessage = `HTTP error! Status: ${data.status}`;
+        throw new Error(errorMessage);
+      }
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: properties,
@@ -87,7 +91,14 @@ const CardsDetail = () => {
         currentPage: page_number,
       }));
     } catch (error) {
-      console.error("Error fetching data:", error);
+      const errorMessage =
+        error.message || "Failed to fetch featured properties.";
+      console.error("Error fetching featured properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 10000,
+      });
+      throw error;
     } finally {
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
     }
@@ -104,7 +115,7 @@ const CardsDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchCityData(
+      await searchCityData(
         selectedCity,
         searchTerm,
         currentPage,
