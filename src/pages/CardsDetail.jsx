@@ -113,7 +113,7 @@ const CardsDetail = () => {
         simpleContext.setAppState((s) => ({ ...s, loading: true }));
         const data = await searchCityData(
           selectedCity,
-          searchTerm,
+          searchTerm || "",
           simpleContext.appState.currentPage,
           sortBy,
           sortOrder,
@@ -172,9 +172,49 @@ const CardsDetail = () => {
   };
   const { loading } = simpleContext.appState;
 
-  const handleSearch = (sort_by = sortBy, sort_order = sortOrder) => {
-    fetchCityData(selectedCity, searchTerm || "", 1, sort_by, sort_order);
-    setSelectedCity(selectedCity);
+  const handleSearch = async (sort_by = sortBy, sort_order = sortOrder) => {
+    try {
+      simpleContext.setAppState((s) => ({ ...s, loading: true }));
+
+      // Fetch data using the current selectedCity and searchTerm
+      const data = await searchCityData(
+        selectedCity,
+        searchTerm || "",
+        1,
+        sort_by,
+        sort_order,
+        {
+          price_min: cleanValue(simpleContext.appState.selectedAmountMin),
+          price_max: cleanValue(simpleContext.appState.selectedAmountMax),
+          bedrooms: simpleContext.appState.selectBeds.trim(),
+          property_type:
+            simpleContext.appState.propertyState.selectedSubProperty,
+        }
+      );
+
+      const { properties, total_count, page_size, page_number } = data;
+
+      // Update appState with fetched data
+      simpleContext.setAppState((s) => ({
+        ...s,
+        cardData: properties,
+        pageData: { total_count: Number(total_count), page_number },
+        isApiCall: true,
+        totalPages: Math.ceil(Number(total_count) / Number(page_size)),
+        currentPage: page_number,
+      }));
+    } catch (error) {
+      const errorMessage =
+        error.message || "Failed to fetch featured properties.";
+      console.error("Error fetching featured properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 10000,
+      });
+      throw error;
+    } finally {
+      simpleContext.setAppState((s) => ({ ...s, loading: false }));
+    }
   };
 
   const handleSubmit = (e) => {
