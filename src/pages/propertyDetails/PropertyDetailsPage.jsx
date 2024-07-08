@@ -33,7 +33,6 @@ const PropertyDetailsPage = () => {
   const fetchData = useCallback(async () => {
     try {
       const propertyDetails = await fetchPropertyDetails(id);
-
       setData(propertyDetails);
     } catch (error) {
       const errorMessage =

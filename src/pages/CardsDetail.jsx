@@ -76,10 +76,6 @@ const CardsDetail = () => {
         filters
       );
       const { properties, total_count, page_size } = data;
-      if (!data.ok) {
-        const errorMessage = `HTTP error! Status: ${data.status}`;
-        throw new Error(errorMessage);
-      }
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: properties,
@@ -113,14 +109,45 @@ const CardsDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await searchCityData(
-        selectedCity,
-        searchTerm,
-        simpleContext.appState.currentPage,
-        sortBy,
-        sortOrder
-      );
+      try {
+        simpleContext.setAppState((s) => ({ ...s, loading: true }));
+        const data = await searchCityData(
+          selectedCity,
+          searchTerm,
+          simpleContext.appState.currentPage,
+          sortBy,
+          sortOrder,
+          {
+            price_min: cleanValue(simpleContext.appState.selectedAmountMin),
+            price_max: cleanValue(simpleContext.appState.selectedAmountMax),
+            bedrooms: simpleContext.appState.selectBeds.trim(),
+            property_type:
+              simpleContext.appState.propertyState.selectedSubProperty,
+          }
+        );
+        const { properties, total_count, page_size, page_number } = data;
+        simpleContext.setAppState((s) => ({
+          ...s,
+          cardData: properties,
+          pageData: { total_count: Number(total_count), page_number },
+          isApiCall: true,
+          totalPages: Math.ceil(Number(total_count) / Number(page_size)),
+          currentPage: page_number,
+        }));
+      } catch (error) {
+        const errorMessage =
+          error.message || "Failed to fetch featured properties.";
+        console.error("Error fetching featured properties:", errorMessage);
+        toast.error(errorMessage, {
+          position: "top-center",
+          autoClose: 10000,
+        });
+        throw error;
+      } finally {
+        simpleContext.setAppState((s) => ({ ...s, loading: false }));
+      }
     };
+
     if (isInitialRender.current) {
       isInitialRender.current = false;
     } else {
@@ -128,13 +155,13 @@ const CardsDetail = () => {
     }
   }, [
     selectedCity,
+    simpleContext.appState.selectedAmountMin,
+    simpleContext.appState.selectedAmountMax,
+    simpleContext.appState.selectBeds,
+    simpleContext.appState.propertyState.selectedSubProperty,
     simpleContext.appState.currentPage,
     sortBy,
     sortOrder,
-    simpleContext.appState.selectBeds,
-    simpleContext.appState.selectedAmountMin,
-    simpleContext.appState.selectedAmountMax,
-    simpleContext.appState.propertyState.selectedSubProperty,
   ]);
 
   const handleToggleExpand = (id) => {

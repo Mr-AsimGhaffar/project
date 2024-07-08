@@ -86,8 +86,8 @@ async function searchCityData(
   filters = {}
 ) {
   try {
-    const { price_min, price_max, bedrooms, property_type } = filters;
-
+    const { price_min, price_max, bedrooms } = filters;
+    const property_type = filters.property_type ?? "";
     const url = `${API_URL}/property/search/${city ?? ""}?query=${
       query ?? ""
     }&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type}&area_min=&area_max=&price_min=${

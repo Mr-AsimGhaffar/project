@@ -20,6 +20,7 @@ import BedsTag from "./headerComponent/beds/BedsTag";
 import PropertyTag from "./headerComponent/property_type/PropertyTag";
 import Spinner from "./spinner/Spinner";
 import { fetchAvailableCities, searchCityData } from "../utlils/fetchApi";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [data, setData] = useState([]);
@@ -34,7 +35,14 @@ const Header = () => {
       const cities = await fetchAvailableCities();
       setData(cities);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      const errorMessage =
+        error.message || "Failed to fetch featured properties.";
+      console.error("Error fetching featured properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: toast,
+        autoClose: 10000,
+      });
+      throw error;
     }
   }, []);
 
