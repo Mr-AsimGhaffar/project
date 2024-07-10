@@ -12,11 +12,11 @@ import SimilarProperty from "./SimilarProperty";
 import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import LocationMap from "./LocationMap";
 import SkeletonCard from "../../components/skeleton/Skeleton";
-import { priceConversion } from "../../utlils/priceConversion";
 import { fetchPropertyDetails } from "../../utlils/fetchApi";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-const PropertyDetailsPage = () => {
+const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const [activeButton, setActiveButton] = useState("Overview");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showAllRows, setShowAllRows] = useState(false);
@@ -202,7 +202,7 @@ const PropertyDetailsPage = () => {
                             >
                               {property[item]
                                 ? item === "price"
-                                  ? priceConversion(property[item])
+                                  ? conversionFunction(property[item])
                                   : property[item]
                                 : "-"}
                             </TableCell>
@@ -316,11 +316,16 @@ const PropertyDetailsPage = () => {
           <SimilarProperty
             similarPropertyId={property.id}
             location={property.location}
+            conversionFunction={conversionFunction}
+            propertyCategory={propertyCategory}
           />
         </div>
       </div>
     </div>
   );
 };
-
+PropertyDetailsPage.propTypes = {
+  conversionFunction: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string.isRequired,
+};
 export default PropertyDetailsPage;

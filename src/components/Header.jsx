@@ -21,8 +21,9 @@ import PropertyTag from "./headerComponent/property_type/PropertyTag";
 import Spinner from "./spinner/Spinner";
 import { fetchAvailableCities, searchCityData } from "../utlils/fetchApi";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-const Header = () => {
+const Header = ({ propertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("islamabad");
@@ -93,7 +94,8 @@ const Header = () => {
         1,
         "id",
         "ASC",
-        filters
+        filters,
+        propertyCategory
       );
 
       simpleContext.setAppState((s) => ({
@@ -251,6 +253,9 @@ const Header = () => {
       </Card>
     </div>
   );
+};
+Header.propTypes = {
+  propertyCategory: PropTypes.string.isRequired,
 };
 
 export default Header;

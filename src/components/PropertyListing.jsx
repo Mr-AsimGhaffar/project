@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import PropertyDetails from "./PropertyDetails";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchPropertyCount } from "../utlils/fetchApi";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-const PropertyListing = () => {
+const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const [propertyListingData, setPropertyListingData] = useState({});
   const [viewAll, setViewAll] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const PropertyListing = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchPropertyCount();
+        const data = await fetchPropertyCount(propertyCategory);
         setPropertyListingData(data);
       } catch (error) {
         const errorMessage =
@@ -32,7 +32,7 @@ const PropertyListing = () => {
     };
 
     fetchData();
-  }, []);
+  }, [propertyCategory]);
 
   const toggleView = () => setViewAll((prev) => !prev);
 
@@ -46,7 +46,11 @@ const PropertyListing = () => {
   }
   return (
     <main>
-      <PropertyDetails propertyListingData={propertyListingData} />
+      <PropertyDetails
+        propertyListingData={propertyListingData}
+        conversionFunction={conversionFunction}
+        propertyCategory={propertyCategory}
+      />
       <div className="flex justify-between items-center text-2xl font-bold">
         <div>Property Listings</div>
         <div>
@@ -72,7 +76,7 @@ const PropertyListing = () => {
                   <br />
                   <div>
                     <CardDescription className="text-3xl font-bold">
-                      {priceConversion(item.amount)}
+                      {conversionFunction(item.amount)}
                     </CardDescription>
                   </div>
                 </CardHeader>
@@ -83,5 +87,8 @@ const PropertyListing = () => {
     </main>
   );
 };
-
+PropertyListing.propTypes = {
+  conversionFunction: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string.isRequired,
+};
 export default PropertyListing;

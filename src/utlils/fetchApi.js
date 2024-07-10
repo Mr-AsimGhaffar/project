@@ -2,14 +2,17 @@ import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-async function fetchFeaturedProperties() {
+async function fetchFeaturedProperties(propertyCategory = "For Sale") {
   try {
-    const response = await fetch(`${API_URL}/property/featured`, {
-      method: "get",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
-    });
+    const response = await fetch(
+      `${API_URL}/property/featured?purpose=${propertyCategory}`,
+      {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      }
+    );
     if (!response.ok) {
       const errorMessage = `HTTP error! Status: ${response.status}`;
       throw new Error(errorMessage);
@@ -22,10 +25,13 @@ async function fetchFeaturedProperties() {
   }
 }
 
-async function fetchSimilarProperties(similarPropertyId) {
+async function fetchSimilarProperties(
+  similarPropertyId,
+  propertyCategory = "For Sale"
+) {
   try {
     const response = await fetch(
-      `${API_URL}/property/similar?id=${similarPropertyId}`,
+      `${API_URL}/property/similar?id=${similarPropertyId}&purpose=${propertyCategory}`,
       {
         method: "get",
         headers: new Headers({
@@ -83,7 +89,8 @@ async function searchCityData(
   page_number = 1,
   sort_by = "id",
   sort_order = "ASC",
-  filters = {}
+  filters = {},
+  propertyCategory = "For Sale"
 ) {
   try {
     const { price_min, price_max, bedrooms } = filters;
@@ -92,7 +99,9 @@ async function searchCityData(
       query ?? ""
     }&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type}&area_min=&area_max=&price_min=${
       price_min ?? ""
-    }&price_max=${price_max ?? ""}&bedrooms=${bedrooms ?? ""}`;
+    }&price_max=${price_max ?? ""}&bedrooms=${
+      bedrooms ?? ""
+    }&purpose=${propertyCategory}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -145,14 +154,17 @@ async function fetchAvailableCities() {
   }
 }
 
-export async function fetchPropertyCount() {
+export async function fetchPropertyCount(propertyCategory = "For Sale") {
   try {
-    const response = await fetch(`${API_URL}/property/count`, {
-      method: "get",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
-    });
+    const response = await fetch(
+      `${API_URL}/property/count?purpose=${propertyCategory}`,
+      {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      }
+    );
     if (!response.ok) {
       const errorMessage = `HTTP error! Status: ${response.status}`;
       throw new Error(errorMessage);

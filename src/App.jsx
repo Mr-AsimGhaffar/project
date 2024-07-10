@@ -11,6 +11,8 @@ import PropertyDetailsPage from "./pages/propertyDetails/PropertyDetailsPage";
 import Footer from "./components/footer/Footer";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { priceConversion } from "./utlils/priceConversion";
+import { countConversion } from "./utlils/countConversion";
 
 function App() {
   const [appState, setAppState] = useState({
@@ -35,11 +37,19 @@ function App() {
     currentPage: 1,
   });
 
+  const [conversionType, setConversionType] = useState("price");
+  const [propertyCategory, setPropertyCategory] = useState("For Sale");
+  const conversionFunction =
+    conversionType === "price" ? priceConversion : countConversion;
+
   return (
     <BrowserRouter>
       <div>
         <appContext.Provider value={{ appState, setAppState }}>
-          <Navbar />
+          <Navbar
+            setConversionType={setConversionType}
+            setPropertyCategory={setPropertyCategory}
+          />
           <Sidebar />
           <ToastContainer />
           <div
@@ -50,13 +60,44 @@ function App() {
             {/* {appState.showDashboard ? ( */}
             <div>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                  path="/"
+                  element={
+                    <Dashboard
+                      conversionFunction={conversionFunction}
+                      propertyCategory={propertyCategory}
+                    />
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <Dashboard
+                      conversionFunction={conversionFunction}
+                      propertyCategory={propertyCategory}
+                    />
+                  }
+                />
                 {/* <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} /> */}
                 <Route path="/header" element={<Header />} />
-                <Route path="/search-results" element={<CardsDetail />} />
-                <Route path="/property/:id" element={<PropertyDetailsPage />} />
+                <Route
+                  path="/search-results"
+                  element={
+                    <CardsDetail
+                      conversionFunction={conversionFunction}
+                      propertyCategory={propertyCategory}
+                    />
+                  }
+                />
+                <Route
+                  path="/property/:id"
+                  element={
+                    <PropertyDetailsPage
+                      conversionFunction={conversionFunction}
+                    />
+                  }
+                />
               </Routes>
             </div>
             {/* ) : (

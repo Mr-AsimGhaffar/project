@@ -14,7 +14,6 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
-import { priceConversion } from "@/utlils/priceConversion";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchSimilarProperties } from "../../utlils/fetchApi";
 import { toast } from "react-toastify";
@@ -37,14 +36,22 @@ const responsive = {
   },
 };
 
-export default function SimilarProperty({ location, similarPropertyId }) {
+export default function SimilarProperty({
+  location,
+  similarPropertyId,
+  conversionFunction,
+  propertyCategory,
+}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     try {
-      const data = await fetchSimilarProperties(similarPropertyId);
+      const data = await fetchSimilarProperties(
+        similarPropertyId,
+        propertyCategory
+      );
       setData(data);
     } catch (error) {
       const errorMessage =
@@ -58,7 +65,7 @@ export default function SimilarProperty({ location, similarPropertyId }) {
     } finally {
       setLoading(false);
     }
-  }, [similarPropertyId]);
+  }, [similarPropertyId, propertyCategory]);
 
   useEffect(() => {
     fetchData();
@@ -100,7 +107,7 @@ export default function SimilarProperty({ location, similarPropertyId }) {
                     </div>
                     <div className="py-2 font-bold">
                       <CardDescription>
-                        PKR {priceConversion(item.price)}
+                        PKR {conversionFunction(item.price)}
                       </CardDescription>
                       <CardDescription className="truncate">
                         {item.location}
@@ -149,4 +156,6 @@ export default function SimilarProperty({ location, similarPropertyId }) {
 SimilarProperty.propTypes = {
   location: PropTypes.string.isRequired,
   similarPropertyId: PropTypes.number.isRequired,
+  conversionFunction: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string.isRequired,
 };

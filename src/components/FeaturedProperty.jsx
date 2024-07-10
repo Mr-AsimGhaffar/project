@@ -7,13 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
-import { priceConversion } from "@/utlils/priceConversion";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchFeaturedProperties } from "../utlils/fetchApi";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-export default function FeaturedProperty() {
+export default function FeaturedProperty({
+  conversionFunction,
+  propertyCategory,
+}) {
   const [featuredData, setfeaturedData] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,7 @@ export default function FeaturedProperty() {
   useEffect(() => {
     async function loadData() {
       try {
-        const data = await fetchFeaturedProperties();
+        const data = await fetchFeaturedProperties(propertyCategory);
         setfeaturedData(data);
       } catch (error) {
         const errorMessage =
@@ -38,7 +41,7 @@ export default function FeaturedProperty() {
       }
     }
     loadData();
-  }, []);
+  }, [propertyCategory]);
 
   const handleViewAll = () => setShowAll(true);
   const handleViewLess = () => setShowAll(false);
@@ -91,7 +94,7 @@ export default function FeaturedProperty() {
                     </div>
                     <div className="py-2 font-bold">
                       <CardDescription>
-                        PKR {priceConversion(item.price)}
+                        PKR {conversionFunction(item.price)}
                       </CardDescription>
                       <CardDescription className="truncate">
                         {item.location}
@@ -134,3 +137,7 @@ export default function FeaturedProperty() {
     </div>
   );
 }
+FeaturedProperty.propTypes = {
+  conversionFunction: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string.isRequired,
+};

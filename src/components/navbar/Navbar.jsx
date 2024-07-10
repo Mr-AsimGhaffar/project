@@ -1,7 +1,18 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
-const Navbar = ({ handleDashboardClick }) => {
+const Navbar = ({
+  handleDashboardClick,
+  setConversionType,
+  setPropertyCategory,
+}) => {
+  const [propertyView, setPropertyView] = useState("For Sale");
+
+  const handlePropertyView = (category) => {
+    setPropertyView(category);
+    setPropertyCategory(category);
+  };
   return (
     <div>
       <nav className="bg-gray-800">
@@ -16,10 +27,40 @@ const Navbar = ({ handleDashboardClick }) => {
                     className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
                     aria-current="page"
                   >
-                    Dashboard
+                    DASHBOARD
                   </Link>
                 </div>
               </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                className={`rounded-md px-3 py-2 text-sm font-medium text-white ${
+                  propertyView === "For Sale" ? "bg-gray-400" : "bg-gray-900"
+                }`}
+                onClick={() => handlePropertyView("For Sale")}
+              >
+                BUY
+              </button>
+              <button
+                className={`rounded-md px-3 py-2 text-sm font-medium text-white ${
+                  propertyView === "For Rent" ? "bg-gray-400" : "bg-gray-900"
+                }`}
+                onClick={() => handlePropertyView("For Rent")}
+              >
+                RENT
+              </button>
+              <button
+                className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+                onClick={() => setConversionType("count")}
+              >
+                Lacs
+              </button>
+              <button
+                className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+                onClick={() => setConversionType("price")}
+              >
+                Million
+              </button>
             </div>
           </div>
         </div>
@@ -31,7 +72,7 @@ const Navbar = ({ handleDashboardClick }) => {
               className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
               aria-current="page"
             >
-              Dashboard
+              DASHBOARD
             </Link>
           </div>
         </div>
@@ -39,9 +80,9 @@ const Navbar = ({ handleDashboardClick }) => {
     </div>
   );
 };
-
-export default Navbar;
-
 Navbar.propTypes = {
-  handleDashboardClick: PropTypes.string.isRequired,
+  handleDashboardClick: PropTypes.func.isRequired,
+  setConversionType: PropTypes.func.isRequired,
+  setPropertyCategory: PropTypes.func.isRequired,
 };
+export default Navbar;

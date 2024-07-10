@@ -17,13 +17,13 @@ import HeaderFilter from "./searchResultHeader/HeaderFilter";
 import Paging from "@/components/Paging";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
-import { priceConversion } from "@/utlils/priceConversion";
 import { formatPrice } from "../utlils/formatPrice";
 import Recommended from "../components/cardsDetails/Recommended";
 import { searchCityData } from "../utlils/fetchApi";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-const CardsDetail = () => {
+const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const isInitialRender = useRef(true);
   const simpleContext = useContext(appContext);
   const [expandedCards, setExpandedCards] = useState({});
@@ -73,7 +73,8 @@ const CardsDetail = () => {
         page_number,
         sort_by,
         sort_order,
-        filters
+        filters,
+        propertyCategory
       );
       const { properties, total_count, page_size } = data;
       simpleContext.setAppState((s) => ({
@@ -341,7 +342,7 @@ const CardsDetail = () => {
                     </div>
                     <div className="py-2">
                       <CardDescription className="text-2xl font-bold">
-                        {priceConversion(item.price)} PKR
+                        {conversionFunction(item.price)} PKR
                       </CardDescription>
                       <CardDescription
                         className={`overflow-hidden ${
@@ -380,5 +381,8 @@ const CardsDetail = () => {
     </main>
   );
 };
-
+CardsDetail.propTypes = {
+  conversionFunction: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string.isRequired,
+};
 export default CardsDetail;

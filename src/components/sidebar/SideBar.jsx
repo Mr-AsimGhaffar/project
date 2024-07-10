@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { appContext } from "@/contexts/Context";
 import { CardDescription } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,10 +20,10 @@ const Sidebar = () => {
     setAppState((prevState) => ({ ...prevState, showDashboard: true }));
     toggleSidebar();
   };
-  const handleHomeClick = () => {
-    setAppState((prevState) => ({ ...prevState, showHome: true }));
-    toggleSidebar();
-  };
+  // const handleHomeClick = () => {
+  //   setAppState((prevState) => ({ ...prevState, showHome: true }));
+  //   toggleSidebar();
+  // };
 
   return (
     <>
@@ -65,7 +65,7 @@ const Sidebar = () => {
         <ul className="p-4">
           <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
             <Link to="/dashboard" onClick={handleDashboardClick}>
-              Dashboard
+              DASHBOARD
             </Link>
           </li>
         </ul>
