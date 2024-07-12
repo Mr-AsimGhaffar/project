@@ -19,14 +19,18 @@ import AreaTag from "./headerComponent/areaTag/AreaTag";
 import BedsTag from "./headerComponent/beds/BedsTag";
 import PropertyTag from "./headerComponent/property_type/PropertyTag";
 import Spinner from "./spinner/Spinner";
-import { fetchAvailableCities, searchCityData } from "../utlils/fetchApi";
-import { toast } from "react-toastify";
+import {
+  fetchAvailableCities,
+  fetchSearchSuggestions,
+  searchCityData,
+} from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 
 const Header = ({ propertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("islamabad");
+  const [suggestions, setSuggestions] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const simpleContext = useContext(appContext);
   const navigate = useNavigate();
@@ -36,27 +40,20 @@ const Header = ({ propertyCategory }) => {
       const cities = await fetchAvailableCities();
       setData(cities);
     } catch (error) {
-      const errorMessage =
-        error.message || "Failed to fetch featured properties.";
-      console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
-        position: toast,
-        autoClose: 10000,
-      });
-      throw error;
+      console.error("Error fetching data:", error);
     }
   }, []);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
       searchTerm: searchTerm,
     }));
-  }, [simpleContext, searchTerm]);
+  }, [searchTerm]);
 
   const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
 
@@ -127,7 +124,7 @@ const Header = ({ propertyCategory }) => {
       }));
     }
   };
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const newValue = e.target.value;
     setSearchTerm(newValue);
     simpleContext.setAppState((s) => ({
@@ -135,7 +132,23 @@ const Header = ({ propertyCategory }) => {
       searchTerm: newValue,
     }));
     saveToLocalStorage("searchTerm", newValue);
+    if (newValue.length >= 2) {
+      try {
+        const suggestions = await fetchSearchSuggestions(newValue);
+        setSuggestions(suggestions);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+      }
+    } else {
+      setSuggestions([]);
+    }
   };
+
+  const handleSuggestionClick = (suggestion) => {
+    setSearchTerm(suggestion);
+    setSuggestions([]);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSearch();
@@ -184,6 +197,21 @@ const Header = ({ propertyCategory }) => {
                       onClick={toggleVisibility}
                       placeholder="Location"
                     />
+                    <div className="absolute z-10 mt-10 w-[42%]">
+                      {suggestions.length > 0 && (
+                        <ul className="bg-white border border-gray-200 w-full rounded">
+                          {suggestions.map((suggestion, index) => (
+                            <li
+                              key={index}
+                              className="p-2 cursor-pointer hover:bg-gray-200 text-sm"
+                              onClick={() => handleSuggestionClick(suggestion)}
+                            >
+                              {suggestion}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
                   <div className="grid grid-cols-1">
                     <Button onClick={handleSearch}>Search</Button>
