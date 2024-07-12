@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
@@ -19,12 +19,14 @@ import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "../utlils/formatPrice";
 import Recommended from "../components/cardsDetails/Recommended";
-import { searchCityData } from "../utlils/fetchApi";
-import { toast } from "react-toastify";
+import { fetchSearchSuggestions, searchCityData } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
+import { formatTimeFromNow } from "../utlils/UnixEpochTimeConverter";
+import { FaBath, FaBed } from "react-icons/fa";
+import { BiSolidDirections } from "react-icons/bi";
+import { DatePickerWithRange } from "../components/ui/DateRangePicker";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
-  const isInitialRender = useRef(true);
   const simpleContext = useContext(appContext);
   const [expandedCards, setExpandedCards] = useState({});
   const [searchTerm, setSearchTerm] = useState(
@@ -33,9 +35,15 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [selectedCity, setSelectedCity] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [sortBy, setSortBy] = useState("id");
+  const [suggestions, setSuggestions] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  // const isInitialRender = useRef(true);
 
   const {
     cardData,
+    loading,
     pageData: { total_count: totalCount },
   } = simpleContext.appState;
 
@@ -46,7 +54,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     query,
     page_number,
     sort_by,
-    sort_order
+    sort_order,
+    propertyCategory,
+    start_date,
+    end_date
   ) => {
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
@@ -74,7 +85,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         sort_by,
         sort_order,
         filters,
-        propertyCategory
+        propertyCategory,
+        start_date ? start_date.toISOString() : "",
+        end_date ? end_date.toISOString() : ""
       );
       const { properties, total_count, page_size } = data;
       simpleContext.setAppState((s) => ({
@@ -86,14 +99,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         currentPage: page_number,
       }));
     } catch (error) {
-      const errorMessage =
-        error.message || "Failed to fetch featured properties.";
-      console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 10000,
-      });
-      throw error;
+      console.error("Error fetching data:", error);
     } finally {
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
     }
@@ -108,62 +114,24 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }));
   }, [searchTerm, simpleContext]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        simpleContext.setAppState((s) => ({ ...s, loading: true }));
-        const data = await searchCityData(
-          selectedCity,
-          searchTerm || "",
-          simpleContext.appState.currentPage,
-          sortBy,
-          sortOrder,
-          {
-            price_min: cleanValue(simpleContext.appState.selectedAmountMin),
-            price_max: cleanValue(simpleContext.appState.selectedAmountMax),
-            bedrooms: simpleContext.appState.selectBeds.trim(),
-            property_type:
-              simpleContext.appState.propertyState.selectedSubProperty,
-          }
-        );
-        const { properties, total_count, page_size, page_number } = data;
-        simpleContext.setAppState((s) => ({
-          ...s,
-          cardData: properties,
-          pageData: { total_count: Number(total_count), page_number },
-          isApiCall: true,
-          totalPages: Math.ceil(Number(total_count) / Number(page_size)),
-          currentPage: page_number,
-        }));
-      } catch (error) {
-        const errorMessage =
-          error.message || "Failed to fetch featured properties.";
-        console.error("Error fetching featured properties:", errorMessage);
-        toast.error(errorMessage, {
-          position: "top-center",
-          autoClose: 10000,
-        });
-        throw error;
-      } finally {
-        simpleContext.setAppState((s) => ({ ...s, loading: false }));
-      }
-    };
-
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-    } else {
-      fetchData();
-    }
-  }, [
-    selectedCity,
-    simpleContext.appState.selectedAmountMin,
-    simpleContext.appState.selectedAmountMax,
-    simpleContext.appState.selectBeds,
-    simpleContext.appState.propertyState.selectedSubProperty,
-    simpleContext.appState.currentPage,
-    sortBy,
-    sortOrder,
-  ]);
+  // useEffect(() => {
+  //   if (!isInitialRender.current) {
+  //     fetchCityData(
+  //       selectedCity,
+  //       searchTerm || "",
+  //       simpleContext.appState.currentPage,
+  //       sortBy,
+  //       sortOrder
+  //     );
+  //   } else {
+  //     isInitialRender.current = false;
+  //   }
+  // }, [
+  //   simpleContext.appState.selectedAmountMin,
+  //   simpleContext.appState.selectedAmountMax,
+  //   simpleContext.appState.selectBeds,
+  //   simpleContext.appState.propertyState,
+  // ]);
 
   const handleToggleExpand = (id) => {
     setExpandedCards((prev) => ({
@@ -171,13 +139,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       [id]: !prev[id],
     }));
   };
-  const { loading } = simpleContext.appState;
 
   const handleSearch = async (sort_by = sortBy, sort_order = sortOrder) => {
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
-
-      // Fetch data using the current selectedCity and searchTerm
       const data = await searchCityData(
         selectedCity,
         searchTerm || "",
@@ -190,12 +155,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           bedrooms: simpleContext.appState.selectBeds.trim(),
           property_type:
             simpleContext.appState.propertyState.selectedSubProperty,
-        }
+        },
+        propertyCategory,
+        startDate ? startDate.toISOString() : "",
+        endDate ? endDate.toISOString() : ""
       );
 
       const { properties, total_count, page_size, page_number } = data;
 
-      // Update appState with fetched data
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: properties,
@@ -205,14 +172,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         currentPage: page_number,
       }));
     } catch (error) {
-      const errorMessage =
-        error.message || "Failed to fetch featured properties.";
-      console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 10000,
-      });
-      throw error;
+      console.error("Error fetching data:", error);
     } finally {
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
     }
@@ -223,9 +183,17 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     handleSearch();
   };
   const handlePageChange = (page_number) =>
-    fetchCityData(selectedCity, searchTerm, page_number, sortBy, sortOrder);
+    fetchCityData(
+      selectedCity,
+      searchTerm,
+      page_number,
+      sortBy,
+      sortOrder,
+      startDate ? startDate.toISOString() : "",
+      endDate ? endDate.toISOString() : ""
+    );
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const newValue = e.target.value;
     setSearchTerm(newValue);
     setSelectedCity(selectedCity);
@@ -234,12 +202,34 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       searchTerm: newValue,
     }));
     saveToLocalStorage("searchTerm", newValue);
+    if (newValue.length > 2) {
+      try {
+        const suggestions = await fetchSearchSuggestions(newValue);
+        setSuggestions(suggestions);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+      }
+    } else {
+      setSuggestions([]);
+    }
   };
+
+  const handleSuggestionClick = (suggestion) => {
+    setSearchTerm(suggestion);
+    setSuggestions([]);
+  };
+
   const handleSortChange = (sort_by, sort_order) => {
     setSortBy(sort_by);
     setSortOrder(sort_order);
     handleSearch(sort_by, sort_order);
   };
+
+  const handleDateChange = (start, end) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
+
   return (
     <main>
       <div>
@@ -252,7 +242,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
       <br />
       <form onSubmit={handleSubmit}>
-        <div className="grid lg:grid-cols-5 grid-cols-1 gap-4">
+        <div className="grid lg:grid-cols-6 grid-cols-1 gap-4">
           <div className="relative">
             <div className=" w-[100%]">
               <Input
@@ -260,7 +250,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 onChange={handleChange}
                 type="text"
                 placeholder="Search Here..."
-                className="rounded-3xl border-2"
+                className="rounded-3xl border-2 pr-12"
               />
             </div>
             <div>
@@ -272,6 +262,21 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               </div>
               <div className="absolute inset-y-0 w-[1px] h-[20px] mt-3 right-10 bg-gray-400"></div>
             </div>
+            <div className="absolute z-10">
+              {suggestions.length > 0 && (
+                <ul className="bg-white border border-gray-300 w-full rounded-3xl">
+                  {suggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      {suggestion}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
           <div>
             <HeaderPrice />
@@ -281,6 +286,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           </div>
           <div>
             <HeaderProperty />
+          </div>
+          <div>
+            <DatePickerWithRange onChange={handleDateChange} />
           </div>
           <div>
             <HeaderFilter onSortChange={handleSortChange} />
@@ -325,20 +333,31 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               }`}
             >
               <Link to={`/property/${item.id}`} state={{ id: item.id }}>
-                {item.cover_photo_url && (
+                {item.cover_photo_url ? (
                   <img
                     src={item.cover_photo_url}
                     alt="photo"
+                    className="w-full h-52 object-fit rounded-t-md"
+                  />
+                ) : (
+                  <img
+                    src="/img/NoImage.png"
+                    alt="dummy"
                     className="w-full h-52 object-fit rounded-t-md"
                   />
                 )}
                 <CardHeader>
                   <div>
                     <div className="flex justify-between item-center">
-                      <CardTitle className="text-base font-semibold w-[90%]">
+                      <CardTitle className="text-base font-semibold">
                         {item.header}
                       </CardTitle>
                       {/* <LuDollarSign /> */}
+                    </div>
+                    <div className="py-2">
+                      <CardDescription>
+                        Added: {formatTimeFromNow(item.added)}
+                      </CardDescription>
                     </div>
                     <div className="py-2">
                       <CardDescription className="text-2xl font-bold">
@@ -352,6 +371,30 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                         }`}
                       >
                         {item.desc}
+                      </CardDescription>
+                    </div>
+                    <div className="py-2">
+                      <CardDescription>
+                        <div className="flex justify-left gap-3 text-xs">
+                          {item.bedroom && (
+                            <div className="flex flex-row items-center gap-1">
+                              <FaBed />
+                              <p>{item.bedroom}</p>
+                            </div>
+                          )}
+                          {item.bath && (
+                            <div className="flex flex-row items-center gap-1">
+                              <FaBath />
+                              <p>{item.bath}</p>
+                            </div>
+                          )}
+                          {item.area && (
+                            <div className="flex flex-row items-center gap-1">
+                              <BiSolidDirections />
+                              <p>{item.area.split(" ")[0]} Marla</p>
+                            </div>
+                          )}
+                        </div>
                       </CardDescription>
                     </div>
                   </div>

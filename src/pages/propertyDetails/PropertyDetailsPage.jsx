@@ -13,7 +13,6 @@ import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import LocationMap from "./LocationMap";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchPropertyDetails } from "../../utlils/fetchApi";
-import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
@@ -35,14 +34,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       const propertyDetails = await fetchPropertyDetails(id);
       setData(propertyDetails);
     } catch (error) {
-      const errorMessage =
-        error.message || "Failed to fetch featured properties.";
-      console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 10000,
-      });
-      throw error;
+      console.error("Error fetching data:", error);
     }
   }, [id]);
   useEffect(() => {
@@ -79,11 +71,19 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           <p>{property.location}</p>
         </div>
         <div className="relative w-[100%]">
-          <img
-            src={property.cover_photo_url}
-            alt="property"
-            className="w-[100%] h-[800px]"
-          />
+          {property.cover_photo_url ? (
+            <img
+              src={property.cover_photo_url}
+              alt="property"
+              className="w-full h-800px object-cover rounded-t-md"
+            />
+          ) : (
+            <img
+              src="/img/NoImage.png"
+              alt="dummy"
+              className="w-full h-full object-cover rounded-t-md"
+            />
+          )}
           <div className="absolute right-5 bottom-5">
             <CiHeart className="w-[30px] h-[30px] bg-gray-400 rounded-3xl text-white" />
           </div>
