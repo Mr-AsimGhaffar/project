@@ -86,8 +86,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         sort_order,
         filters,
         propertyCategory,
-        start_date ? start_date.toISOString() : "",
-        end_date ? end_date.toISOString() : ""
+        start_date,
+        end_date
       );
       const { properties, total_count, page_size } = data;
       simpleContext.setAppState((s) => ({
@@ -140,6 +140,11 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }));
   };
 
+  const handleDateChange = (start, end) => {
+    setStartDate(start ? new Date(start) : null);
+    setEndDate(end ? new Date(end) : null);
+  };
+
   const handleSearch = async (sort_by = sortBy, sort_order = sortOrder) => {
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
@@ -189,6 +194,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       page_number,
       sortBy,
       sortOrder,
+      propertyCategory,
       startDate ? startDate.toISOString() : "",
       endDate ? endDate.toISOString() : ""
     );
@@ -223,11 +229,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setSortBy(sort_by);
     setSortOrder(sort_order);
     handleSearch(sort_by, sort_order);
-  };
-
-  const handleDateChange = (start, end) => {
-    setStartDate(start);
-    setEndDate(end);
   };
 
   return (

@@ -105,9 +105,11 @@ const HeaderPrice = () => {
       <Select>
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="PRICE" />
-          <div>{selectedAmountMin}</div>
-          <div>To</div>
-          <div>{selectedAmountMax}</div>
+          <div className="flex gap-1 text-xs">
+            <div>{selectedAmountMin}</div>
+            <div>To</div>
+            <div>{selectedAmountMax}</div>
+          </div>
         </SelectTrigger>
         <SelectContent>
           <div className="bg-white rounded-md shadow-lg p-4 w-64">

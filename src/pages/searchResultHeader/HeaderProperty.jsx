@@ -51,7 +51,7 @@ const HeaderProperty = () => {
       <Select>
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="PROPERTY TYPE" />
-          <div>
+          <div className="text-xs">
             {propertyState.selectedSubProperty ||
               propertyState.selectedPropertyType}
           </div>
