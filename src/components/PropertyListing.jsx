@@ -4,7 +4,6 @@ import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchPropertyCount } from "../utlils/fetchApi";
-import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 const PropertyListing = ({ conversionFunction, propertyCategory }) => {
@@ -18,14 +17,7 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
         const data = await fetchPropertyCount(propertyCategory);
         setPropertyListingData(data);
       } catch (error) {
-        const errorMessage =
-          error.message || "Failed to fetch featured properties.";
-        console.error("Error fetching featured properties:", errorMessage);
-        toast.error(errorMessage, {
-          position: "top-center",
-          autoClose: 10000,
-        });
-        throw error;
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }

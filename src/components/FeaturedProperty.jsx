@@ -33,7 +33,7 @@ export default function FeaturedProperty({
         console.error("Error fetching featured properties:", errorMessage);
         toast.error(errorMessage, {
           position: "top-center",
-          autoClose: 10000,
+          autoClose: 5000,
         });
         throw error;
       } finally {

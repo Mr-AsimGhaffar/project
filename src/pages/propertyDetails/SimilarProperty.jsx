@@ -16,7 +16,6 @@ import { BiSolidDirections } from "react-icons/bi";
 import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchSimilarProperties } from "../../utlils/fetchApi";
-import { toast } from "react-toastify";
 
 const responsive = {
   desktop: {
@@ -54,14 +53,7 @@ export default function SimilarProperty({
       );
       setData(data);
     } catch (error) {
-      const errorMessage =
-        error.message || "Failed to fetch featured properties.";
-      console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 10000,
-      });
-      throw error;
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
