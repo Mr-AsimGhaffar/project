@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { appContext } from "@/contexts/Context";
 import {
   Pagination,
@@ -14,21 +14,29 @@ import {
 const Paging = ({ onPageChange }) => {
   const simpleContext = useContext(appContext);
   const { appState } = simpleContext;
-  const { currentPage: current_Page, totalPages: total_Pages } = appState;
-  // const current_Page = simpleContext.appState.currentPage;
-  // const total_Pages = simpleContext.appState.totalPages;
+  const { currentPage, totalPages } = appState;
+  const [showGoToFirst, setShowGoToFirst] = useState(false);
+
+  useEffect(() => {
+    setShowGoToFirst(currentPage > 1);
+  }, [currentPage]);
+
   const renderPaginationLinks = () => {
     let pages = [];
-    const additionalPages = current_Page === 9 ? 4 : 0;
-    const totalDisplayedPages = Math.min(9 + additionalPages, total_Pages);
+    const additionalPages = currentPage === 9 ? 4 : 0;
+    const startPage = Math.max(1, currentPage - 4);
+    const endPage = Math.min(startPage + 7 + additionalPages, totalPages);
 
-    for (let i = 1; i <= totalDisplayedPages; i++) {
+    for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <PaginationItem key={i}>
           <PaginationLink
-            isActive={i === current_Page}
+            isActive={i === currentPage}
             href="#"
             onClick={() => onPageChange(i)}
+            className={
+              i === currentPage ? "active-link bg-gray-800 text-white" : ""
+            }
           >
             {i}
           </PaginationLink>
@@ -36,7 +44,34 @@ const Paging = ({ onPageChange }) => {
       );
     }
 
+    if (endPage < totalPages) {
+      pages.push(
+        <PaginationItem key="ellipsis">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+      pages.push(
+        <PaginationItem key={totalPages}>
+          <PaginationLink
+            isActive={currentPage === totalPages}
+            href="#"
+            onClick={() => onPageChange(totalPages)}
+            className={
+              currentPage === totalPages
+                ? "active-link bg-gray-800 text-white"
+                : ""
+            }
+          >
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
     return pages;
+  };
+  const goToFirstPage = () => {
+    onPageChange(1);
   };
   return (
     <div>
@@ -46,33 +81,29 @@ const Paging = ({ onPageChange }) => {
             <PaginationPrevious
               isActive
               href="#"
-              onClick={() => onPageChange(current_Page - 1)}
-              disabled={current_Page === 1}
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
             />
           </PaginationItem>
-          {renderPaginationLinks()}
-          {current_Page < total_Pages - 4 && (
-            <>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink
-                  isActive={current_Page === total_Pages}
-                  href="#"
-                  onClick={() => onPageChange(total_Pages)}
-                >
-                  {total_Pages}
-                </PaginationLink>
-              </PaginationItem>
-            </>
+          {showGoToFirst && (
+            <PaginationItem>
+              <button
+                onClick={goToFirstPage}
+                className="p-2 hover:bg-gray-100 rounded active"
+                disabled={currentPage === 1}
+              >
+                1
+              </button>
+            </PaginationItem>
           )}
+          <PaginationEllipsis />
+          {renderPaginationLinks()}
           <PaginationItem>
             <PaginationNext
               isActive
               href="#"
-              onClick={() => onPageChange(current_Page + 1)}
-              disabled={current_Page === total_Pages}
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
             />
           </PaginationItem>
         </PaginationContent>
@@ -81,8 +112,6 @@ const Paging = ({ onPageChange }) => {
   );
 };
 Paging.propTypes = {
-  currentPage: PropTypes.number.isRequired,
-  totalPages: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
 };
 
