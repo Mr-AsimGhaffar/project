@@ -19,16 +19,12 @@ const HeaderProperty = () => {
     selectedSubProperty:
       simpleContext.appState.propertyState.selectedSubProperty,
   });
-  // const [selectedPropertyType, setSelectedPropertyType] = useState("Home");
-  // const [selectedSubProperty, setSelectedSubProperty] = useState(
-  //   simpleContext.appState.selectedSubProperty
-  // );
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
       propertyState: propertyState,
     }));
-  }, [simpleContext, propertyState]);
+  }, [propertyState]);
 
   const handleSubPropertySelect = (subProperty) => {
     const newValue = subProperty;
@@ -45,6 +41,11 @@ const HeaderProperty = () => {
     });
   };
 
+  const getPropertyTypeStyle = (propertyType) =>
+    propertyState.selectedPropertyType === propertyType
+      ? "text-gray-800"
+      : "hover:text-blue-500 cursor-pointer";
+
   return (
     <div>
       <Select>
@@ -58,27 +59,19 @@ const HeaderProperty = () => {
         <SelectContent className="w-[100%]">
           <div className="flex justify-between items-center p-5">
             <h1
-              className={`cursor-pointer hover:text-blue-500 ${
-                propertyState.selectedPropertyType === "Home" && "text-blue-500"
-              }`}
+              className={getPropertyTypeStyle("Home")}
               onClick={() => handlePropertyTypeChange("Home")}
             >
               Home
             </h1>
             <h1
-              className={`cursor-pointer hover:text-blue-500 ${
-                propertyState.selectedPropertyType === "Plots" &&
-                "text-blue-500"
-              }`}
+              className={getPropertyTypeStyle("Plots")}
               onClick={() => handlePropertyTypeChange("Plots")}
             >
               Plots
             </h1>
             <h1
-              className={`cursor-pointer hover:text-blue-500 ${
-                propertyState.selectedPropertyType === "Commercial" &&
-                "text-blue-500"
-              }`}
+              className={getPropertyTypeStyle("Commercial")}
               onClick={() => handlePropertyTypeChange("Commercial")}
             >
               Commercial
@@ -86,13 +79,22 @@ const HeaderProperty = () => {
           </div>
           <div>
             {propertyState.selectedPropertyType === "Home" && (
-              <Home onSubPropertySelect={handleSubPropertySelect} />
+              <Home
+                selectedSubProperty={propertyState.selectedSubProperty}
+                onSubPropertySelect={handleSubPropertySelect}
+              />
             )}
             {propertyState.selectedPropertyType === "Plots" && (
-              <Plots onSubPropertySelect={handleSubPropertySelect} />
+              <Plots
+                selectedSubProperty={propertyState.selectedSubProperty}
+                onSubPropertySelect={handleSubPropertySelect}
+              />
             )}
             {propertyState.selectedPropertyType === "Commercial" && (
-              <Commercial onSubPropertySelect={handleSubPropertySelect} />
+              <Commercial
+                selectedSubProperty={propertyState.selectedSubProperty}
+                onSubPropertySelect={handleSubPropertySelect}
+              />
             )}
           </div>
         </SelectContent>

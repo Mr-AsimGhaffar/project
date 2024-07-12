@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
 import PropTypes from "prop-types";
 
-const Commercial = ({ onSubPropertySelect }) => {
+const Commercial = ({ selectedSubProperty, onSubPropertySelect }) => {
+  const buttonStyles = (subProperty) =>
+    selectedSubProperty === subProperty
+      ? "bg-gray-800 text-white"
+      : "text-black";
   return (
     <div>
       <div className="w-[100%] flex gap-5 p-1">
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Office")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Office")}
           >
@@ -16,7 +20,7 @@ const Commercial = ({ onSubPropertySelect }) => {
         </div>
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Shop")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Shop")}
           >
@@ -27,7 +31,7 @@ const Commercial = ({ onSubPropertySelect }) => {
       <div className="w-[100%] flex gap-5 p-1">
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Warehouse")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Warehouse")}
           >
@@ -36,7 +40,7 @@ const Commercial = ({ onSubPropertySelect }) => {
         </div>
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Factory")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Factory")}
           >
@@ -47,7 +51,7 @@ const Commercial = ({ onSubPropertySelect }) => {
       <div className="w-[100%] flex gap-5 p-1">
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Building")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Building")}
           >
@@ -56,7 +60,7 @@ const Commercial = ({ onSubPropertySelect }) => {
         </div>
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Other")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Other")}
           >
@@ -70,6 +74,7 @@ const Commercial = ({ onSubPropertySelect }) => {
 
 Commercial.propTypes = {
   onSubPropertySelect: PropTypes.func.isRequired,
+  selectedSubProperty: PropTypes.string.isRequired,
 };
 
 export default Commercial;

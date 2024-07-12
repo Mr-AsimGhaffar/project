@@ -14,6 +14,8 @@ const marlaToSquareFeet = (marla) => {
 const AreaTag = () => {
   const [selectedAreaMax, setSelectedAreaMax] = useState(null);
   const [selectedAreaMin, setSelectedAreaMin] = useState(null);
+  const [selectedMinButton, setSelectedMinButton] = useState(null);
+  const [selectedMaxButton, setSelectedMaxButton] = useState(null);
   const simpleContext = useContext(appContext);
   useEffect(() => {
     if (selectedAreaMax !== null) {
@@ -23,7 +25,7 @@ const AreaTag = () => {
         selectedAreaMax: areaMaxInSquareFeet,
       }));
     }
-  }, [selectedAreaMax, simpleContext]);
+  }, [selectedAreaMax]);
   useEffect(() => {
     if (selectedAreaMin !== null) {
       const areaMiInSquareFeet = marlaToSquareFeet(selectedAreaMin);
@@ -32,16 +34,30 @@ const AreaTag = () => {
         selectedAreaMin: areaMiInSquareFeet,
       }));
     }
-  }, [selectedAreaMin, simpleContext]);
+  }, [selectedAreaMin]);
 
-  const handleSelectMaxArea = (area) => setSelectedAreaMax(area);
-  const handleSelectMinArea = (area) => setSelectedAreaMin(area);
+  const handleSelectMaxButton = (area, buttonIndex) => {
+    setSelectedAreaMax(area);
+    setSelectedMaxButton(buttonIndex);
+  };
+
+  const handleSelectMinButton = (area, buttonIndex) => {
+    setSelectedAreaMin(area);
+    setSelectedMinButton(buttonIndex);
+  };
   const handleMinChangeArea = (e) => setSelectedAreaMin(e.target.value);
   const handleMaxChangeArea = (e) => setSelectedAreaMax(e.target.value);
+
   const handleReset = () => {
     setSelectedAreaMin(null);
     setSelectedAreaMax(null);
+    setSelectedMinButton(null);
+    setSelectedMaxButton(null);
   };
+
+  const buttonStyles = (isSelected) =>
+    isSelected ? "bg-gray-800 text-white" : "text-black";
+
   return (
     <div>
       <Select>
@@ -83,14 +99,16 @@ const AreaTag = () => {
             <div className="border-t border-gray-200 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <Button
-                  variant="destructive"
-                  onClick={() => handleSelectMinArea(0)}
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 0)}
+                  onClick={() => handleSelectMinButton(0, 0)}
                 >
                   0
                 </Button>
                 <Button
-                  variant="destructive"
-                  onClick={() => handleSelectMaxArea("Any")}
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 0)}
+                  onClick={() => handleSelectMaxButton("Any", 0)}
                 >
                   Any
                 </Button>
@@ -98,37 +116,43 @@ const AreaTag = () => {
               <div className="grid grid-cols-2 gap-4 p-2">
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMinArea("2")}
+                  className={buttonStyles(selectedMinButton === 1)}
+                  onClick={() => handleSelectMinButton("2", 1)}
                 >
                   2
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMaxArea("2")}
+                  className={buttonStyles(selectedMaxButton === 1)}
+                  onClick={() => handleSelectMaxButton("2", 1)}
                 >
                   2
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMinArea("3")}
+                  className={buttonStyles(selectedMinButton === 2)}
+                  onClick={() => handleSelectMinButton("3", 2)}
                 >
                   3
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMaxArea("3")}
+                  className={buttonStyles(selectedMaxButton === 2)}
+                  onClick={() => handleSelectMaxButton("3", 2)}
                 >
                   3
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMinArea("5")}
+                  className={buttonStyles(selectedMinButton === 3)}
+                  onClick={() => handleSelectMinButton("5", 3)}
                 >
                   5
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handleSelectMaxArea("5")}
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("5", 3)}
                 >
                   5
                 </Button>

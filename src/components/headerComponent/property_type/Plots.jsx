@@ -2,13 +2,17 @@ import { Button } from "@/components/ui/button";
 
 import PropTypes from "prop-types";
 
-const Plots = ({ onSubPropertySelect }) => {
+const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
+  const buttonStyles = (subProperty) =>
+    selectedSubProperty === subProperty
+      ? "bg-gray-800 text-white"
+      : "text-black";
   return (
     <div>
       <div className="w-[100%] flex gap-5 p-1">
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Residential Plot")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Residential Plot")}
           >
@@ -17,7 +21,7 @@ const Plots = ({ onSubPropertySelect }) => {
         </div>
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Commercial Plot")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Commercial Plot")}
           >
@@ -28,7 +32,7 @@ const Plots = ({ onSubPropertySelect }) => {
       <div className="w-[100%] flex gap-5 p-1">
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Agricultural Land")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Agricultural Land")}
           >
@@ -37,7 +41,7 @@ const Plots = ({ onSubPropertySelect }) => {
         </div>
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Industrial Land")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Industrial Land")}
           >
@@ -48,7 +52,7 @@ const Plots = ({ onSubPropertySelect }) => {
       <div className="w-[100%] flex gap-5 p-1">
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Plot File")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Plot File")}
           >
@@ -57,7 +61,7 @@ const Plots = ({ onSubPropertySelect }) => {
         </div>
         <div className="w-[50%]">
           <Button
-            className="w-[100%]"
+            className={`w-[100%] ${buttonStyles("Plot Form")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Plot Form")}
           >
@@ -71,6 +75,7 @@ const Plots = ({ onSubPropertySelect }) => {
 
 Plots.propTypes = {
   onSubPropertySelect: PropTypes.func.isRequired,
+  selectedSubProperty: PropTypes.string.isRequired,
 };
 
 export default Plots;

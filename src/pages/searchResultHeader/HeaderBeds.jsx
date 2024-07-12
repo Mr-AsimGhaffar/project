@@ -19,7 +19,7 @@ const HeaderBeds = () => {
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [selectBeds, simpleContext]);
+  }, [selectBeds]);
 
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {

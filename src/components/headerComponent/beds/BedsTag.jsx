@@ -10,14 +10,14 @@ import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
 
 const BedsTag = () => {
-  const [selectBeds, setSelectBeds] = useState("");
+  const [selectBeds, setSelectBeds] = useState("All");
   const simpleContext = useContext(appContext);
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [simpleContext, selectBeds]);
+  }, [selectBeds]);
 
   const handleSelectBeds = (number) => {
     setSelectBeds((prevSelectBeds) => {
@@ -41,7 +41,7 @@ const BedsTag = () => {
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [simpleContext, selectBeds]);
+  }, [selectBeds]);
 
   const buttonStyles = (bedType) => ({
     backgroundColor: selectBeds.includes(bedType) ? "#2C2C2C" : "#FFFFFF",
