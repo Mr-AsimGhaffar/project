@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { appContext } from "./contexts/Context";
 import Navbar from "./components/navbar/Navbar";
 import Sidebar from "./components/sidebar/SideBar";
@@ -35,6 +35,8 @@ function App() {
     searchTerm: "",
     totalPages: 1,
     currentPage: 1,
+    startDate: "",
+    endDate: "",
   });
 
   const [conversionType, setConversionType] = useState("price");
@@ -42,11 +44,17 @@ function App() {
   const conversionFunction =
     conversionType === "price" ? priceConversion : countConversion;
 
+  const contextValue = useMemo(() => ({ appState, setAppState }), [appState]);
+  const handleDashboardClick = useCallback(() => {
+    setAppState((prevState) => ({ ...prevState, showDashboard: true }));
+  }, []);
+
   return (
     <BrowserRouter>
       <div>
-        <appContext.Provider value={{ appState, setAppState }}>
+        <appContext.Provider value={contextValue}>
           <Navbar
+            handleDashboardClick={handleDashboardClick}
             setConversionType={setConversionType}
             setPropertyCategory={setPropertyCategory}
           />
