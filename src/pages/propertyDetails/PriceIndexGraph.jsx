@@ -119,6 +119,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
                 dot={false}
                 activeDot={{ r: 7 }}
                 strokeWidth={3}
+                formatter={(value) => value.toLocaleString()}
               />
             </LineChart>
           </ResponsiveContainer>
