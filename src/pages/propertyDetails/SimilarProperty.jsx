@@ -81,10 +81,16 @@ export default function SimilarProperty({
           {data.map((item) => (
             <Card key={item.id} className="m-4">
               <div onClick={() => handleClick(item)}>
-                {item.cover_photo_url && (
+                {item.cover_photo_url ? (
                   <img
                     src={item.cover_photo_url}
                     alt="photo"
+                    className="w-full h-52 object-fit rounded-t-md"
+                  />
+                ) : (
+                  <img
+                    src="/img/NoImage.png"
+                    alt="dummy"
                     className="w-full h-52 object-fit rounded-t-md"
                   />
                 )}
