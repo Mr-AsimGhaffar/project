@@ -194,10 +194,10 @@ const Header = ({ propertyCategory }) => {
                     <Input
                       value={searchTerm}
                       onChange={handleChange}
-                      onClick={toggleVisibility}
+                      onClick={isVisible || toggleVisibility}
                       placeholder="Location"
                     />
-                    <div className="absolute z-10 mt-10 w-[42%]">
+                    <div className="absolute z-10 mt-10 w-[42%] text-black">
                       {suggestions.length > 0 && (
                         <ul className="bg-white border border-gray-200 w-full rounded">
                           {suggestions.map((suggestion, index) => (

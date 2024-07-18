@@ -10,7 +10,7 @@ const HeaderFilter = ({ onSortChange }) => {
     setSortOrder(order);
   };
   return (
-    <div className="flex justify-end gap-4">
+    <div className="flex gap-2">
       <div>
         <Button
           variant="outline"

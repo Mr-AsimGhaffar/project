@@ -43,7 +43,7 @@ const HeaderProperty = () => {
 
   const getPropertyTypeStyle = (propertyType) =>
     propertyState.selectedPropertyType === propertyType
-      ? "text-gray-800"
+      ? "text-gray-800 border-b-2 border-gray-800"
       : "hover:text-blue-500 cursor-pointer";
 
   return (
@@ -51,7 +51,7 @@ const HeaderProperty = () => {
       <Select>
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="PROPERTY TYPE" />
-          <div className="text-xs">
+          <div>
             {propertyState.selectedSubProperty ||
               propertyState.selectedPropertyType}
           </div>

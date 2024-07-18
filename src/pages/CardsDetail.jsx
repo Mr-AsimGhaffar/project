@@ -25,6 +25,7 @@ import { formatTimeFromNow } from "../utlils/UnixEpochTimeConverter";
 import { FaBath, FaBed } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { DatePickerWithRange } from "../components/ui/DateRangePicker";
+import { Button } from "../components/ui/button";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -243,7 +244,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
       <br />
       <form onSubmit={handleSubmit}>
-        <div className="grid lg:grid-cols-6 grid-cols-1 gap-4">
+        <div className="grid lg:grid-cols-5 grid-cols-1 gap-4">
           <div className="relative">
             <div className=" w-[100%]">
               <Input
@@ -291,12 +292,45 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           <div>
             <DatePickerWithRange onChange={handleDateChange} />
           </div>
+        </div>
+        <div className="flex justify-end mt-2 gap-2">
           <div>
             <HeaderFilter onSortChange={handleSortChange} />
           </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className={`px-4 py-2 rounded-3xl border-2 ${
+                sortBy === "start_date" ? "bg-gray-800 text-white" : ""
+              }`}
+              type="button"
+              onClick={() =>
+                handleSortChange(
+                  "start_date",
+                  sortOrder === "ASC" ? "DESC" : "ASC"
+                )
+              }
+            >
+              Sort by Start Date
+            </Button>
+            <Button
+              variant="outline"
+              className={`px-4 py-2 rounded-3xl border-2 ${
+                sortBy === "end_date" ? "bg-gray-800 text-white" : ""
+              }`}
+              type="button"
+              onClick={() =>
+                handleSortChange(
+                  "end_date",
+                  sortOrder === "ASC" ? "DESC" : "ASC"
+                )
+              }
+            >
+              Sort by End Date
+            </Button>
+          </div>
         </div>
       </form>
-      <br />
       <div className="flex justify-left gap-6">
         <div>
           <Recommended />
@@ -310,11 +344,11 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-6 py-5">
         {loading ? (
-          Array.from({ length: 1 }).map((_, index) => (
+          Array.from({ length: cardData.length }).map((_, index) => (
             <div key={index} className="flex items-center justify-center">
               <div className="flex flex-col items-center">
                 <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gradient-to-br from-blue-200 to-blue-300 animate-pulse" />
-                <div className="space-y-2">
+                <div className="space-y-2 py-2">
                   <Skeleton className="h-4 w-[250px] bg-gradient-to-r from-green-200 to-green-300 animate-ping" />
                   <Skeleton className="h-4 w-[200px] bg-gradient-to-r from-yellow-200 to-yellow-300 animate-ping" />
                 </div>

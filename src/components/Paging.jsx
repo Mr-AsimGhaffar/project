@@ -16,9 +16,14 @@ const Paging = ({ onPageChange }) => {
   const { appState } = simpleContext;
   const { currentPage, totalPages } = appState;
   const [showGoToFirst, setShowGoToFirst] = useState(false);
+  const [pages, setPages] = useState(undefined);
 
   useEffect(() => {
-    setShowGoToFirst(currentPage > 1);
+    setShowGoToFirst(currentPage > 5);
+  }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    renderPaginationLinks();
   }, [currentPage]);
 
   const renderPaginationLinks = () => {
@@ -35,7 +40,7 @@ const Paging = ({ onPageChange }) => {
             href="#"
             onClick={() => onPageChange(i)}
             className={
-              i === currentPage ? "active-link bg-gray-800 text-white" : ""
+              i == currentPage ? "active-link bg-gray-800 text-white" : ""
             }
           >
             {i}
@@ -67,8 +72,7 @@ const Paging = ({ onPageChange }) => {
         </PaginationItem>
       );
     }
-
-    return pages;
+    setPages(pages);
   };
   const goToFirstPage = () => {
     onPageChange(1);
@@ -86,18 +90,24 @@ const Paging = ({ onPageChange }) => {
             />
           </PaginationItem>
           {showGoToFirst && (
-            <PaginationItem>
-              <button
-                onClick={goToFirstPage}
-                className="p-2 hover:bg-gray-100 rounded active"
-                disabled={currentPage === 1}
-              >
-                1
-              </button>
-            </PaginationItem>
+            <div className="flex items-center">
+              <div>
+                <PaginationItem>
+                  <button
+                    onClick={goToFirstPage}
+                    className="p-2 hover:bg-gray-100 rounded active"
+                    disabled={currentPage === 1}
+                  >
+                    1
+                  </button>
+                </PaginationItem>
+              </div>
+              <div>
+                <PaginationEllipsis />
+              </div>
+            </div>
           )}
-          <PaginationEllipsis />
-          {renderPaginationLinks()}
+          {pages}
           <PaginationItem>
             <PaginationNext
               isActive
