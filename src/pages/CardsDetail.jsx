@@ -395,20 +395,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                       </CardDescription>
                     </div>
                     <div className="py-2">
-                      <CardDescription className="text-2xl font-bold">
-                        {conversionFunction(item.price)} PKR
-                      </CardDescription>
-                      <CardDescription
-                        className={`overflow-hidden ${
-                          expandedCards[item.id]
-                            ? "line-clamp-none"
-                            : "line-clamp-2"
-                        }`}
-                      >
-                        {item.desc}
-                      </CardDescription>
-                    </div>
-                    <div className="py-2">
                       <CardDescription>
                         <div className="flex justify-left gap-3 text-xs">
                           {item.bedroom && (
@@ -430,6 +416,20 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                             </div>
                           )}
                         </div>
+                      </CardDescription>
+                    </div>
+                    <div className="py-2">
+                      <CardDescription className="text-2xl font-bold">
+                        {conversionFunction(item.price)} PKR
+                      </CardDescription>
+                      <CardDescription
+                        className={`overflow-hidden ${
+                          expandedCards[item.id]
+                            ? "line-clamp-none"
+                            : "line-clamp-2"
+                        }`}
+                      >
+                        {item.desc}
                       </CardDescription>
                     </div>
                   </div>
