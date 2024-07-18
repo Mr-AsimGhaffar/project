@@ -18,7 +18,7 @@ const Navbar = ({
   setPropertyCategory,
 }) => {
   const [propertyView, setPropertyView] = useState("For Sale");
-  const [conversionType, setConversionTypeState] = useState("count");
+  const [conversionType, setConversionTypeState] = useState("price");
   const [isLoading, setIsLoading] = useState(false);
   const { setTheme } = useTheme();
 
