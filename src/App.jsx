@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { priceConversion } from "./utlils/priceConversion";
 import { countConversion } from "./utlils/countConversion";
+import { ThemeProvider } from "./components/theme/themeProvider";
 
 function App() {
   const [appState, setAppState] = useState({
@@ -50,74 +51,76 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <div>
-        <appContext.Provider value={contextValue}>
-          <Navbar
-            handleDashboardClick={handleDashboardClick}
-            setConversionType={setConversionType}
-            setPropertyCategory={setPropertyCategory}
-          />
-          <Sidebar />
-          <ToastContainer />
-          <div
-            className={`p-20 transition-transform duration-300  ${
-              appState.isSidebarOpen ? "transform -translate-x-0" : ""
-            }`}
-          >
-            {/* {appState.showDashboard ? ( */}
-            <div>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <Dashboard
-                      conversionFunction={conversionFunction}
-                      propertyCategory={propertyCategory}
-                    />
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <Dashboard
-                      conversionFunction={conversionFunction}
-                      propertyCategory={propertyCategory}
-                    />
-                  }
-                />
-                {/* <Route path="/" element={<Home />} />
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <div>
+          <appContext.Provider value={contextValue}>
+            <Navbar
+              handleDashboardClick={handleDashboardClick}
+              setConversionType={setConversionType}
+              setPropertyCategory={setPropertyCategory}
+            />
+            <Sidebar />
+            <ToastContainer />
+            <div
+              className={`p-20 transition-transform duration-300  ${
+                appState.isSidebarOpen ? "transform -translate-x-0" : ""
+              }`}
+            >
+              {/* {appState.showDashboard ? ( */}
+              <div>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <Dashboard
+                        conversionFunction={conversionFunction}
+                        propertyCategory={propertyCategory}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <Dashboard
+                        conversionFunction={conversionFunction}
+                        propertyCategory={propertyCategory}
+                      />
+                    }
+                  />
+                  {/* <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} /> */}
-                <Route path="/header" element={<Header />} />
-                <Route
-                  path="/search-results"
-                  element={
-                    <CardsDetail
-                      conversionFunction={conversionFunction}
-                      propertyCategory={propertyCategory}
-                    />
-                  }
-                />
-                <Route
-                  path="/property/:id"
-                  element={
-                    <PropertyDetailsPage
-                      conversionFunction={conversionFunction}
-                    />
-                  }
-                />
-              </Routes>
-            </div>
-            {/* ) : (
+                  <Route path="/header" element={<Header />} />
+                  <Route
+                    path="/search-results"
+                    element={
+                      <CardsDetail
+                        conversionFunction={conversionFunction}
+                        propertyCategory={propertyCategory}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/property/:id"
+                    element={
+                      <PropertyDetailsPage
+                        conversionFunction={conversionFunction}
+                      />
+                    }
+                  />
+                </Routes>
+              </div>
+              {/* ) : (
               <Routes>
                 <Route path="/" element={<Home />} />
               </Routes>
             )} */}
-          </div>
-          <Footer />
-        </appContext.Provider>
-      </div>
-    </BrowserRouter>
+            </div>
+            <Footer />
+          </appContext.Provider>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
