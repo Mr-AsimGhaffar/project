@@ -172,14 +172,14 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           </div>
         </div>
         <div ref={overviewRef} className="w-[100%]">
-          <div className="bg-gray-50">
-            <p className="text-2xl p-2">Overview</p>
+          <div className="bg-gray-100">
+            <p className="text-2xl text-black p-2">Overview</p>
           </div>
           <div className="p-2">
             <p className="font-bold">Details</p>
             <div>
               <Table>
-                <div className="flex justify-start gap-10">
+                <div className="flex justify-start gap-10 text-black">
                   <div>
                     <TableBody>
                       {Object.keys(property)
@@ -264,7 +264,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <div className="p-2">
               <p className="font-bold">Amenities</p>
               <br />
-              <div className="p-2">
+              <div className="p-2 text-black">
                 <Table>
                   <TableBody>
                     {property.features

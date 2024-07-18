@@ -36,7 +36,7 @@ export default function PopularityTrendGraph({
     <div>
       <div className="bg-gray-50">
         <hr />
-        <p className="text-2xl p-2">
+        <p className="text-2xl text-black p-2">
           Trends - Most Searched Locations in {location}
         </p>
       </div>
@@ -70,7 +70,7 @@ export default function PopularityTrendGraph({
           </div>
           <div className="w-[50%]">
             <p>PERCENTAGE OF TOTAL SEARCHES (%)</p>
-            <div>
+            <div className="text-black">
               <ResponsiveContainer width="100%" height={chartHeight}>
                 <BarChart
                   layout="vertical"

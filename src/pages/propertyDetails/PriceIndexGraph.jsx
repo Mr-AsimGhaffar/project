@@ -26,7 +26,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
     <div>
       <div className="bg-gray-50">
         <hr />
-        <p className="text-2xl p-2">Price Index</p>
+        <p className="text-2xl text-black p-2">Price Index</p>
       </div>
       <div>
         <p className="text-3xl p-2">
@@ -62,7 +62,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
             </p>
           </div>
           <br />
-          <div className="flex justify-between p-2 bg-gray-50">
+          <div className="flex justify-between p-2 bg-gray-50 text-black">
             <div>
               <p>6 months ago</p>
               <p>12 months ago</p>
@@ -90,7 +90,10 @@ export default function PriceIndexGraph({ areaTrendData }) {
             </div>
           </div>
         </div>
-        <div className="col-span-9" style={{ width: "100%", height: "100%" }}>
+        <div
+          className="col-span-9 text-black"
+          style={{ width: "100%", height: "100%" }}
+        >
           <ResponsiveContainer width="100%" height={400}>
             <LineChart
               width={900}
