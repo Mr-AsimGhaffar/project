@@ -118,7 +118,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               variant="ghost"
               className={`w-full${
                 activeButton === "Overview"
-                  ? "bg-white bg-accent text-black rounded-3xl border-2"
+                  ? "bg-white bg-accent rounded-3xl border-2"
                   : "bg-black text-white rounded-3xl border-2 border-none"
               }`}
               onClick={() => scrollToSection(overviewRef, "Overview")}
@@ -129,7 +129,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               variant="ghost"
               className={`  w-full${
                 activeButton === "Location"
-                  ? "bg-white bg-accent text-black rounded-3xl border-2"
+                  ? "bg-white bg-accent rounded-3xl border-2"
                   : "bg-inherit text-white rounded-3xl border-2 border-none"
               }`}
               onClick={() => scrollToSection(locationRef, "Location")}
@@ -140,7 +140,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               variant="ghost"
               className={`w-full${
                 activeButton === "PriceIndex"
-                  ? "bg-white bg-accent text-black rounded-3xl border-2"
+                  ? "bg-white bg-accent rounded-3xl border-2"
                   : "bg-transparent text-white rounded-3xl border-2 border-none"
               }`}
               onClick={() => scrollToSection(priceIndexRef, "PriceIndex")}
@@ -151,7 +151,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               variant="ghost"
               className={`w-full${
                 activeButton === "Trends"
-                  ? "bg-white bg-accent text-black rounded-3xl border-2"
+                  ? "bg-white bg-accent rounded-3xl border-2"
                   : "bg-transparent text-white rounded-3xl border-2 border-none"
               }`}
               onClick={() => scrollToSection(trendsRef, "Trends")}
@@ -161,8 +161,8 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <Button
               variant="ghost"
               className={`w-full${
-                activeButton === "Finance"
-                  ? "bg-white bg-accent text-black rounded-3xl border-2"
+                activeButton === "Similar"
+                  ? "bg-white bg-accent rounded-3xl border-2"
                   : "bg-transparent text-white rounded-3xl border-2 border-none"
               }`}
               onClick={() => scrollToSection(similarPropertyRef, "Similar")}
@@ -179,7 +179,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <p className="font-bold">Details</p>
             <div>
               <Table>
-                <div className="flex justify-start gap-10 text-black">
+                <div className="flex justify-start gap-10">
                   <div>
                     <TableBody>
                       {Object.keys(property)
@@ -190,14 +190,16 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                           <TableRow key={item} className="border-none">
                             <TableCell
                               className={`${
-                                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 text-black"
+                                  : ""
                               }`}
                             >
                               {capitalizeFirstLetter(item)}
                             </TableCell>
                             <TableCell
                               className={`${
-                                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                rowIndex % 2 === 0 ? "bg-gray-100" : ""
                               }`}
                             >
                               {property[item]
@@ -220,14 +222,16 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                           <TableRow key={item} className="border-none">
                             <TableCell
                               className={`${
-                                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 text-black"
+                                  : ""
                               }`}
                             >
                               {capitalizeFirstLetter(item)}
                             </TableCell>
                             <TableCell
                               className={`${
-                                rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                rowIndex % 2 === 0 ? "bg-gray-100" : ""
                               }`}
                             >
                               {property[item]

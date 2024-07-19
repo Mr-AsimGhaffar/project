@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 
 const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
   const buttonStyles = (subProperty) =>
-    selectedSubProperty === subProperty
-      ? "bg-gray-800 text-white"
-      : "text-black";
+    selectedSubProperty === subProperty ? "bg-gray-800 text-white" : "";
 
   return (
     <div>
@@ -79,6 +77,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
             Penthouse
           </Button>
         </div>
+        <div className="w-[50%]"></div>
       </div>
     </div>
   );

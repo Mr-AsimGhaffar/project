@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 
 const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
   const buttonStyles = (subProperty) =>
-    selectedSubProperty === subProperty
-      ? "bg-gray-800 text-white"
-      : "text-black";
+    selectedSubProperty === subProperty ? "bg-gray-800 text-white" : "";
   return (
     <div>
       <div className="w-[100%] flex gap-5 p-1">

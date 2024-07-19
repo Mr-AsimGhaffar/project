@@ -42,7 +42,7 @@ const PropertyTag = () => {
 
   const getPropertyTypeStyle = (propertyType) =>
     propertyState.selectedPropertyType === propertyType
-      ? "text-gray-800"
+      ? "text-gray-800 border-b-2 border-gray-800"
       : "hover:text-blue-500 cursor-pointer";
 
   return (

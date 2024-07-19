@@ -69,6 +69,12 @@ const PriceTag = () => {
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
   };
+  const handleReset = () => {
+    setSelectedAmountMin(null);
+    setSelectedAmountMax(null);
+    setSelectedMinButton(null);
+    setSelectedMaxButton(null);
+  };
 
   function ChevronUpIcon(props) {
     return (
@@ -89,7 +95,7 @@ const PriceTag = () => {
     );
   }
   const buttonStyles = (isSelected) =>
-    isSelected ? "bg-gray-800 text-white" : "text-black";
+    isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
       <Select>
@@ -100,7 +106,7 @@ const PriceTag = () => {
           <div>{selectedAmountMax}</div>
         </SelectTrigger>
         <SelectContent>
-          <div className="bg-white rounded-md shadow-lg p-4 w-64">
+          <div className="rounded-md shadow-lg p-4 w-64">
             <div className="flex justify-between items-center mb-4">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
               <ChevronUpIcon className="h-4 w-4 text-gray-400" />
@@ -302,6 +308,11 @@ const PriceTag = () => {
                   5,000,000,000
                 </Button>
               </div>
+            </div>
+            <div className="flex justify-between mt-4">
+              <Button variant="outline" onClick={handleReset}>
+                Reset
+              </Button>
             </div>
           </div>
         </SelectContent>

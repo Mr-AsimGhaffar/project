@@ -43,22 +43,22 @@ const HeaderBeds = () => {
       ...s,
       selectBeds: selectBeds,
     }));
-  }, [selectBeds, simpleContext]);
+  }, [selectBeds]);
 
   const buttonStyles = (bedType) => ({
-    backgroundColor: selectBeds.includes(bedType) ? "#2C2C2C" : "#FFFFFF",
+    backgroundColor: selectBeds.includes(bedType) ? "#2d3748" : "#FFFFFF",
     color: selectBeds.includes(bedType) ? "#FFFFFF" : "#000000",
   });
 
   return (
     <div>
       <Select>
-        <SelectTrigger className="rounded-3xl border-none bg-gray-800 text-white">
+        <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="BEDS" />
           <div>{selectBeds}</div>
         </SelectTrigger>
         <SelectContent>
-          <div className="bg-white rounded-md shadow-lg p-4 w-64">
+          <div className="rounded-md shadow-lg p-4 w-64">
             <div className="grid grid-cols-1">
               <Button
                 variant="outline"
@@ -68,7 +68,7 @@ const HeaderBeds = () => {
                 All
               </Button>
             </div>
-            <div className="grid grid-cols-1 mt-2">
+            <div className="grid grid-cols-1 mt-2 space-y-2">
               <Button
                 variant="outline"
                 onClick={() => handleSelectBeds("Studio")}

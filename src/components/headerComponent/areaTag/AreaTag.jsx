@@ -56,7 +56,7 @@ const AreaTag = () => {
   };
 
   const buttonStyles = (isSelected) =>
-    isSelected ? "bg-gray-800 text-white" : "text-black";
+    isSelected ? "bg-gray-800 text-white" : "";
 
   return (
     <div>
@@ -68,7 +68,7 @@ const AreaTag = () => {
           <div>{selectedAreaMax}</div>
         </SelectTrigger>
         <SelectContent>
-          <div className="bg-white rounded-md shadow-lg p-4 w-64">
+          <div className="rounded-md shadow-lg p-4 w-64">
             <Button className="mb-4 w-[100%]" variant="secondary">
               Change area unit (Marla)
             </Button>
@@ -159,7 +159,7 @@ const AreaTag = () => {
               </div>
             </div>
             <div className="flex justify-between mt-4">
-              <Button variant="ghost" onClick={handleReset}>
+              <Button variant="outline" onClick={handleReset}>
                 Reset
               </Button>
             </div>

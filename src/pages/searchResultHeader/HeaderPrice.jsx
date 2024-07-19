@@ -99,7 +99,7 @@ const HeaderPrice = () => {
     );
   }
   const buttonStyles = (isSelected) =>
-    isSelected ? "bg-gray-800 text-white" : "text-black";
+    isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
       <Select>
@@ -112,7 +112,7 @@ const HeaderPrice = () => {
           </div>
         </SelectTrigger>
         <SelectContent>
-          <div className="bg-white rounded-md shadow-lg p-4 w-64 text-black">
+          <div className="rounded-md shadow-lg p-4 w-64">
             <div className="flex justify-between items-center mb-4">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
               <ChevronUpIcon className="h-4 w-4 text-gray-400" />
@@ -145,7 +145,7 @@ const HeaderPrice = () => {
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   variant="outline"
-                  className={buttonStyles(selectedMinButton === 0)}
+                  className={`buttonStyles(selectedMinButton === 0)`}
                   onClick={() => handleSelectMin(0, 0)}
                 >
                   0
@@ -316,7 +316,7 @@ const HeaderPrice = () => {
               </div>
             </div>
             <div className="flex justify-between mt-4">
-              <Button variant="ghost" onClick={handleReset}>
+              <Button variant="outline" onClick={handleReset}>
                 Reset
               </Button>
             </div>

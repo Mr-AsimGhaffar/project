@@ -261,8 +261,9 @@ const Header = ({ propertyCategory }) => {
                     </div> */}
 
                     <Button
+                      variant="primary"
                       onClick={toggleVisibility}
-                      className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-black text-xs"
+                      className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-xs"
                     >
                       {isVisible ? (
                         <FaAngleDown className="mr-2" />

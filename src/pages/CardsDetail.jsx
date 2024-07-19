@@ -293,7 +293,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <DatePickerWithRange onChange={handleDateChange} />
           </div>
         </div>
-        <div className="flex justify-end mt-2 gap-2">
+        <div className="flex justify-end mt-4 gap-2">
           <div>
             <HeaderFilter onSortChange={handleSortChange} />
           </div>
