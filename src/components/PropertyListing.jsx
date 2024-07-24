@@ -5,6 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchPropertyCount } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const [propertyListingData, setPropertyListingData] = useState({});
@@ -37,21 +38,13 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
     return <SkeletonCard />;
   }
   return (
-    <main>
+    <main className="px-44">
       <PropertyDetails
         propertyListingData={propertyListingData}
         conversionFunction={conversionFunction}
         propertyCategory={propertyCategory}
       />
-      <div className="flex justify-between items-center text-2xl font-bold">
-        <div>Property Listings</div>
-        <div>
-          <Button className="text-lg" variant="link" onClick={toggleView}>
-            {viewAll ? "View Less" : "View All"}
-          </Button>
-        </div>
-      </div>
-      <div className="grid md:grid-cols-4 gap-6 py-5">
+      <div className="grid md:grid-cols-4 gap-3">
         {displayedData
           .map((item, index) => ({
             id: index,
@@ -59,15 +52,17 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
             amount: propertyListingData[item],
           }))
           .map((item) => (
-            <div key={item.id}>
-              <Card>
+            <div
+              key={item.id}
+              className="font-montserrat font-semibold leading-10 text-center opacity-80"
+            >
+              <Card className="py-6">
                 <CardHeader>
                   <div>
-                    <CardTitle>{item.title}</CardTitle>
+                    <CardTitle className="text-2xl">{item.title}</CardTitle>
                   </div>
-                  <br />
                   <div>
-                    <CardDescription className="text-3xl font-bold">
+                    <CardDescription className="text-4xl py-4">
                       {conversionFunction(item.amount)}
                     </CardDescription>
                   </div>
@@ -75,6 +70,21 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
               </Card>
             </div>
           ))}
+      </div>
+
+      <div className="flex justify-center py-20">
+        <Button
+          className="font-inter text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-8"
+          variant="ghost"
+          onClick={toggleView}
+        >
+          {viewAll ? "SEE ALL" : "SEE LESS"}
+          {viewAll ? (
+            <FaAngleUp className="ml-2" />
+          ) : (
+            <FaAngleDown className="ml-2" />
+          )}
+        </Button>
       </div>
     </main>
   );
