@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
-import { FaBed } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
-import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "./skeleton/Skeleton";
 import { fetchFeaturedProperties } from "../utlils/fetchApi";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { formatTimeNow } from "../utlils/formatTimeNow";
 
 export default function FeaturedProperty({
   conversionFunction,
@@ -43,8 +42,8 @@ export default function FeaturedProperty({
     loadData();
   }, [propertyCategory]);
 
-  const handleViewAll = () => setShowAll(true);
-  const handleViewLess = () => setShowAll(false);
+  const toggleView = () => setShowAll((prev) => !prev);
+
   const handleClick = (item) => {
     navigate(`/property/${item.id}`, { state: { id: item.id } });
     window.scrollTo(0, 0);
@@ -55,22 +54,15 @@ export default function FeaturedProperty({
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center text-2xl font-bold">
-        <div>Featured Properties</div>
+    <div className="px-44 bg-[#0071BC] bg-opacity-10">
+      <div className="flex justify-center items-center p-20">
         <div>
-          {showAll ? (
-            <Button className="text-lg" variant="link" onClick={handleViewLess}>
-              View Less
-            </Button>
-          ) : (
-            <Button className="text-lg" variant="link" onClick={handleViewAll}>
-              View All
-            </Button>
-          )}
+          <h1 className="font-montserrat font-bold text-5xl leading-10 tracking-widest text-[#0071BC]">
+            FEATURED PROPERTIES
+          </h1>
         </div>
       </div>
-      <div className="grid md:grid-cols-4 gap-6 py-5">
+      <div className="grid md:grid-cols-4 gap-3 font-montserrat">
         {featuredData
           .slice(0, showAll ? featuredData.length : 4)
           .map((item) => (
@@ -94,11 +86,11 @@ export default function FeaturedProperty({
                     <div className="flex justify-between items-center">
                       <CardTitle className="text-base font-semibold w-[90%]">
                         <span className="font-light text-sm">
-                          Added: {formatTimeFromNow(item.added)}
+                          Added: {formatTimeNow(item.added)}
                         </span>
                       </CardTitle>
                     </div>
-                    <div className="py-2 font-bold">
+                    <div className="py-2 font-semibold">
                       <CardDescription>
                         PKR {conversionFunction(item.price)}
                       </CardDescription>
@@ -123,12 +115,7 @@ export default function FeaturedProperty({
                           {item.area && (
                             <div className="flex flex-row items-center gap-1">
                               <BiSolidDirections />
-                              <p>
-                                {convertMarlaToSquareFeet(
-                                  item.area.split(" ")[0]
-                                )}{" "}
-                                sqft
-                              </p>
+                              <p>{item.area} sqft</p>
                             </div>
                           )}
                         </div>
@@ -139,6 +126,20 @@ export default function FeaturedProperty({
               </div>
             </Card>
           ))}
+      </div>
+      <div className="flex justify-center py-20">
+        <Button
+          className="font-inter text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-8"
+          variant="ghost"
+          onClick={toggleView}
+        >
+          {showAll ? "SEE LESS" : "SEE ALL"}
+          {showAll ? (
+            <FaAngleUp className="ml-2" />
+          ) : (
+            <FaAngleDown className="ml-2" />
+          )}
+        </Button>
       </div>
     </div>
   );
