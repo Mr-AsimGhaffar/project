@@ -11,9 +11,10 @@ import { Button } from "../ui/button";
 // } from "../ui/dropdown-menu";
 // import { useTheme } from "../theme/themeProvider";
 import Spinner from "../spinner/Spinner";
+import { Link } from "react-router-dom";
 
 const Navbar = ({
-  // handleDashboardClick,
+  handleDashboardClick,
   // setConversionType,
   setPropertyCategory,
 }) => {
@@ -92,20 +93,22 @@ const Navbar = ({
                       Million
                     </button> */}
             </div>
-            <div className="flex items-center gap-1">
-              <div>
-                <img
-                  src="img/website_logo.svg"
-                  alt="logo"
-                  className="h-8 md:h-10"
-                />
+            <Link to="/dashboard" onClick={handleDashboardClick}>
+              <div className="flex items-center gap-1">
+                <div>
+                  <img
+                    src="img/website_logo.svg"
+                    alt="logo"
+                    className="h-8 md:h-10"
+                  />
+                </div>
+                <div>
+                  <h1 className="font-bold text-2xl md:text-3xl text-[#0071BC] font-robotoSlab tracking-widest">
+                    attaq
+                  </h1>
+                </div>
               </div>
-              <div>
-                <h1 className="font-bold text-2xl md:text-3xl text-[#0071BC] font-robotoSlab tracking-widest">
-                  attaq
-                </h1>
-              </div>
-            </div>
+            </Link>
 
             <div className="hidden lg:flex items-center gap-4 opacity-80 ">
               <div>

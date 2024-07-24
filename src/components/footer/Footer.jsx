@@ -34,7 +34,7 @@ const Footer = () => {
               </h1>
             </div>
             <div className="font-montserrat font-medium text-base tracking-wider">
-              <div className="flex flex-col items-center lg:items-start gap-4 py-5">
+              <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
                   <img src="img/location.svg" alt="location" />
                 </div>
@@ -45,7 +45,7 @@ const Footer = () => {
                   </h1>
                 </div>
               </div>
-              <div className="flex flex-col items-center lg:items-start gap-4 py-5">
+              <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
                   <img src="img/call.svg" alt="call" />
                 </div>
@@ -55,7 +55,7 @@ const Footer = () => {
                   </h1>
                 </div>
               </div>
-              <div className="flex flex-col items-center lg:items-start gap-4 py-5">
+              <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
                   <img src="img/email.svg" alt="email" />
                 </div>
