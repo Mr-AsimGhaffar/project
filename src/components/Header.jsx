@@ -25,6 +25,7 @@ import {
   searchCityData,
 } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
+import { CiSearch } from "react-icons/ci";
 
 const Header = ({ propertyCategory }) => {
   const [data, setData] = useState([]);
@@ -156,77 +157,101 @@ const Header = ({ propertyCategory }) => {
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
-    <div>
-      <div className="flex justify-between items-center">
-        <div className="text-2xl font-bold">Property Search</div>
-        <div>
-          <Button
-            className="text-lg"
-            variant="link"
-            onClick={isVisible || toggleVisibility}
-          >
-            Advance Search
-          </Button>
-        </div>
+    <div className="relative">
+      <div>
+        <img src="img/bg_image.svg" alt="bg_image" />
       </div>
-      <br />
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between">
-            <div className="w-[100%] p-2">
-              <form onSubmit={handleSubmit}>
-                <div className="grid md:grid-cols-4 grid-cols-1 gap-4">
-                  <div className=" text-4xl font-bold">
-                    <Select onValueChange={setSelectedCity}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Islamabad" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {data.map((item) => (
-                          <SelectItem key={item} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+      <div className="absolute top-20 left-0 right-0 mx-auto max-w-5xl">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="font-montserrat font-semibold text-5xl text-[#FFFFFF] leading-10 py-3">
+              Discover a place you&apos;ll love calling home.
+            </h1>
+          </div>
+        </div>
+        <Card className="relative bg-black bg-opacity-50 border-none">
+          <CardHeader>
+            <div className="flex justify-between">
+              <div className="w-[100%]">
+                <form onSubmit={handleSubmit}>
+                  <div className="flex items-center gap-4 py-2 text-white font-montserrat font-semibold text-lg cursor-pointer">
+                    <input type="radio" id="rent" name="fav_language" />
+                    <label htmlFor="rent" className="cursor-pointer">
+                      Rent
+                    </label>
+                    <input type="radio" id="buy" name="fav_language" />
+                    <label htmlFor="buy" className="cursor-pointer">
+                      Buy
+                    </label>
+                    <input type="radio" id="other" name="fav_language" />
+                    <label htmlFor="other" className="cursor-pointer">
+                      Other
+                    </label>
                   </div>
-                  <div className="grid col-span-2">
-                    <Input
-                      value={searchTerm}
-                      onChange={handleChange}
-                      onClick={isVisible || toggleVisibility}
-                      placeholder="Location"
-                    />
-                    <div className="absolute z-10 mt-10 w-[42%] text-black">
-                      {suggestions.length > 0 && (
-                        <ul className="bg-white border border-gray-200 w-full rounded">
-                          {suggestions.map((suggestion, index) => (
-                            <li
-                              key={index}
-                              className="p-2 cursor-pointer hover:bg-gray-200 text-sm"
-                              onClick={() => handleSuggestionClick(suggestion)}
+                  <div className="grid md:grid-cols-8 grid-cols-1 font-montserrat font-medium text-lg">
+                    <div className="grid col-span-2">
+                      <Select onValueChange={setSelectedCity}>
+                        <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
+                          <SelectValue placeholder="Location" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {data.map((item) => (
+                            <SelectItem
+                              className="cursor-pointer"
+                              key={item}
+                              value={item}
                             >
-                              {suggestion}
-                            </li>
+                              {item}
+                            </SelectItem>
                           ))}
-                        </ul>
-                      )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid col-span-5 relative">
+                      <Input
+                        value={searchTerm}
+                        onChange={handleChange}
+                        onClick={isVisible || toggleVisibility}
+                        placeholder="Location"
+                        className="rounded-none"
+                      />
+                      <div className="absolute z-10 mt-10 w-[42%] text-black">
+                        {suggestions.length > 0 && (
+                          <ul className="bg-white border border-gray-200 w-full rounded">
+                            {suggestions.map((suggestion, index) => (
+                              <li
+                                key={index}
+                                className="p-2 cursor-pointer hover:bg-gray-200 text-sm"
+                                onClick={() =>
+                                  handleSuggestionClick(suggestion)
+                                }
+                              >
+                                {suggestion}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1">
+                      <Button
+                        onClick={handleSearch}
+                        className="rounded-none flex items-center justify-center rounded-tr-lg rounded-br-lg bg-white text-black hover:bg-gray-100"
+                      >
+                        <CiSearch className="h-5 w-5 mr-2" />
+                      </Button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1">
-                    <Button onClick={handleSearch}>Search</Button>
-                  </div>
-                </div>
-                <div>
                   <div>
-                    <div
-                      className={`transition-all duration-500 ${
-                        isVisible
-                          ? "max-h-96 opacity-100"
-                          : "max-h-0 opacity-0 overflow-hidden"
-                      }`}
-                    >
-                      {/* <p className="text-sm">Location</p>
+                    <div>
+                      <div
+                        className={`transition-all duration-500 ${
+                          isVisible
+                            ? "max-h-96 opacity-100"
+                            : "max-h-0 opacity-0 overflow-hidden"
+                        }`}
+                      >
+                        {/* <p className="text-sm">Location</p>
                         <Input
                           value={searchTerm}
                           onChange={handleChange}
@@ -234,52 +259,54 @@ const Header = ({ propertyCategory }) => {
                           placeholder="Enter Location"
                         />
                       </div> */}
-                      <br />
-                      <div className="grid md:grid-cols-4 grid-cols-1 gap-4">
-                        <div>
-                          <p className="text-sm">Price Range</p>
-                          <PriceTag />
-                        </div>
-                        <div>
-                          <p className="text-sm">Property Type</p>
-                          <PropertyTag />
-                        </div>
-                        <div>
-                          <p className="text-sm">Area</p>
-                          <AreaTag />
-                        </div>
-                        <div>
-                          <p className="text-sm">Bedrooms</p>
-                          <BedsTag />
+                        <br />
+                        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 font-montserrat font-medium text-lg">
+                          <div>
+                            <p className="text-sm text-white">Price Range</p>
+                            <PriceTag />
+                          </div>
+                          <div>
+                            <p className="text-sm text-white">Property Type</p>
+                            <PropertyTag />
+                          </div>
+                          <div>
+                            <p className="text-sm text-white">Area</p>
+                            <AreaTag />
+                          </div>
+                          <div>
+                            <p className="text-sm text-white">Bedrooms</p>
+                            <BedsTag />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {/* <div>
+                      {/* <div>
                       <Button onClick={handleSearch} className="w-[24%]">
                         Search
                       </Button>
                     </div> */}
-
-                    <Button
-                      variant="primary"
-                      onClick={toggleVisibility}
-                      className="flex items-center px-1 py-1 bg-inherit hover:bg-inherit text-xs"
-                    >
-                      {isVisible ? (
-                        <FaAngleDown className="mr-2" />
-                      ) : (
-                        <FaAngleUp className="mr-2" />
-                      )}
-                      {isVisible ? "Less Options" : "More Options"}
-                    </Button>
+                      <div className="flex justify-end">
+                        <Button
+                          variant="primary"
+                          onClick={toggleVisibility}
+                          className="text-xs text-white font-montserrat font-bold text-base leading-5"
+                        >
+                          {isVisible ? "Less" : "More"}
+                          {isVisible ? (
+                            <FaAngleUp className="ml-2" />
+                          ) : (
+                            <FaAngleDown className="ml-2" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </form>
-              {simpleContext.appState.loading && <Spinner />}
+                </form>
+                {simpleContext.appState.loading && <Spinner />}
+              </div>
             </div>
-          </div>
-        </CardHeader>
-      </Card>
+          </CardHeader>
+        </Card>
+      </div>
     </div>
   );
 };
