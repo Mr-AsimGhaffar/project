@@ -77,7 +77,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <img
               src={property.cover_photo_url}
               alt="property"
-              className="w-full h-800px object-cover rounded-t-md"
+              className="w-full h-96 object-fit rounded-t-md"
             />
           ) : (
             <img
@@ -86,6 +86,11 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               className="w-full h-full object-cover rounded-t-md"
             />
           )}
+          <div className="absolute left-5 bottom-5">
+            <a href={property.url} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline">View more details</Button>
+            </a>
+          </div>
           <div className="absolute right-5 bottom-5">
             <CiHeart className="w-[30px] h-[30px] bg-gray-400 rounded-3xl text-white" />
           </div>
