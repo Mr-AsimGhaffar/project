@@ -9,11 +9,12 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import PriceIndexGraph from "./PriceIndexGraph";
 import PopularityTrendGraph from "./PopularityTrendGraph";
 import SimilarProperty from "./SimilarProperty";
-import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import LocationMap from "./LocationMap";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchPropertyDetails } from "../../utlils/fetchApi";
 import PropTypes from "prop-types";
+import { formatTimeNow } from "../../utlils/formatTimeNow";
+import { squareFeetToMarla } from "../../utlils/squareFeetToMarla";
 
 const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const [activeButton, setActiveButton] = useState("Overview");
@@ -21,7 +22,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const [showAllRows, setShowAllRows] = useState(false);
   const initialRowCount = 2;
   const location = useLocation();
-  const { id } = location.state || {};
+  const { id } = location.state || { id: location.pathname.split("/").pop() };
   const overviewRef = useRef(null);
   const locationRef = useRef(null);
   const similarPropertyRef = useRef(null);
@@ -39,7 +40,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   }, [id]);
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, id]);
 
   const property = data[0];
   if (data.length === 0) {
@@ -66,7 +67,8 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         <hr />
         <div>
           <p className="text-xl font-bold">
-            {property.area}, Brand New House For Sale in {property.location}
+            {squareFeetToMarla(property.area)}, Brand New House For Sale in{" "}
+            {property.location}
           </p>
           <p>{property.location}</p>
         </div>
@@ -205,6 +207,8 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                               {property[item]
                                 ? item === "price"
                                   ? conversionFunction(property[item])
+                                  : item === "type"
+                                  ? property[item].replace("_", " ")
                                   : property[item]
                                 : "-"}
                             </TableCell>
@@ -236,7 +240,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                             >
                               {property[item]
                                 ? item === "added"
-                                  ? formatTimeFromNow(property[item])
+                                  ? formatTimeNow(property[item])
+                                  : item === "area"
+                                  ? squareFeetToMarla(property[item])
                                   : property[item]
                                 : "-"}
                             </TableCell>
