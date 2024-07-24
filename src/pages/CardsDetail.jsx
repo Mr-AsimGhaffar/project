@@ -21,11 +21,12 @@ import { formatPrice } from "../utlils/formatPrice";
 import Recommended from "../components/cardsDetails/Recommended";
 import { fetchSearchSuggestions, searchCityData } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
-import { formatTimeFromNow } from "../utlils/UnixEpochTimeConverter";
 import { FaBath, FaBed } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { DatePickerWithRange } from "../components/ui/DateRangePicker";
 import { Button } from "../components/ui/button";
+import { formatTimeNow } from "../utlils/formatTimeNow";
+import { squareFeetToMarla } from "../utlils/squareFeetToMarla";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -391,7 +392,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                     </div>
                     <div className="py-2">
                       <CardDescription>
-                        Added: {formatTimeFromNow(item.added)}
+                        Added: {formatTimeNow(item.added)}
                       </CardDescription>
                     </div>
                     <div className="py-2">
@@ -412,7 +413,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                           {item.area && (
                             <div className="flex flex-row items-center gap-1">
                               <BiSolidDirections />
-                              <p>{item.area.split(" ")[0]} Marla</p>
+                              <p>{squareFeetToMarla(item.area)}</p>
                             </div>
                           )}
                         </div>
@@ -429,14 +430,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                             : "line-clamp-2"
                         }`}
                       >
-                        {item.desc}
+                        {item.description}
                       </CardDescription>
                     </div>
                   </div>
                 </CardHeader>
               </Link>
               <CardDescription>
-                {item.desc.length > 100 && (
+                {item.description.length > 100 && (
                   <button
                     onClick={() => handleToggleExpand(item.id)}
                     className="text-sm underline p-6 py-3"

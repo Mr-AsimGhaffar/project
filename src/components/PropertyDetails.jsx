@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 const PropertyDetails = ({
   propertyListingData,
@@ -11,9 +10,9 @@ const PropertyDetails = ({
     .reduce((total, num) => total + num, 0);
 
   const displayProperties = () => {
-    if (propertyCategory === "For Sale") {
+    if (propertyCategory === "for_sale") {
       return conversionFunction(totalProperties);
-    } else if (propertyCategory === "For Rent") {
+    } else if (propertyCategory === "for_rent") {
       return conversionFunction(totalProperties);
     } else {
       return "Invalid category";
@@ -22,18 +21,10 @@ const PropertyDetails = ({
 
   return (
     <main>
-      <div className="grid md:grid-cols-3 gap-6 py-5">
-        <div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Properties</CardTitle>
-              <br />
-              <CardDescription className="text-3xl font-bold">
-                {displayProperties()}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
+      <div>
+        <h1 className="font-montserrat font-bold text-5xl leading-10 tracking-widest text-[#0071BC] text-center p-20">
+          TOTAL PROPERTIES LISTED : {displayProperties()}
+        </h1>
       </div>
     </main>
   );

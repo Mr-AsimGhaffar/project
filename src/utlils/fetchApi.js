@@ -13,7 +13,7 @@ function getAbortController(key) {
   return controller;
 }
 
-async function fetchFeaturedProperties(propertyCategory = "For Sale") {
+async function fetchFeaturedProperties(propertyCategory = "for_sale") {
   try {
     const response = await fetch(
       `${API_URL}/property/featured?purpose=${propertyCategory}`,
@@ -45,7 +45,7 @@ async function fetchFeaturedProperties(propertyCategory = "For Sale") {
 
 async function fetchSimilarProperties(
   similarPropertyId,
-  propertyCategory = "For Sale"
+  propertyCategory = "for_sale"
 ) {
   try {
     const response = await fetch(
@@ -110,7 +110,7 @@ async function searchCityData(
   sort_by = "id",
   sort_order = "ASC",
   filters = {},
-  propertyCategory = "For Sale",
+  propertyCategory = "for_sale",
   start_date,
   end_date
 ) {
@@ -120,7 +120,9 @@ async function searchCityData(
     const property_type = filters.property_type ?? "";
     const url = `${API_URL}/property/search/${city ?? ""}?query=${
       query ?? ""
-    }&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type}&area_min=&area_max=&price_min=${
+    }&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
+      .toLowerCase()
+      .replace(" ", "_")}&area_min=&area_max=&price_min=${
       price_min ?? ""
     }&price_max=${price_max ?? ""}&bedrooms=${
       bedrooms ?? ""
@@ -184,7 +186,7 @@ async function fetchAvailableCities() {
   }
 }
 
-export async function fetchPropertyCount(propertyCategory = "For Sale") {
+export async function fetchPropertyCount(propertyCategory = "for_sale") {
   try {
     const response = await fetch(
       `${API_URL}/property/count?purpose=${propertyCategory}`,

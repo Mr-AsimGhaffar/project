@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
 import { appContext } from "./contexts/Context";
 import Navbar from "./components/navbar/Navbar";
-import Sidebar from "./components/sidebar/SideBar";
+// import Sidebar from "./components/sidebar/SideBar";
 import Dashboard from "./pages/Dashboard";
 // import Home from "./components/Home";
 import Header from "./components/Header";
@@ -41,7 +41,7 @@ function App() {
   });
 
   const [conversionType, setConversionType] = useState("price");
-  const [propertyCategory, setPropertyCategory] = useState("For Sale");
+  const [propertyCategory, setPropertyCategory] = useState("for_sale");
   const conversionFunction =
     conversionType === "price" ? priceConversion : countConversion;
 
@@ -60,14 +60,9 @@ function App() {
               setConversionType={setConversionType}
               setPropertyCategory={setPropertyCategory}
             />
-            <Sidebar />
+            {/* <Sidebar /> */}
             <ToastContainer />
-            <div
-              className={`p-20 transition-transform duration-300  ${
-                appState.isSidebarOpen ? "transform -translate-x-0" : ""
-              }`}
-            >
-              {/* {appState.showDashboard ? ( */}
+            <div>
               <div>
                 <Routes>
                   <Route
@@ -88,8 +83,7 @@ function App() {
                       />
                     }
                   />
-                  {/* <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Home />} /> */}
+
                   <Route path="/header" element={<Header />} />
                   <Route
                     path="/search-results"
@@ -110,11 +104,6 @@ function App() {
                   />
                 </Routes>
               </div>
-              {/* ) : (
-              <Routes>
-                <Route path="/" element={<Home />} />
-              </Routes>
-            )} */}
             </div>
             <Footer />
           </appContext.Provider>

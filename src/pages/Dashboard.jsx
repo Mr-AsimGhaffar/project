@@ -6,11 +6,11 @@ import PropTypes from "prop-types";
 const Dashboard = ({ conversionFunction, propertyCategory }) => {
   return (
     <div>
+      <Header propertyCategory={propertyCategory} />
       <PropertyListing
         conversionFunction={conversionFunction}
         propertyCategory={propertyCategory}
       />
-      <Header propertyCategory={propertyCategory} />
       <br />
       <FeaturedProperty
         conversionFunction={conversionFunction}

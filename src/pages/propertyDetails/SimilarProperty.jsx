@@ -9,13 +9,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { formatTimeFromNow } from "@/utlils/UnixEpochTimeConverter";
 import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
-import { convertMarlaToSquareFeet } from "@/utlils/marlaToSquareFeet";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchSimilarProperties } from "../../utlils/fetchApi";
+import { formatTimeNow } from "../../utlils/formatTimeNow";
 
 const responsive = {
   desktop: {
@@ -99,7 +98,7 @@ export default function SimilarProperty({
                     <div className="flex justify-between items-center">
                       <CardTitle className="text-base font-semibold w-[90%]">
                         <span className="font-light text-sm">
-                          Added: {formatTimeFromNow(item.added)}
+                          Added: {formatTimeNow(item.added)}
                         </span>
                       </CardTitle>
                     </div>
@@ -129,12 +128,7 @@ export default function SimilarProperty({
                           {item.area && (
                             <div className="flex flex-row items-center gap-1">
                               <BiSolidDirections />
-                              <p>
-                                {convertMarlaToSquareFeet(
-                                  item.area.split(" ")[0]
-                                )}{" "}
-                                sqft
-                              </p>
+                              <p>{item.area} sqft</p>
                             </div>
                           )}
                         </div>
