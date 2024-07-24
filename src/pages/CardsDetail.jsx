@@ -233,6 +233,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     handleSearch(sort_by, sort_order);
   };
 
+  const handleDateSortChange = (sortOrder) => {
+    handleSortChange("added", sortOrder);
+  };
+
   return (
     <main>
       <div>
@@ -302,32 +306,26 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <Button
               variant="outline"
               className={`px-4 py-2 rounded-3xl border-2 ${
-                sortBy === "start_date" ? "bg-gray-800 text-white" : ""
+                sortBy === "added" && sortOrder === "ASC"
+                  ? "bg-gray-800 text-white"
+                  : ""
               }`}
               type="button"
-              onClick={() =>
-                handleSortChange(
-                  "start_date",
-                  sortOrder === "ASC" ? "DESC" : "ASC"
-                )
-              }
+              onClick={() => handleDateSortChange("ASC")}
             >
-              Sort by Start Date
+              Date Asc
             </Button>
             <Button
               variant="outline"
               className={`px-4 py-2 rounded-3xl border-2 ${
-                sortBy === "end_date" ? "bg-gray-800 text-white" : ""
+                sortBy === "added" && sortOrder === "DESC"
+                  ? "bg-gray-800 text-white"
+                  : ""
               }`}
               type="button"
-              onClick={() =>
-                handleSortChange(
-                  "end_date",
-                  sortOrder === "ASC" ? "DESC" : "ASC"
-                )
-              }
+              onClick={() => handleDateSortChange("DESC")}
             >
-              Sort by End Date
+              Date Desc
             </Button>
           </div>
         </div>
