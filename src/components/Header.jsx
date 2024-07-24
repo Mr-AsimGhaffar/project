@@ -159,13 +159,13 @@ const Header = ({ propertyCategory }) => {
   return (
     <div className="relative">
       <div>
-        <img src="img/bg_image.svg" alt="bg_image" />
+        <img src="img/bg_image.svg" alt="bg_image" className="w-full" />
       </div>
-      <div className="absolute top-20 left-0 right-0 mx-auto max-w-5xl">
+      <div className="lg:absolute top-20 left-0 right-0 mx-auto max-w-5xl">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="font-montserrat font-semibold text-5xl text-[#FFFFFF] leading-10 py-3">
-              Discover a place you&apos;ll love calling home.
+              Discover a place you&apos; love calling home.
             </h1>
           </div>
         </div>
@@ -188,8 +188,8 @@ const Header = ({ propertyCategory }) => {
                       Other
                     </label>
                   </div>
-                  <div className="grid md:grid-cols-8 grid-cols-1 font-montserrat font-medium text-lg">
-                    <div className="grid col-span-2">
+                  <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg">
+                    <div className="col-span-1 md:col-span-2">
                       <Select onValueChange={setSelectedCity}>
                         <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
                           <SelectValue placeholder="Location" />
@@ -207,7 +207,7 @@ const Header = ({ propertyCategory }) => {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="grid col-span-5 relative">
+                    <div className="col-span-1 md:col-span-5 relative">
                       <Input
                         value={searchTerm}
                         onChange={handleChange}
@@ -215,9 +215,9 @@ const Header = ({ propertyCategory }) => {
                         placeholder="Location"
                         className="rounded-none"
                       />
-                      <div className="absolute z-10 mt-10 w-[42%] text-black">
+                      <div className="absolute z-10 w-full text-black">
                         {suggestions.length > 0 && (
-                          <ul className="bg-white border border-gray-200 w-full rounded">
+                          <ul className="bg-white border border-gray-200 w-full">
                             {suggestions.map((suggestion, index) => (
                               <li
                                 key={index}
@@ -233,10 +233,10 @@ const Header = ({ propertyCategory }) => {
                         )}
                       </div>
                     </div>
-                    <div className="grid grid-cols-1">
+                    <div className="col-span-1 md:col-span-1">
                       <Button
                         onClick={handleSearch}
-                        className="rounded-none flex items-center justify-center rounded-tr-lg rounded-br-lg bg-white text-black hover:bg-gray-100"
+                        className="rounded-none flex items-center justify-center rounded-tr-lg rounded-br-lg bg-white text-black hover:bg-gray-100 md:w-full"
                       >
                         <CiSearch className="h-5 w-5 mr-2" />
                       </Button>

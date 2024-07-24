@@ -54,15 +54,15 @@ export default function FeaturedProperty({
   }
 
   return (
-    <div className="px-44 bg-[#0071BC] bg-opacity-10">
-      <div className="flex justify-center items-center p-20">
+    <div className="px-4 md:px-20 lg:px-44 bg-[#0071BC] bg-opacity-10">
+      <div className="flex justify-center items-center p-10 lg:p-20">
         <div>
-          <h1 className="font-montserrat font-bold text-5xl leading-10 tracking-widest text-[#0071BC]">
+          <h1 className="font-montserrat font-bold text-3xl lg:text-5xl leading-10 tracking-widest text-[#0071BC] text-center">
             FEATURED PROPERTIES
           </h1>
         </div>
       </div>
-      <div className="grid md:grid-cols-4 gap-3 font-montserrat">
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 font-montserrat">
         {featuredData
           .slice(0, showAll ? featuredData.length : 4)
           .map((item) => (
@@ -127,9 +127,9 @@ export default function FeaturedProperty({
             </Card>
           ))}
       </div>
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-10 lg:py-20">
         <Button
-          className="font-inter text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-8"
+          className="font-inter text-xl lg:text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-4 lg:p-8"
           variant="ghost"
           onClick={toggleView}
         >
