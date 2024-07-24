@@ -38,13 +38,13 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
     return <SkeletonCard />;
   }
   return (
-    <main className="px-44">
+    <main className="px-4 md:px-8 lg:px-20 xl:px-44">
       <PropertyDetails
         propertyListingData={propertyListingData}
         conversionFunction={conversionFunction}
         propertyCategory={propertyCategory}
       />
-      <div className="grid md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 xl:gap-8 py-10">
         {displayedData
           .map((item, index) => ({
             id: index,
@@ -56,13 +56,15 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
               key={item.id}
               className="font-montserrat font-semibold leading-10 text-center opacity-80"
             >
-              <Card className="py-6">
+              <Card className="py-4 lg:py-6">
                 <CardHeader>
                   <div>
-                    <CardTitle className="text-2xl">{item.title}</CardTitle>
+                    <CardTitle className="text-xl lg:text-2xl">
+                      {item.title}
+                    </CardTitle>
                   </div>
                   <div>
-                    <CardDescription className="text-4xl py-4">
+                    <CardDescription className="text-2xl lg:text-4xl py-2 lg:py-4">
                       {conversionFunction(item.amount)}
                     </CardDescription>
                   </div>
@@ -72,13 +74,13 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
           ))}
       </div>
 
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-10 lg:py-20">
         <Button
-          className="font-inter text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-8"
+          className="font-inter text-xl lg:text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-4 lg:p-8"
           variant="ghost"
           onClick={toggleView}
         >
-          {viewAll ? "SEE ALL" : "SEE LESS"}
+          {viewAll ? "SEE LESS" : "SEE ALL"}
           {viewAll ? (
             <FaAngleUp className="ml-2" />
           ) : (
