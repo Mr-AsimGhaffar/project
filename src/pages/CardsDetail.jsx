@@ -27,6 +27,7 @@ import { DatePickerWithRange } from "../components/ui/DateRangePicker";
 import { Button } from "../components/ui/button";
 import { formatTimeNow } from "../utlils/formatTimeNow";
 import { squareFeetToMarla } from "../utlils/squareFeetToMarla";
+import { toast } from "react-toastify";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -38,8 +39,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [sortOrder, setSortOrder] = useState("ASC");
   const [sortBy, setSortBy] = useState("id");
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
 
   // const isInitialRender = useRef(true);
 
@@ -61,6 +64,13 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     start_date,
     end_date
   ) => {
+    if (simpleContext.appState.selectedSuggestions.length === 0) {
+      toast.error("Please select a location from the suggestions.", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      return;
+    }
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
 
@@ -148,11 +158,18 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   };
 
   const handleSearch = async (sort_by = sortBy, sort_order = sortOrder) => {
+    if (simpleContext.appState.selectedSuggestions.length === 0) {
+      toast.error("Please select a location from the suggestions.", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      return;
+    }
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
       const data = await searchCityData(
         selectedCity,
-        searchTerm || "",
+        simpleContext.appState.selectedSuggestions,
         1,
         sort_by,
         sort_order,
@@ -192,7 +209,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const handlePageChange = (page_number) =>
     fetchCityData(
       selectedCity,
-      searchTerm,
+      simpleContext.appState.selectedSuggestions,
       page_number,
       sortBy,
       sortOrder,
@@ -212,8 +229,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     saveToLocalStorage("searchTerm", newValue);
     if (newValue.length > 2) {
       try {
-        const suggestions = await fetchSearchSuggestions(newValue);
+        const suggestions = await fetchSearchSuggestions(
+          selectedCity,
+          newValue
+        );
         setSuggestions(suggestions);
+        setSelectedIndex(-1);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }
@@ -223,8 +244,40 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setSearchTerm(suggestion);
+    if (!simpleContext.appState.selectedSuggestions.includes(suggestion)) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedSuggestions: [
+          ...simpleContext.appState.selectedSuggestions,
+          suggestion,
+        ],
+      }));
+    }
+    setSearchTerm("");
     setSuggestions([]);
+  };
+
+  const removeSuggestion = (suggestion) => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedSuggestions: simpleContext.appState.selectedSuggestions.filter(
+        (item) => item !== suggestion
+      ),
+    }));
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prevIndex) =>
+        prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
+      e.preventDefault(); // Prevent form submission
+      handleSuggestionClick(suggestions[selectedIndex]);
+      setSelectedIndex(-1); // Reset the selected index after selection
+    }
   };
 
   const handleSortChange = (sort_by, sort_order) => {
@@ -237,24 +290,37 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     handleSortChange("added", sortOrder);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".suggestions-container")) {
+        setIsVisibleSuggestions(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <main>
+    <main className="px-44">
       <div>
         <div className="text-lg font-bold">
           <span>{formatPrice(totalCount)} Results</span>{" "}
           <span className="text-sm text-gray-500">
-            in {simpleContext.appState.searchTerm}
+            in {simpleContext.appState.selectedSuggestions.join(", ")}
           </span>
         </div>
       </div>
-      <br />
+
       <form onSubmit={handleSubmit}>
-        <div className="grid lg:grid-cols-5 grid-cols-1 gap-4">
+        <div className="grid lg:grid-cols-5 grid-cols-1 gap-4 py-4">
           <div className="relative">
             <div className=" w-[100%]">
               <Input
                 value={searchTerm}
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 type="text"
                 placeholder="Search Here..."
                 className="rounded-3xl border-2 pr-12"
@@ -275,7 +341,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                   {suggestions.map((suggestion, index) => (
                     <li
                       key={index}
-                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      className={`p-2 cursor-pointer hover:bg-gray-200 text-sm ${
+                        index === selectedIndex ? "bg-gray-200" : ""
+                      }`}
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
                       {suggestion}
@@ -284,6 +352,48 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 </ul>
               )}
             </div>
+            {simpleContext.appState.selectedSuggestions.length > 0 && (
+              <div className="mt-2 flex flex-wrap suggestions-container">
+                {simpleContext.appState.selectedSuggestions.length > 2 &&
+                !isVisibleSuggestions ? (
+                  <div
+                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                    onClick={() => setIsVisibleSuggestions(true)}
+                  >
+                    x{simpleContext.appState.selectedSuggestions.length}
+                  </div>
+                ) : (
+                  <div>
+                    {simpleContext.appState.selectedSuggestions.map(
+                      (suggestion, index) => (
+                        <div
+                          key={index}
+                          className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                          onClick={() => removeSuggestion(suggestion)}
+                        >
+                          {suggestion}
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+                {isVisibleSuggestions && (
+                  <div className="absolute z-10 w-full text-black">
+                    {simpleContext.appState.selectedSuggestions.map(
+                      (suggestion, index) => (
+                        <div
+                          key={index}
+                          className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                          onClick={() => removeSuggestion(suggestion)}
+                        >
+                          {suggestion}
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div>
             <HeaderPrice />

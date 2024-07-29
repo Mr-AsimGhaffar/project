@@ -26,13 +26,17 @@ import {
 } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { CiSearch } from "react-icons/ci";
+import { toast } from "react-toastify";
 
-const Header = ({ propertyCategory }) => {
+const Header = ({ propertyCategory, setPropertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("islamabad");
   const [suggestions, setSuggestions] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [propertyView, setPropertyView] = useState("");
+  const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
   const simpleContext = useContext(appContext);
   const navigate = useNavigate();
 
@@ -60,6 +64,13 @@ const Header = ({ propertyCategory }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    if (simpleContext.appState.selectedSuggestions.length === 0) {
+      toast.error("Please select a location from the suggestions.", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      return;
+    }
     try {
       simpleContext.setAppState((s) => ({
         ...s,
@@ -88,12 +99,12 @@ const Header = ({ propertyCategory }) => {
 
       const data = await searchCityData(
         selectedCity,
-        searchTerm,
+        simpleContext.appState.selectedSuggestions,
         1,
         "id",
         "ASC",
         filters,
-        propertyCategory
+        propertyView || propertyCategory
       );
 
       simpleContext.setAppState((s) => ({
@@ -135,8 +146,12 @@ const Header = ({ propertyCategory }) => {
     saveToLocalStorage("searchTerm", newValue);
     if (newValue.length >= 2) {
       try {
-        const suggestions = await fetchSearchSuggestions(newValue);
+        const suggestions = await fetchSearchSuggestions(
+          selectedCity,
+          newValue
+        );
         setSuggestions(suggestions);
+        setSelectedIndex(-1);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }
@@ -146,15 +161,60 @@ const Header = ({ propertyCategory }) => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setSearchTerm(suggestion);
+    if (!simpleContext.appState.selectedSuggestions.includes(suggestion)) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedSuggestions: [
+          ...simpleContext.appState.selectedSuggestions,
+          suggestion,
+        ],
+      }));
+    }
+    setSearchTerm("");
     setSuggestions([]);
+  };
+
+  const removeSuggestion = (suggestion) => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedSuggestions: simpleContext.appState.selectedSuggestions.filter(
+        (item) => item !== suggestion
+      ),
+    }));
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prevIndex) =>
+        prevIndex < suggestions.length - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
+      e.preventDefault(); // Prevent form submission
+      handleSuggestionClick(suggestions[selectedIndex]);
+      setSelectedIndex(-1); // Reset the selected index after selection
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     handleSearch();
   };
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".suggestions-container")) {
+        setIsVisibleSuggestions(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="relative">
@@ -175,15 +235,42 @@ const Header = ({ propertyCategory }) => {
               <div className="w-[100%]">
                 <form onSubmit={handleSubmit}>
                   <div className="flex items-center gap-4 py-2 text-white font-montserrat font-semibold text-lg cursor-pointer">
-                    <input type="radio" id="rent" name="fav_language" />
+                    <input
+                      type="radio"
+                      id="rent"
+                      name="propertyView"
+                      value="for_rent"
+                      checked={
+                        propertyView === "for_rent" ||
+                        propertyCategory == "for_rent"
+                      }
+                      onChange={(e) => setPropertyView(e.target.value)}
+                    />
                     <label htmlFor="rent" className="cursor-pointer">
                       Rent
                     </label>
-                    <input type="radio" id="buy" name="fav_language" />
+                    <input
+                      type="radio"
+                      id="buy"
+                      name="propertyView"
+                      value="for_sale"
+                      checked={
+                        propertyView === "for_sale" ||
+                        propertyCategory == "for_sale"
+                      }
+                      onChange={(e) => setPropertyView(e.target.value)}
+                    />
                     <label htmlFor="buy" className="cursor-pointer">
                       Buy
                     </label>
-                    <input type="radio" id="other" name="fav_language" />
+                    <input
+                      type="radio"
+                      id="other"
+                      name="propertyCategory"
+                      value="other"
+                      checked={propertyCategory === "other"}
+                      onChange={(e) => setPropertyCategory(e.target.value)}
+                    />
                     <label htmlFor="other" className="cursor-pointer">
                       Other
                     </label>
@@ -192,7 +279,7 @@ const Header = ({ propertyCategory }) => {
                     <div className="col-span-1 md:col-span-2">
                       <Select onValueChange={setSelectedCity}>
                         <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
-                          <SelectValue placeholder="Location" />
+                          <SelectValue placeholder="Islamabad" />
                         </SelectTrigger>
                         <SelectContent>
                           {data.map((item) => (
@@ -211,6 +298,7 @@ const Header = ({ propertyCategory }) => {
                       <Input
                         value={searchTerm}
                         onChange={handleChange}
+                        onKeyDown={handleKeyDown}
                         onClick={isVisible || toggleVisibility}
                         placeholder="Location"
                         className="rounded-none"
@@ -221,7 +309,9 @@ const Header = ({ propertyCategory }) => {
                             {suggestions.map((suggestion, index) => (
                               <li
                                 key={index}
-                                className="p-2 cursor-pointer hover:bg-gray-200 text-sm"
+                                className={`p-2 cursor-pointer hover:bg-gray-200 text-sm ${
+                                  index === selectedIndex ? "bg-gray-200" : ""
+                                }`}
                                 onClick={() =>
                                   handleSuggestionClick(suggestion)
                                 }
@@ -232,7 +322,55 @@ const Header = ({ propertyCategory }) => {
                           </ul>
                         )}
                       </div>
+                      {simpleContext.appState.selectedSuggestions.length >
+                        0 && (
+                        <div className="mt-2 flex flex-wrap suggestions-container">
+                          {simpleContext.appState.selectedSuggestions.length >
+                            2 && !isVisibleSuggestions ? (
+                            <div
+                              className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                              onClick={() => setIsVisibleSuggestions(true)}
+                            >
+                              x
+                              {
+                                simpleContext.appState.selectedSuggestions
+                                  .length
+                              }
+                            </div>
+                          ) : (
+                            <div>
+                              {simpleContext.appState.selectedSuggestions.map(
+                                (suggestion, index) => (
+                                  <div
+                                    key={index}
+                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                                    onClick={() => removeSuggestion(suggestion)}
+                                  >
+                                    {suggestion}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+                          {isVisibleSuggestions && (
+                            <div className="absolute z-10 w-full text-black">
+                              {simpleContext.appState.selectedSuggestions.map(
+                                (suggestion, index) => (
+                                  <div
+                                    key={index}
+                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                                    onClick={() => removeSuggestion(suggestion)}
+                                  >
+                                    {suggestion}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
+
                     <div className="col-span-1 md:col-span-1">
                       <Button
                         onClick={handleSearch}
@@ -251,16 +389,7 @@ const Header = ({ propertyCategory }) => {
                             : "max-h-0 opacity-0 overflow-hidden"
                         }`}
                       >
-                        {/* <p className="text-sm">Location</p>
-                        <Input
-                          value={searchTerm}
-                          onChange={handleChange}
-                          // onClick={isVisible || toggleVisibility}
-                          placeholder="Enter Location"
-                        />
-                      </div> */}
-                        <br />
-                        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 font-montserrat font-medium text-lg">
+                        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 font-montserrat font-medium text-lg py-4">
                           <div>
                             <p className="text-sm text-white">Price Range</p>
                             <PriceTag />
@@ -279,11 +408,7 @@ const Header = ({ propertyCategory }) => {
                           </div>
                         </div>
                       </div>
-                      {/* <div>
-                      <Button onClick={handleSearch} className="w-[24%]">
-                        Search
-                      </Button>
-                    </div> */}
+
                       <div className="flex justify-end">
                         <Button
                           variant="primary"
@@ -312,6 +437,7 @@ const Header = ({ propertyCategory }) => {
 };
 Header.propTypes = {
   propertyCategory: PropTypes.string.isRequired,
+  setPropertyCategory: PropTypes.func.isRequired,
 };
 
 export default Header;
