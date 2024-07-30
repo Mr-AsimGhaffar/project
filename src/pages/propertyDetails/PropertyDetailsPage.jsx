@@ -61,7 +61,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   }
 
   return (
-    <div>
+    <div className="px-44">
       {/* <h1>{property.header}</h1> */}
       <div>
         <hr />

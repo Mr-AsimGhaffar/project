@@ -78,6 +78,7 @@ const AreaTag = () => {
                   MIN:
                 </div>
                 <Input
+                  type="number"
                   className="text-center"
                   placeholder="0"
                   value={selectedAreaMin || ""}
@@ -89,6 +90,7 @@ const AreaTag = () => {
                   MAX:
                 </div>
                 <Input
+                  type="number"
                   className="text-center"
                   placeholder="Any"
                   value={selectedAreaMax || ""}

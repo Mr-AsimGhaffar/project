@@ -20,11 +20,31 @@ const Footer = () => {
               </h1>
             </div>
             <div className="flex justify-center lg:justify-start items-center gap-4 py-6 lg:py-12">
-              <img src="img/facebook.svg" alt="facebook" />
-              <img src="img/instagram.svg" alt="instagram" />
-              <img src="img/linkedin.svg" alt="linkedin" />
-              <img src="img/whatsapp.svg" alt="whatsapp" />
-              <img src="img/telegram.svg" alt="telegram" />
+              <img
+                src="img/facebook.svg"
+                alt="facebook"
+                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+              />
+              <img
+                src="img/instagram.svg"
+                alt="instagram"
+                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+              />
+              <img
+                src="img/linkedin.svg"
+                alt="linkedin"
+                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+              />
+              <img
+                src="img/whatsapp.svg"
+                alt="whatsapp"
+                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+              />
+              <img
+                src="img/telegram.svg"
+                alt="telegram"
+                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+              />
             </div>
           </div>
           <div className="text-center lg:text-left">
@@ -36,7 +56,11 @@ const Footer = () => {
             <div className="font-montserrat font-medium text-base tracking-wider">
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
-                  <img src="img/location.svg" alt="location" />
+                  <img
+                    src="img/location.svg"
+                    alt="location"
+                    className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+                  />
                 </div>
                 <div className="opacity-60">
                   <h1 className="text-center lg:text-left">
@@ -47,7 +71,11 @@ const Footer = () => {
               </div>
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
-                  <img src="img/call.svg" alt="call" />
+                  <img
+                    src="img/call.svg"
+                    alt="call"
+                    className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+                  />
                 </div>
                 <div className="opacity-60">
                   <h1 className="text-center lg:text-left">
@@ -57,7 +85,11 @@ const Footer = () => {
               </div>
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
-                  <img src="img/email.svg" alt="email" />
+                  <img
+                    src="img/email.svg"
+                    alt="email"
+                    className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+                  />
                 </div>
                 <div className="opacity-60">
                   <h1 className="text-center lg:text-left">
