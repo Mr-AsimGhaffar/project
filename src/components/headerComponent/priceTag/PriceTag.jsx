@@ -117,6 +117,7 @@ const PriceTag = () => {
                   MIN:
                 </div>
                 <Input
+                  type="number"
                   className="text-center"
                   placeholder="0"
                   value={selectedAmountMin || ""}
@@ -128,6 +129,7 @@ const PriceTag = () => {
                   MAX:
                 </div>
                 <Input
+                  type="number"
                   className="text-center"
                   placeholder="Any"
                   value={selectedAmountMax || ""}
