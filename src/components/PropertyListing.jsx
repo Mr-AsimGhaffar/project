@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import PropertyDetails from "./PropertyDetails";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import SkeletonCard from "./skeleton/Skeleton";
 import { fetchPropertyCount } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import Spinner from "./spinner/Spinner";
 
 const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const [propertyListingData, setPropertyListingData] = useState({});
@@ -36,7 +36,7 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const displayedData = viewAll ? sortedKeys : sortedKeys.slice(0, 4);
 
   if (loading) {
-    return <SkeletonCard />;
+    return <Spinner />;
   }
   return (
     <main className="px-4 md:px-8 lg:px-20 xl:px-44">

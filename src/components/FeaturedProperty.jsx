@@ -6,11 +6,11 @@ import { BiSolidDirections } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import SkeletonCard from "./skeleton/Skeleton";
 import { fetchFeaturedProperties } from "../utlils/fetchApi";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { formatTimeNow } from "../utlils/formatTimeNow";
+import Spinner from "./spinner/Spinner";
 
 export default function FeaturedProperty({
   conversionFunction,
@@ -50,7 +50,7 @@ export default function FeaturedProperty({
   };
 
   if (loading) {
-    return <SkeletonCard />;
+    return <Spinner />;
   }
 
   return (
