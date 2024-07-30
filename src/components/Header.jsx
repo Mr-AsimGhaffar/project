@@ -28,7 +28,7 @@ import PropTypes from "prop-types";
 import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
 
-const Header = ({ propertyCategory, setPropertyCategory }) => {
+const Header = ({ propertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("islamabad");
@@ -225,7 +225,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="font-montserrat font-semibold text-5xl text-[#FFFFFF] leading-10 py-3">
-              Discover a place you&apos; love calling home.
+              Discover a place you&apos;ll love calling home.
             </h1>
           </div>
         </div>
@@ -237,20 +237,6 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                   <div className="flex items-center gap-4 py-2 text-white font-montserrat font-semibold text-lg cursor-pointer">
                     <input
                       type="radio"
-                      id="rent"
-                      name="propertyView"
-                      value="for_rent"
-                      checked={
-                        propertyView === "for_rent" ||
-                        propertyCategory == "for_rent"
-                      }
-                      onChange={(e) => setPropertyView(e.target.value)}
-                    />
-                    <label htmlFor="rent" className="cursor-pointer">
-                      Rent
-                    </label>
-                    <input
-                      type="radio"
                       id="buy"
                       name="propertyView"
                       value="for_sale"
@@ -259,17 +245,36 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                         propertyCategory == "for_sale"
                       }
                       onChange={(e) => setPropertyView(e.target.value)}
+                      className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
                     />
                     <label htmlFor="buy" className="cursor-pointer">
                       Buy
                     </label>
                     <input
                       type="radio"
+                      id="rent"
+                      name="propertyView"
+                      value="for_rent"
+                      checked={
+                        propertyView === "for_rent" ||
+                        propertyCategory == "for_rent"
+                      }
+                      onChange={(e) => setPropertyView(e.target.value)}
+                      className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
+                    />
+                    <label htmlFor="rent" className="cursor-pointer">
+                      Rent
+                    </label>
+
+                    <input
+                      type="radio"
                       id="other"
-                      name="propertyCategory"
+                      name="propertyView"
                       value="other"
-                      checked={propertyCategory === "other"}
-                      onChange={(e) => setPropertyCategory(e.target.value)}
+                      checked={
+                        propertyView === "other" || propertyCategory == "other"
+                      }
+                      className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
                     />
                     <label htmlFor="other" className="cursor-pointer">
                       Other
@@ -343,7 +348,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                                 (suggestion, index) => (
                                   <div
                                     key={index}
-                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
                                     onClick={() => removeSuggestion(suggestion)}
                                   >
                                     {suggestion}
@@ -358,7 +363,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                                 (suggestion, index) => (
                                   <div
                                     key={index}
-                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
                                     onClick={() => removeSuggestion(suggestion)}
                                   >
                                     {suggestion}

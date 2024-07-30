@@ -335,7 +335,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               </div>
               <div className="absolute inset-y-0 w-[1px] h-[20px] mt-3 right-10 bg-gray-400"></div>
             </div>
-            <div className="absolute z-10">
+            <div className="absolute z-10 text-black">
               {suggestions.length > 0 && (
                 <ul className="bg-white border border-gray-300 w-full rounded-3xl">
                   {suggestions.map((suggestion, index) => (
@@ -357,7 +357,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 {simpleContext.appState.selectedSuggestions.length > 2 &&
                 !isVisibleSuggestions ? (
                   <div
-                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
                     onClick={() => setIsVisibleSuggestions(true)}
                   >
                     x{simpleContext.appState.selectedSuggestions.length}
@@ -368,7 +368,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                       (suggestion, index) => (
                         <div
                           key={index}
-                          className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
+                          className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
                           onClick={() => removeSuggestion(suggestion)}
                         >
                           {suggestion}

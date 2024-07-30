@@ -116,12 +116,13 @@ const Navbar = ({
 
               <div>
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
+                  <DropdownMenuTrigger asChild className="bg-white">
                     <Button variant="outline" size="icon">
                       <img src="img/filter_svg.svg" alt="filter" />
                       <span className="sr-only">Toggle theme</span>
                     </Button>
                   </DropdownMenuTrigger>
+
                   <DropdownMenuContent
                     align="end"
                     className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
@@ -133,7 +134,7 @@ const Navbar = ({
                           type="checkbox"
                           checked={isBlackTheme}
                           onChange={handleThemeToggle}
-                          className="form-checkbox text-green-600"
+                          className="appearance-none border w-4 h-4 rounded-sm checked:bg-[#0071BC] checked:border-[#0071BC] focus:outline-none"
                         />
                       </div>
                     </DropdownMenuItem>
@@ -148,6 +149,7 @@ const Navbar = ({
                           type="checkbox"
                           checked={conversionType === "count"}
                           onChange={handleConversionType}
+                          className="appearance-none border w-4 h-4 rounded-sm checked:bg-[#0071BC] checked:border-[#0071BC] focus:outline-none"
                         />
                       </div>
                     </DropdownMenuItem>
@@ -219,7 +221,46 @@ const Navbar = ({
               >
                 Sign-up or Log-in
               </Button>
-              <img src="img/filter_svg.svg" alt="filter" className="h-6" />
+              <div className="text-center">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild className="bg-white">
+                    <Button variant="outline" size="icon">
+                      <img src="img/filter_svg.svg" alt="filter" />
+                      <span className="sr-only">Toggle theme</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
+                  >
+                    <DropdownMenuItem className="flex items-center justify-between">
+                      <div>{isBlackTheme ? "Light Theme" : "Black Theme"}</div>
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={isBlackTheme}
+                          onChange={handleThemeToggle}
+                          className="form-checkbox text-green-600"
+                        />
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="flex items-center justify-between">
+                      <div>
+                        {conversionType === "count"
+                          ? "Currency Value in Million"
+                          : "Currency Value in Lacs"}
+                      </div>
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={conversionType === "count"}
+                          onChange={handleConversionType}
+                        />
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </div>
         )}
