@@ -38,6 +38,7 @@ function App() {
     currentPage: 1,
     startDate: "",
     endDate: "",
+    selectedSuggestions: [],
   });
 
   const [conversionType, setConversionType] = useState("price");

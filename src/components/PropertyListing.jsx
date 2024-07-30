@@ -30,9 +30,10 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const toggleView = () => setViewAll((prev) => !prev);
 
   const propertyListingKeys = Object.keys(propertyListingData);
-  const displayedData = viewAll
-    ? propertyListingKeys
-    : propertyListingKeys.slice(0, 4);
+  const sortedKeys = propertyListingKeys.sort(
+    (a, b) => propertyListingData[b] - propertyListingData[a]
+  );
+  const displayedData = viewAll ? sortedKeys : sortedKeys.slice(0, 4);
 
   if (loading) {
     return <SkeletonCard />;
@@ -60,7 +61,9 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
                 <CardHeader>
                   <div>
                     <CardTitle className="text-xl lg:text-2xl">
-                      {item.title}
+                      {item.title
+                        .replace("_", " ")
+                        .replace(/\b\w/g, (char) => char.toUpperCase())}
                     </CardTitle>
                   </div>
                   <div>

@@ -105,7 +105,7 @@ async function fetchPropertyDetails(id) {
 
 async function searchCityData(
   city,
-  query,
+  queries = [],
   page_number = 1,
   sort_by = "id",
   sort_order = "ASC",
@@ -118,9 +118,10 @@ async function searchCityData(
   try {
     const { price_min, price_max, bedrooms } = filters;
     const property_type = filters.property_type ?? "";
-    const url = `${API_URL}/property/search/${city ?? ""}?query=${
-      query ?? ""
-    }&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
+    const queryString = queries.map((query) => `${query}`).join("|");
+    const url = `${API_URL}/property/search/${
+      city ?? ""
+    }?query=${queryString}&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
       .toLowerCase()
       .replace(" ", "_")}&area_min=&area_max=&price_min=${
       price_min ?? ""
@@ -216,10 +217,10 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
   }
 }
 
-async function fetchSearchSuggestions(query) {
+async function fetchSearchSuggestions(city, query) {
   const controller = getAbortController("fetchSearchSuggestions");
   try {
-    const url = `${API_URL}/property/suggestions?query=${query}`;
+    const url = `${API_URL}/property/suggestions/${city ?? ""}?query=${query}`;
 
     const response = await fetch(url, {
       method: "GET",

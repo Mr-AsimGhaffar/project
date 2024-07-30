@@ -1,28 +1,33 @@
-// import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState } from "react";
-// import { Moon, Sun } from "lucide-react";
 import { Button } from "../ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuTrigger,
-// } from "../ui/dropdown-menu";
-// import { useTheme } from "../theme/themeProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { useTheme } from "../theme/themeProvider";
 import Spinner from "../spinner/Spinner";
 import { Link } from "react-router-dom";
 
 const Navbar = ({
   handleDashboardClick,
-  // setConversionType,
+  setConversionType,
   setPropertyCategory,
 }) => {
   const [propertyView, setPropertyView] = useState("for_sale");
-  // const [conversionType, setConversionTypeState] = useState("price");
+  const [conversionType, setConversionTypeState] = useState("price");
   const [isLoading, setIsLoading] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const { setTheme } = useTheme();
+  const { setTheme } = useTheme();
+  const [isBlackTheme, setIsBlackTheme] = useState(false);
+
+  const handleThemeToggle = () => {
+    const newTheme = isBlackTheme ? "light" : "dark";
+    setTheme(newTheme);
+    setIsBlackTheme(!isBlackTheme);
+  };
 
   const fetchData = () => {
     setIsLoading(true);
@@ -36,10 +41,11 @@ const Navbar = ({
     setPropertyCategory(category);
     fetchData();
   };
-  // const handleConversionType = (type) => {
-  //   setConversionType(type);
-  //   setConversionTypeState(type);
-  // };
+  const handleConversionType = () => {
+    const newConversionType = conversionType === "price" ? "count" : "price";
+    setConversionTypeState(newConversionType);
+    setConversionType(newConversionType);
+  };
   return (
     <div>
       <nav>
@@ -72,26 +78,6 @@ const Navbar = ({
               >
                 Mortgage
               </Button>
-              {/* <button
-                      className={`rounded-md px-3 py-2 text-sm font-medium text-white ${
-                        conversionType === "count"
-                          ? "bg-gray-400"
-                          : "bg-gray-900"
-                      }`}
-                      onClick={() => handleConversionType("count")}
-                    >
-                      Lacs
-                    </button>
-                    <button
-                      className={`rounded-md px-3 py-2 text-sm font-medium text-white ${
-                        conversionType === "price"
-                          ? "bg-gray-400"
-                          : "bg-gray-900"
-                      }`}
-                      onClick={() => handleConversionType("price")}
-                    >
-                      Million
-                    </button> */}
             </div>
             <Link to="/dashboard" onClick={handleDashboardClick}>
               <div className="flex items-center gap-1">
@@ -127,33 +113,47 @@ const Navbar = ({
                   Sign-up or Log-in
                 </Button>
               </div>
+
               <div>
-                <Button variant="outline">
-                  <img src="img/filter_svg.svg" alt="filter" className="" />
-                </Button>
-              </div>
-              {/* <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
-                      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                      <img src="img/filter_svg.svg" alt="filter" />
                       <span className="sr-only">Toggle theme</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setTheme("light")}>
-                      Light
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
+                  >
+                    <DropdownMenuItem className="flex items-center justify-between">
+                      <div>{isBlackTheme ? "Light Theme" : "Black Theme"}</div>
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={isBlackTheme}
+                          onChange={handleThemeToggle}
+                          className="form-checkbox text-green-600"
+                        />
+                      </div>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("dark")}>
-                      Dark
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("system")}>
-                      System
+                    <DropdownMenuItem className="flex items-center justify-between">
+                      <div>
+                        {conversionType === "count"
+                          ? "Currency Value in Million"
+                          : "Currency Value in Lacs"}
+                      </div>
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={conversionType === "count"}
+                          onChange={handleConversionType}
+                        />
+                      </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div> */}
+              </div>
             </div>
             <div className="lg:hidden">
               <button
