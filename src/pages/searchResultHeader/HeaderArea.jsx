@@ -9,15 +9,25 @@ import {
 import { appContext } from "@/contexts/Context";
 import { useContext, useState } from "react";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+
 const marlaToSquareFeet = (marla) => {
   return marla * 225;
 };
+
+const squareFeetToMarla = (marla) => {
+  return marla / 225;
+};
+
 const AreaTag = () => {
-  const [selectedAreaMax, setSelectedAreaMax] = useState(null);
-  const [selectedAreaMin, setSelectedAreaMin] = useState(null);
+  const simpleContext = useContext(appContext);
+  const [selectedAreaMin, setSelectedAreaMin] = useState(
+    squareFeetToMarla(simpleContext.appState.selectedAreaMin)
+  );
+  const [selectedAreaMax, setSelectedAreaMax] = useState(
+    squareFeetToMarla(simpleContext.appState.selectedAreaMax)
+  );
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
-  const simpleContext = useContext(appContext);
 
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area;
@@ -79,7 +89,7 @@ const AreaTag = () => {
   return (
     <div>
       <Select>
-        <SelectTrigger>
+        <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="AREA" />
           <div>{selectedAreaMin}</div>
           <div>To</div>

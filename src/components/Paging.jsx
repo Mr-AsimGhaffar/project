@@ -24,7 +24,7 @@ const Paging = ({ onPageChange }) => {
 
   useEffect(() => {
     renderPaginationLinks();
-  }, [currentPage]);
+  }, [currentPage, totalPages]);
 
   const renderPaginationLinks = () => {
     let pages = [];

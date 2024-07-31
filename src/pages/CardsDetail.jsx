@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
@@ -14,6 +14,7 @@ import HeaderPrice from "./searchResultHeader/HeaderPrice";
 import HeaderBeds from "./searchResultHeader/HeaderBeds";
 import HeaderProperty from "./searchResultHeader/HeaderProperty";
 import HeaderFilter from "./searchResultHeader/HeaderFilter";
+import HeaderArea from "./searchResultHeader/HeaderArea";
 import Paging from "@/components/Paging";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,7 @@ import Recommended from "../components/cardsDetails/Recommended";
 import { fetchSearchSuggestions, searchCityData } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { FaBath, FaBed } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import { BiSolidDirections } from "react-icons/bi";
 import { DatePickerWithRange } from "../components/ui/DateRangePicker";
 import { Button } from "../components/ui/button";
@@ -44,7 +46,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [endDate, setEndDate] = useState(null);
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
 
-  // const isInitialRender = useRef(true);
+  const isInitialRender = useRef(true);
 
   const {
     cardData,
@@ -64,7 +66,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     start_date,
     end_date
   ) => {
-    if (simpleContext.appState.selectedSuggestions.length === 0) {
+    if (
+      simpleContext.appState.selectedSuggestions.length === 0 &&
+      searchTerm != ""
+    ) {
       toast.error("Please select a location from the suggestions.", {
         position: "top-center",
         autoClose: 2000,
@@ -79,6 +84,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         selectedAmountMax,
         selectBeds,
         propertyState,
+        selectedAreaMin,
+        selectedAreaMax,
       } = simpleContext.appState;
 
       const filters = {
@@ -86,13 +93,17 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         price_max: cleanValue(selectedAmountMax),
         bedrooms: selectBeds.trim(),
         property_type:
-          propertyState.selectedSubProperty ??
+          propertyState.selectedSubProperty ||
           propertyState.selectedPropertyType,
+        area_max: selectedAreaMax || "",
+        area_min: selectedAreaMin || "",
       };
 
       const data = await searchCityData(
         city,
-        query,
+        simpleContext.appState.selectedSuggestions.map(
+          (suggestion) => suggestion.id
+        ),
         page_number,
         sort_by,
         sort_order,
@@ -126,24 +137,33 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }));
   }, [searchTerm, simpleContext]);
 
-  // useEffect(() => {
-  //   if (!isInitialRender.current) {
-  //     fetchCityData(
-  //       selectedCity,
-  //       searchTerm || "",
-  //       simpleContext.appState.currentPage,
-  //       sortBy,
-  //       sortOrder
-  //     );
-  //   } else {
-  //     isInitialRender.current = false;
-  //   }
-  // }, [
-  //   simpleContext.appState.selectedAmountMin,
-  //   simpleContext.appState.selectedAmountMax,
-  //   simpleContext.appState.selectBeds,
-  //   simpleContext.appState.propertyState,
-  // ]);
+  useEffect(() => {
+    if (!isInitialRender.current) {
+      fetchCityData(
+        selectedCity,
+        searchTerm || "",
+        simpleContext.appState.currentPage,
+        sortBy,
+        sortOrder,
+        "",
+        simpleContext.appState.startDate,
+        simpleContext.appState.endDate
+      );
+    }
+  }, [
+    simpleContext.appState.selectedAmountMin,
+    simpleContext.appState.selectedAmountMax,
+    simpleContext.appState.selectedAreaMax,
+    simpleContext.appState.selectedAreaMin,
+    simpleContext.appState.selectBeds,
+    simpleContext.appState.propertyState,
+    simpleContext.appState.startDate,
+    simpleContext.appState.endDate,
+  ]);
+
+  useEffect(() => {
+    isInitialRender.current = false;
+  }, []);
 
   const handleToggleExpand = (id) => {
     setExpandedCards((prev) => ({
@@ -158,7 +178,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   };
 
   const handleSearch = async (sort_by = sortBy, sort_order = sortOrder) => {
-    if (simpleContext.appState.selectedSuggestions.length === 0) {
+    if (
+      simpleContext.appState.selectedSuggestions.length === 0 &&
+      searchTerm != ""
+    ) {
       toast.error("Please select a location from the suggestions.", {
         position: "top-center",
         autoClose: 2000,
@@ -169,20 +192,25 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
       const data = await searchCityData(
         selectedCity,
-        simpleContext.appState.selectedSuggestions,
+        simpleContext.appState.selectedSuggestions.map(
+          (suggestion) => suggestion.id
+        ),
         1,
         sort_by,
         sort_order,
         {
           price_min: cleanValue(simpleContext.appState.selectedAmountMin),
           price_max: cleanValue(simpleContext.appState.selectedAmountMax),
+          area_min: simpleContext.appState.selectedAreaMin,
+          area_max: simpleContext.appState.selectedAreaMax,
           bedrooms: simpleContext.appState.selectBeds.trim(),
           property_type:
-            simpleContext.appState.propertyState.selectedSubProperty,
+            simpleContext.appState.propertyState.selectedSubProperty ||
+            simpleContext.appState.propertyState.selectedPropertyType,
         },
         propertyCategory,
-        startDate ? startDate.toISOString() : "",
-        endDate ? endDate.toISOString() : ""
+        startDate ? startDate.toDateString() : "",
+        endDate ? endDate.toDateString() : ""
       );
 
       const { properties, total_count, page_size, page_number } = data;
@@ -307,12 +335,80 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       <div>
         <div className="text-lg font-bold">
           <span>{formatPrice(totalCount)} Results</span>{" "}
-          <span className="text-sm text-gray-500">
-            in {simpleContext.appState.selectedSuggestions.join(", ")}
-          </span>
+          {/* <span className="text-sm text-gray-500">
+            in{" "}
+            {simpleContext.appState.selectedSuggestions
+              .map((suggestion) => suggestion.name)
+              .join(", ")}
+          </span> */}
         </div>
       </div>
+      <div>
+        {simpleContext.appState.selectedSuggestions.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-2 suggestions-container">
+            {simpleContext.appState.selectedSuggestions.length > 5 &&
+            !isVisibleSuggestions ? (
+              <>
+                <div>
+                  <div className="flex items-center gap-2 relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300 transition-colors duration-300">
+                    <span>
+                      {
+                        simpleContext.appState.selectedSuggestions[0].name.split(
+                          ","
+                        )[0]
+                      }
+                    </span>
+                    <div>
+                      <RxCross2
+                        onClick={() =>
+                          removeSuggestion(
+                            simpleContext.appState.selectedSuggestions[0]
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
 
+                <div
+                  className="bg-[#0071BC] p-2 rounded-full cursor-pointer text-xs text-white shadow-md hover:bg-blue-600 transition-colors duration-300"
+                  onClick={() => setIsVisibleSuggestions(true)}
+                >
+                  +{simpleContext.appState.selectedSuggestions.length - 1} more
+                </div>
+              </>
+            ) : (
+              <>
+                {simpleContext.appState.selectedSuggestions.map(
+                  (suggestion, index) => (
+                    <div key={index}>
+                      <div className="flex items-center gap-2 relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300">
+                        <span className="ellipsis-text">
+                          {suggestion.name.split(",")[0]}
+                        </span>
+                        <div>
+                          <RxCross2
+                            onClick={() => removeSuggestion(suggestion)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+                {isVisibleSuggestions && (
+                  <div className="absolute z-10 w-full text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
+                    {simpleContext.appState.selectedSuggestions.map(
+                      (suggestion, index) => (
+                        <div key={index} className=""></div>
+                      )
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="grid lg:grid-cols-5 grid-cols-1 gap-4 py-4">
           <div className="relative">
@@ -346,54 +442,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                       }`}
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
-                      {suggestion}
+                      {suggestion.name}
                     </li>
                   ))}
                 </ul>
               )}
             </div>
-            {simpleContext.appState.selectedSuggestions.length > 0 && (
-              <div className="mt-2 flex flex-wrap suggestions-container">
-                {simpleContext.appState.selectedSuggestions.length > 2 &&
-                !isVisibleSuggestions ? (
-                  <div
-                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
-                    onClick={() => setIsVisibleSuggestions(true)}
-                  >
-                    x{simpleContext.appState.selectedSuggestions.length}
-                  </div>
-                ) : (
-                  <div>
-                    {simpleContext.appState.selectedSuggestions.map(
-                      (suggestion, index) => (
-                        <div
-                          key={index}
-                          className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
-                          onClick={() => removeSuggestion(suggestion)}
-                        >
-                          {suggestion}
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-                {isVisibleSuggestions && (
-                  <div className="absolute z-10 w-full text-black">
-                    {simpleContext.appState.selectedSuggestions.map(
-                      (suggestion, index) => (
-                        <div
-                          key={index}
-                          className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
-                          onClick={() => removeSuggestion(suggestion)}
-                        >
-                          {suggestion}
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
           <div>
             <HeaderPrice />
@@ -407,7 +461,11 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           <div>
             <DatePickerWithRange onChange={handleDateChange} />
           </div>
+          <div>
+            <HeaderArea />
+          </div>
         </div>
+
         <div className="flex justify-end mt-4 gap-2">
           <div>
             <HeaderFilter onSortChange={handleSortChange} />
@@ -423,7 +481,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               type="button"
               onClick={() => handleDateSortChange("ASC")}
             >
-              Date Asc
+              Oldest Date
             </Button>
             <Button
               variant="outline"
@@ -435,7 +493,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               type="button"
               onClick={() => handleDateSortChange("DESC")}
             >
-              Date Desc
+              Newest Date
             </Button>
           </div>
         </div>
