@@ -46,7 +46,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [endDate, setEndDate] = useState(null);
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
 
-  const isInitialRender = useRef(true);
+  const mounted = useRef(false);
 
   const {
     cardData,
@@ -137,34 +137,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }));
   }, [searchTerm, simpleContext]);
 
-  useEffect(() => {
-    if (!isInitialRender.current) {
-      fetchCityData(
-        selectedCity,
-        searchTerm || "",
-        simpleContext.appState.currentPage,
-        sortBy,
-        sortOrder,
-        "",
-        simpleContext.appState.startDate,
-        simpleContext.appState.endDate
-      );
-    }
-  }, [
-    simpleContext.appState.selectedAmountMin,
-    simpleContext.appState.selectedAmountMax,
-    simpleContext.appState.selectedAreaMax,
-    simpleContext.appState.selectedAreaMin,
-    simpleContext.appState.selectBeds,
-    simpleContext.appState.propertyState,
-    simpleContext.appState.startDate,
-    simpleContext.appState.endDate,
-  ]);
-
-  useEffect(() => {
-    isInitialRender.current = false;
-  }, []);
-
   const handleToggleExpand = (id) => {
     setExpandedCards((prev) => ({
       ...prev,
@@ -229,6 +201,25 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
     }
   };
+
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    handleSearch();
+  }, [
+    simpleContext.appState.selectedAmountMin,
+    simpleContext.appState.selectedAmountMax,
+    simpleContext.appState.selectBeds,
+    simpleContext.appState.propertyState.selectedPropertyType,
+    simpleContext.appState.propertyState.selectedSubProperty,
+    simpleContext.appState.selectedAreaMin,
+    simpleContext.appState.selectedAreaMax,
+    startDate,
+    endDate,
+    simpleContext.appState.selectedSuggestions,
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
