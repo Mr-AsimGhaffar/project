@@ -311,6 +311,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      emptySearchString();
       if (!event.target.closest(".suggestions-container")) {
         setIsVisibleSuggestions(false);
       }
@@ -321,6 +322,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     };
   }, []);
 
+  const emptySearchString = () => {
+    setSearchTerm("");
+    setSuggestions([]);
+  };
   return (
     <main className="px-44">
       <div>

@@ -219,6 +219,7 @@ const Header = ({ propertyCategory }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      emptySearchString();
       if (!event.target.closest(".suggestions-container")) {
         setIsVisibleSuggestions(false);
       }

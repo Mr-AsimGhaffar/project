@@ -23,7 +23,7 @@ const PropertyDetails = ({
     <main>
       <div className="px-4 md:px-20 lg:px-44">
         <h1 className="font-montserrat font-bold text-3xl lg:text-5xl leading-10 tracking-widest text-[#0071BC] text-center py-10 lg:py-20">
-          TOTAL PROPERTIES LISTED : {displayProperties()}
+          TOTAL PROPERTIES : {displayProperties()}
         </h1>
       </div>
     </main>
