@@ -39,14 +39,25 @@ function App() {
     startDate: "",
     endDate: "",
     selectedSuggestions: [],
+    selectedCity: "islamabad",
   });
+
+  const setSelectedCity = (city) => {
+    setAppState((prevState) => ({
+      ...prevState,
+      selectedCity: city,
+    }));
+  };
 
   const [conversionType, setConversionType] = useState("price");
   const [propertyCategory, setPropertyCategory] = useState("for_sale");
   const conversionFunction =
     conversionType === "price" ? priceConversion : countConversion;
 
-  const contextValue = useMemo(() => ({ appState, setAppState }), [appState]);
+  const contextValue = useMemo(
+    () => ({ appState, setAppState, setSelectedCity }),
+    [appState]
+  );
   const handleDashboardClick = useCallback(() => {
     setAppState((prevState) => ({ ...prevState, showDashboard: true }));
   }, []);

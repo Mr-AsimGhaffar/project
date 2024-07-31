@@ -13,7 +13,7 @@ import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 
 const PropertyTag = () => {
   const [propertyState, setPropertyState] = useState({
-    selectedPropertyType: "Home",
+    selectedPropertyType: "home",
     selectedSubProperty: "",
   });
   const simpleContext = useContext(appContext);
@@ -42,7 +42,7 @@ const PropertyTag = () => {
 
   const getPropertyTypeStyle = (propertyType) =>
     propertyState.selectedPropertyType === propertyType
-      ? "text-gray-800 border-b-2 border-gray-800"
+      ? "text-[#0071BC] border-b-2 border-[#0071BC] cursor-pointer"
       : "hover:text-blue-500 cursor-pointer";
 
   return (
@@ -55,7 +55,7 @@ const PropertyTag = () => {
               propertyState.selectedPropertyType}
           </div>
         </SelectTrigger>
-        <SelectContent className="w-[100%]">
+        <SelectContent>
           <div className="flex justify-between items-center p-5">
             <h1
               className={getPropertyTypeStyle("home")}

@@ -37,7 +37,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [searchTerm, setSearchTerm] = useState(
     simpleContext.appState.searchTerm
   );
-  const [selectedCity, setSelectedCity] = useState("");
   const [sortOrder, setSortOrder] = useState("ASC");
   const [sortBy, setSortBy] = useState("id");
   const [suggestions, setSuggestions] = useState([]);
@@ -100,7 +99,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       };
 
       const data = await searchCityData(
-        city,
+        simpleContext.appState.selectedCity,
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
@@ -163,7 +162,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
       const data = await searchCityData(
-        selectedCity,
+        simpleContext.appState.selectedCity,
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
@@ -227,7 +226,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   };
   const handlePageChange = (page_number) =>
     fetchCityData(
-      selectedCity,
+      simpleContext.appState.selectedCity,
       simpleContext.appState.selectedSuggestions,
       page_number,
       sortBy,
@@ -240,7 +239,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const handleChange = async (e) => {
     const newValue = e.target.value;
     setSearchTerm(newValue);
-    setSelectedCity(selectedCity);
     simpleContext.setAppState((s) => ({
       ...s,
       searchTerm: newValue,
@@ -249,7 +247,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     if (newValue.length > 2) {
       try {
         const suggestions = await fetchSearchSuggestions(
-          selectedCity,
+          simpleContext.appState.selectedCity,
           newValue
         );
         setSuggestions(suggestions);
@@ -507,7 +505,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-6 py-5">
         {loading ? (
-          Array.from({ length: cardData.length }).map((_, index) => (
+          Array.from({ length: 9 }).map((_, index) => (
             <div key={index} className="flex items-center justify-center">
               <div className="flex flex-col items-center">
                 <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gradient-to-br from-blue-200 to-blue-300 animate-pulse" />
@@ -523,7 +521,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             No result found. Try again
           </div>
         ) : (
-          cardData.map((item) => (
+          cardData.slice(0, 9).map((item) => (
             <Card
               key={item.id}
               className={`relative ${

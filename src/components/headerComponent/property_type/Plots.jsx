@@ -7,19 +7,19 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
     selectedSubProperty === subProperty ? "bg-gray-800 text-white" : "";
   return (
     <div>
-      <div className="w-[100%] flex gap-5 p-1">
-        <div className="w-[50%]">
+      <div className="flex gap-2 p-1">
+        <div>
           <Button
-            className={`w-[100%] ${buttonStyles("Residential Plot")}`}
+            className={`w-40 ${buttonStyles("Residential Plot")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Residential Plot")}
           >
             Residential Plots
           </Button>
         </div>
-        <div className="w-[50%]">
+        <div>
           <Button
-            className={`w-[100%] ${buttonStyles("Commercial Plot")}`}
+            className={`w-40 ${buttonStyles("Commercial Plot")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Commercial Plot")}
           >
@@ -27,19 +27,19 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
           </Button>
         </div>
       </div>
-      <div className="w-[100%] flex gap-5 p-1">
-        <div className="w-[50%]">
+      <div className="flex gap-2 p-1">
+        <div>
           <Button
-            className={`w-[100%] ${buttonStyles("Agricultural Land")}`}
+            className={`w-40 ${buttonStyles("Agricultural Land")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Agricultural Land")}
           >
             Agricultural Land
           </Button>
         </div>
-        <div className="w-[50%]">
+        <div>
           <Button
-            className={`w-[100%] ${buttonStyles("Industrial Land")}`}
+            className={`w-40 ${buttonStyles("Industrial Land")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Industrial Land")}
           >
@@ -47,19 +47,19 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
           </Button>
         </div>
       </div>
-      <div className="w-[100%] flex gap-5 p-1">
-        <div className="w-[50%]">
+      <div className="flex gap-2 p-1">
+        <div>
           <Button
-            className={`w-[100%] ${buttonStyles("Plot File")}`}
+            className={`w-40 ${buttonStyles("Plot File")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Plot File")}
           >
             Plot File
           </Button>
         </div>
-        <div className="w-[50%]">
+        <div>
           <Button
-            className={`w-[100%] ${buttonStyles("Plot Form")}`}
+            className={`w-40 ${buttonStyles("Plot Form")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Plot Form")}
           >

@@ -32,7 +32,6 @@ import { RxCross2 } from "react-icons/rx";
 const Header = ({ propertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCity, setSelectedCity] = useState("islamabad");
   const [suggestions, setSuggestions] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -52,7 +51,6 @@ const Header = ({ propertyCategory }) => {
 
   useEffect(() => {
     fetchData();
-    // emptySuggestions();
     simpleContext.setAppState((s) => ({
       ...s,
       selectedSuggestions: [],
@@ -108,7 +106,7 @@ const Header = ({ propertyCategory }) => {
       };
 
       const data = await searchCityData(
-        selectedCity,
+        simpleContext.appState.selectedCity,
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
@@ -159,7 +157,7 @@ const Header = ({ propertyCategory }) => {
     if (newValue.length >= 2) {
       try {
         const suggestions = await fetchSearchSuggestions(
-          selectedCity,
+          simpleContext.appState.selectedCity,
           newValue
         );
         setSuggestions(suggestions);
@@ -238,7 +236,7 @@ const Header = ({ propertyCategory }) => {
   };
 
   const handleSelectCity = (city) => {
-    setSelectedCity(city);
+    simpleContext.setAppState.setSelectedCity(city);
     emptySuggestions();
   };
 
