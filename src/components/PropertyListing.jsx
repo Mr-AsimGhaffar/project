@@ -27,7 +27,10 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
     fetchData();
   }, [propertyCategory]);
 
-  const toggleView = () => setViewAll((prev) => !prev);
+  const toggleView = () => {
+    setViewAll((prev) => !prev);
+    window.scrollTo(0, 500);
+  };
 
   const propertyListingKeys = Object.keys(propertyListingData);
   const sortedKeys = propertyListingKeys.sort(

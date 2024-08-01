@@ -23,7 +23,7 @@ const HeaderFilter = ({ onSortChange }) => {
             handleSortChange("price", "ASC");
           }}
         >
-          Price Asc
+          Prices (Low to High)
         </Button>
       </div>
       <div>
@@ -38,7 +38,7 @@ const HeaderFilter = ({ onSortChange }) => {
             handleSortChange("price", "DESC");
           }}
         >
-          Price Desc
+          Prices (High to Low)
         </Button>
       </div>
     </div>

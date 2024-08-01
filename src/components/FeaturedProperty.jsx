@@ -42,7 +42,10 @@ export default function FeaturedProperty({
     loadData();
   }, [propertyCategory]);
 
-  const toggleView = () => setShowAll((prev) => !prev);
+  const toggleView = () => {
+    setShowAll((prev) => !prev);
+    window.scrollTo(0, 1000);
+  };
 
   const handleClick = (item) => {
     navigate(`/property/${item.id}`, { state: { id: item.id } });

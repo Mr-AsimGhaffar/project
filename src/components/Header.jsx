@@ -27,11 +27,11 @@ import {
 import PropTypes from "prop-types";
 import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
+import { RxCross2 } from "react-icons/rx";
 
 const Header = ({ propertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCity, setSelectedCity] = useState("islamabad");
   const [suggestions, setSuggestions] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -51,6 +51,12 @@ const Header = ({ propertyCategory }) => {
 
   useEffect(() => {
     fetchData();
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedSuggestions: [],
+      selectedAreaMin: "",
+      selectedAreaMax: "",
+    }));
   }, []);
 
   useEffect(() => {
@@ -64,7 +70,10 @@ const Header = ({ propertyCategory }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (simpleContext.appState.selectedSuggestions.length === 0) {
+    if (
+      simpleContext.appState.selectedSuggestions.length === 0 &&
+      searchTerm != ""
+    ) {
       toast.error("Please select a location from the suggestions.", {
         position: "top-center",
         autoClose: 2000,
@@ -85,21 +94,22 @@ const Header = ({ propertyCategory }) => {
         selectBeds,
         propertyState,
       } = simpleContext.appState;
-
       const filters = {
         price_min: cleanValue(selectedAmountMin),
         price_max: cleanValue(selectedAmountMax),
-        area_min: selectedAreaMin,
-        area_max: selectedAreaMax,
+        area_min: selectedAreaMin || "",
+        area_max: selectedAreaMax || "",
         bedrooms: selectBeds,
         property_type:
-          propertyState.selectedSubProperty ??
+          propertyState.selectedSubProperty ||
           propertyState.selectedPropertyType,
       };
 
       const data = await searchCityData(
-        selectedCity,
-        simpleContext.appState.selectedSuggestions,
+        simpleContext.appState.selectedCity,
+        simpleContext.appState.selectedSuggestions.map(
+          (suggestion) => suggestion.id
+        ),
         1,
         "id",
         "ASC",
@@ -147,7 +157,7 @@ const Header = ({ propertyCategory }) => {
     if (newValue.length >= 2) {
       try {
         const suggestions = await fetchSearchSuggestions(
-          selectedCity,
+          simpleContext.appState.selectedCity,
           newValue
         );
         setSuggestions(suggestions);
@@ -192,6 +202,7 @@ const Header = ({ propertyCategory }) => {
       setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
     } else if (e.key === "Enter" && selectedIndex >= 0) {
       e.preventDefault(); // Prevent form submission
+
       handleSuggestionClick(suggestions[selectedIndex]);
       setSelectedIndex(-1); // Reset the selected index after selection
     }
@@ -206,6 +217,7 @@ const Header = ({ propertyCategory }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      emptySearchString();
       if (!event.target.closest(".suggestions-container")) {
         setIsVisibleSuggestions(false);
       }
@@ -216,6 +228,25 @@ const Header = ({ propertyCategory }) => {
     };
   }, []);
 
+  const emptySuggestions = () => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedSuggestions: [],
+    }));
+  };
+
+  const handleSelectCity = (city) => {
+    emptySuggestions();
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedCity: city,
+    }));
+  };
+
+  const emptySearchString = () => {
+    setSearchTerm("");
+    setSuggestions([]);
+  };
   return (
     <div className="relative">
       <div>
@@ -282,7 +313,10 @@ const Header = ({ propertyCategory }) => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg">
                     <div className="col-span-1 md:col-span-2">
-                      <Select onValueChange={setSelectedCity}>
+                      <Select
+                        onOpenChange={emptySearchString}
+                        onValueChange={handleSelectCity}
+                      >
                         <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
                           <SelectValue placeholder="Islamabad" />
                         </SelectTrigger>
@@ -308,7 +342,7 @@ const Header = ({ propertyCategory }) => {
                         placeholder="Location"
                         className="rounded-none"
                       />
-                      <div className="absolute z-10 w-full text-black">
+                      <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
                         {suggestions.length > 0 && (
                           <ul className="bg-white border border-gray-200 w-full">
                             {suggestions.map((suggestion, index) => (
@@ -321,59 +355,85 @@ const Header = ({ propertyCategory }) => {
                                   handleSuggestionClick(suggestion)
                                 }
                               >
-                                {suggestion}
+                                {suggestion.name}
                               </li>
                             ))}
                           </ul>
                         )}
                       </div>
-                      {simpleContext.appState.selectedSuggestions.length >
-                        0 && (
-                        <div className="mt-2 flex flex-wrap suggestions-container">
-                          {simpleContext.appState.selectedSuggestions.length >
-                            2 && !isVisibleSuggestions ? (
-                            <div
-                              className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs"
-                              onClick={() => setIsVisibleSuggestions(true)}
-                            >
-                              x
-                              {
-                                simpleContext.appState.selectedSuggestions
-                                  .length
-                              }
-                            </div>
-                          ) : (
-                            <div>
-                              {simpleContext.appState.selectedSuggestions.map(
-                                (suggestion, index) => (
-                                  <div
-                                    key={index}
-                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
-                                    onClick={() => removeSuggestion(suggestion)}
-                                  >
-                                    {suggestion}
+                      <div>
+                        {simpleContext.appState.selectedSuggestions.length >
+                          0 && (
+                          <div className="mt-2 flex flex-wrap gap-2 suggestions-container">
+                            {simpleContext.appState.selectedSuggestions.length >
+                              1 && !isVisibleSuggestions ? (
+                              <>
+                                <div>
+                                  <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300 transition-colors duration-300">
+                                    <span>
+                                      {
+                                        simpleContext.appState.selectedSuggestions[0].name.split(
+                                          ","
+                                        )[0]
+                                      }
+                                    </span>
+                                    <div>
+                                      <RxCross2
+                                        onClick={() =>
+                                          removeSuggestion(
+                                            simpleContext.appState
+                                              .selectedSuggestions[0]
+                                          )
+                                        }
+                                      />
+                                    </div>
                                   </div>
-                                )
-                              )}
-                            </div>
-                          )}
-                          {isVisibleSuggestions && (
-                            <div className="absolute z-10 w-full text-black">
-                              {simpleContext.appState.selectedSuggestions.map(
-                                (suggestion, index) => (
-                                  <div
-                                    key={index}
-                                    className="bg-gray-200 p-2 mr-2 mb-2 rounded cursor-pointer text-xs text-black"
-                                    onClick={() => removeSuggestion(suggestion)}
-                                  >
-                                    {suggestion}
+                                </div>
+
+                                <div
+                                  className="bg-[#0071BC] p-2 rounded-full cursor-pointer text-xs text-white shadow-md hover:bg-blue-600 transition-colors duration-300"
+                                  onClick={() => setIsVisibleSuggestions(true)}
+                                >
+                                  +
+                                  {simpleContext.appState.selectedSuggestions
+                                    .length - 1}{" "}
+                                  more
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                {simpleContext.appState.selectedSuggestions.map(
+                                  (suggestion, index) => (
+                                    <div key={index}>
+                                      <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300">
+                                        <span className="ellipsis-text">
+                                          {suggestion.name.split(",")[0]}
+                                        </span>
+                                        <div>
+                                          <RxCross2
+                                            onClick={() =>
+                                              removeSuggestion(suggestion)
+                                            }
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )
+                                )}
+                                {isVisibleSuggestions && (
+                                  <div className="absolute z-10 w-full text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
+                                    {simpleContext.appState.selectedSuggestions.map(
+                                      (suggestion, index) => (
+                                        <div key={index} className=""></div>
+                                      )
+                                    )}
                                   </div>
-                                )
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )}
+                                )}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <div className="col-span-1 md:col-span-1">

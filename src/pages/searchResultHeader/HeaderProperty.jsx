@@ -43,7 +43,7 @@ const HeaderProperty = () => {
 
   const getPropertyTypeStyle = (propertyType) =>
     propertyState.selectedPropertyType === propertyType
-      ? "text-gray-800 border-b-2 border-gray-800"
+      ? "text-[#0071BC] border-b-2 border-[#0071BC] cursor-pointer"
       : "hover:text-blue-500 cursor-pointer";
 
   return (
@@ -59,38 +59,38 @@ const HeaderProperty = () => {
         <SelectContent className="w-[100%]">
           <div className="flex justify-between items-center p-5">
             <h1
-              className={getPropertyTypeStyle("Home")}
-              onClick={() => handlePropertyTypeChange("Home")}
+              className={getPropertyTypeStyle("home")}
+              onClick={() => handlePropertyTypeChange("home")}
             >
               Home
             </h1>
             <h1
-              className={getPropertyTypeStyle("Plots")}
-              onClick={() => handlePropertyTypeChange("Plots")}
+              className={getPropertyTypeStyle("plot")}
+              onClick={() => handlePropertyTypeChange("plot")}
             >
               Plots
             </h1>
             <h1
-              className={getPropertyTypeStyle("Commercial")}
-              onClick={() => handlePropertyTypeChange("Commercial")}
+              className={getPropertyTypeStyle("commercial")}
+              onClick={() => handlePropertyTypeChange("commercial")}
             >
               Commercial
             </h1>
           </div>
           <div>
-            {propertyState.selectedPropertyType === "Home" && (
+            {propertyState.selectedPropertyType === "home" && (
               <Home
                 selectedSubProperty={propertyState.selectedSubProperty}
                 onSubPropertySelect={handleSubPropertySelect}
               />
             )}
-            {propertyState.selectedPropertyType === "Plots" && (
+            {propertyState.selectedPropertyType === "plot" && (
               <Plots
                 selectedSubProperty={propertyState.selectedSubProperty}
                 onSubPropertySelect={handleSubPropertySelect}
               />
             )}
-            {propertyState.selectedPropertyType === "Commercial" && (
+            {propertyState.selectedPropertyType === "commercial" && (
               <Commercial
                 selectedSubProperty={propertyState.selectedSubProperty}
                 onSubPropertySelect={handleSubPropertySelect}

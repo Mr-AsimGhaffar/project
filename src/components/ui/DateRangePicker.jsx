@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -15,14 +15,19 @@ import {
 } from "@/components/ui/popover";
 
 export function DatePickerWithRange({ onChange, className }) {
-  const [date, setDate] = React.useState({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
-  });
+  const [date, setDate] = React.useState(null);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-    onChange(newDate.from, newDate.to);
+    if (newDate) {
+      onChange(newDate.from, newDate.to);
+    } else {
+      onChange(null, null); // Handle case when date is cleared
+    }
+  };
+  const handleClear = () => {
+    setDate(null);
+    onChange(null, null);
   };
   const today = new Date();
 
@@ -62,6 +67,11 @@ export function DatePickerWithRange({ onChange, className }) {
             numberOfMonths={2}
             toDate={today}
           />
+          <div className="flex justify-end p-2">
+            <Button variant="outline" onClick={handleClear}>
+              Clear
+            </Button>
+          </div>
         </PopoverContent>
       </Popover>
     </div>
