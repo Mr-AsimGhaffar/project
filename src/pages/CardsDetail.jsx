@@ -110,7 +110,11 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         start_date,
         end_date
       );
-      const { properties, total_count, page_size } = data;
+      const { properties, total_count, page_size } = data ?? {
+        properties: [],
+        total_count: 0,
+        page_size: 10,
+      };
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: properties,
@@ -118,10 +122,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         isApiCall: true,
         totalPages: Math.ceil(Number(total_count) / Number(page_size)),
         currentPage: page_number,
+        loading: data == null,
       }));
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
     }
   };
@@ -182,7 +186,11 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         startDate ? startDate.toDateString() : "",
         endDate ? endDate.toDateString() : ""
       );
-      const { properties, total_count, page_size, page_number } = data;
+      const { properties, total_count, page_size, page_number } = data ?? {
+        properties: [],
+        total_count: 0,
+        page_size: 10,
+      };
 
       simpleContext.setAppState((s) => ({
         ...s,
@@ -191,10 +199,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         isApiCall: true,
         totalPages: Math.ceil(Number(total_count) / Number(page_size)),
         currentPage: page_number,
+        loading: data == null,
       }));
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
     }
   };
