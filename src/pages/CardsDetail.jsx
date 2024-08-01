@@ -52,7 +52,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     loading,
     pageData: { total_count: totalCount },
   } = simpleContext.appState;
-
   const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
 
   const fetchCityData = async (
@@ -183,7 +182,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         startDate ? startDate.toDateString() : "",
         endDate ? endDate.toDateString() : ""
       );
-
       const { properties, total_count, page_size, page_number } = data;
 
       simpleContext.setAppState((s) => ({
@@ -425,7 +423,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               </div>
               <div className="absolute inset-y-0 w-[1px] h-[20px] mt-3 right-10 bg-gray-400"></div>
             </div>
-            <div className="absolute z-10 text-black">
+            <div className="absolute z-10 text-black overscroll-auto max-h-80 overflow-y-scroll">
               {suggestions.length > 0 && (
                 <ul className="bg-white border border-gray-300 w-full rounded-3xl">
                   {suggestions.map((suggestion, index) => (

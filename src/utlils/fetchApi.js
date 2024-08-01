@@ -225,15 +225,9 @@ async function fetchSearchSuggestions(city, query) {
       "a821e0149ad248fa5240718b3c1a5360"
     );
     const index = client.initIndex("locations");
-    const response = await index.search(query, {
+    const response = await index.search(`${city} ${query}`, {
       attributesToRetrieve: ["id", "name"],
     });
-
-    // if (!response.ok) {
-    //   const errorMessage =
-    //     "Checked that you typed the address correctly, try using our site to find something specific";
-    //   throw new Error(errorMessage);
-    // }
     return response.hits;
   } catch (error) {
     if (error.name !== "AbortError") {

@@ -236,8 +236,11 @@ const Header = ({ propertyCategory }) => {
   };
 
   const handleSelectCity = (city) => {
-    simpleContext.setAppState.setSelectedCity(city);
     emptySuggestions();
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedCity: city,
+    }));
   };
 
   const emptySearchString = () => {
@@ -339,7 +342,7 @@ const Header = ({ propertyCategory }) => {
                         placeholder="Location"
                         className="rounded-none"
                       />
-                      <div className="absolute z-10 w-full text-black">
+                      <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
                         {suggestions.length > 0 && (
                           <ul className="bg-white border border-gray-200 w-full">
                             {suggestions.map((suggestion, index) => (
