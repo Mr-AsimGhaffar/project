@@ -206,7 +206,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                             </TableCell>
                             <TableCell
                               className={`${
-                                rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 text-black"
+                                  : ""
                               }`}
                             >
                               {property[item]
@@ -240,7 +242,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                             </TableCell>
                             <TableCell
                               className={`${
-                                rowIndex % 2 === 0 ? "bg-gray-100" : ""
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 text-black"
+                                  : ""
                               }`}
                             >
                               {property[item]
@@ -265,7 +269,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <p className="font-bold">Description</p>
             <br />
             <p className={`${isExpanded ? "" : "line-clamp-2"}`}>
-              {property.desc}
+              {property.description}
             </p>
             <br />
             <div className="text-right">
