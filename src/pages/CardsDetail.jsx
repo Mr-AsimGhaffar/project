@@ -19,7 +19,7 @@ import Paging from "@/components/Paging";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "../utlils/formatPrice";
-import Recommended from "../components/cardsDetails/Recommended";
+// import Recommended from "../components/cardsDetails/Recommended";
 import { fetchSearchSuggestions, searchCityData } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { FaBath, FaBed } from "react-icons/fa";
@@ -44,7 +44,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
-
   const mounted = useRef(false);
 
   const {
@@ -224,13 +223,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     startDate,
     endDate,
     simpleContext.appState.selectedSuggestions,
+    propertyCategory,
   ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSearch();
   };
-  const handlePageChange = (page_number) =>
+  const handlePageChange = (page_number) => {
     fetchCityData(
       simpleContext.appState.selectedCity,
       simpleContext.appState.selectedSuggestions,
@@ -241,6 +241,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       startDate ? startDate.toISOString() : "",
       endDate ? endDate.toISOString() : ""
     );
+  };
 
   const handleChange = async (e) => {
     const newValue = e.target.value;
@@ -330,6 +331,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setSearchTerm("");
     setSuggestions([]);
   };
+
   return (
     <main className="px-44">
       <div>
@@ -498,20 +500,20 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           </div>
         </div>
       </form>
-      <div className="flex justify-left gap-6">
+      {/* <div className="flex justify-left gap-6">
         <div>
           <Recommended />
         </div>
-        {/* <div>
+        <div>
           <Popular />
         </div>
         <div>
           <Nearest />
-        </div> */}
-      </div>
+        </div>
+      </div> */}
       <div className="grid md:grid-cols-3 grid-cols-1 gap-6 py-5">
         {loading ? (
-          Array.from({ length: 9 }).map((_, index) => (
+          Array.from({ length: 12 }).map((_, index) => (
             <div key={index} className="flex items-center justify-center">
               <div className="flex flex-col items-center">
                 <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gradient-to-br from-blue-200 to-blue-300 animate-pulse" />
@@ -527,7 +529,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             No result found. Try again
           </div>
         ) : (
-          cardData.slice(0, 9).map((item) => (
+          cardData.map((item) => (
             <Card
               key={item.id}
               className={`relative ${
@@ -556,10 +558,15 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                       </CardTitle>
                       {/* <LuDollarSign /> */}
                     </div>
-                    <div className="py-2">
-                      <CardDescription>
-                        Added: {formatTimeNow(item.added)}
-                      </CardDescription>
+                    <div className="flex justify-between items-center py-2">
+                      <div>
+                        <CardDescription>
+                          Added: {formatTimeNow(item.added)}
+                        </CardDescription>
+                      </div>
+                      <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                        {item.type.replace("_", " ")}
+                      </div>
                     </div>
                     <div className="py-2">
                       <CardDescription>

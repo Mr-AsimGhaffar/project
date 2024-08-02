@@ -60,7 +60,7 @@ export default function FeaturedProperty({
     <div className="px-4 md:px-20 lg:px-44 bg-[#0071BC] bg-opacity-10">
       <div className="flex justify-center items-center p-10 lg:p-20">
         <div>
-          <h1 className="font-montserrat font-bold text-3xl lg:text-5xl leading-10 tracking-widest text-[#0071BC] text-center">
+          <h1 className="font-montserrat font-bold text-3xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
             FEATURED PROPERTIES
           </h1>
         </div>

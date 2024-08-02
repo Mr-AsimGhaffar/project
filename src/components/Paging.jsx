@@ -112,7 +112,7 @@ const Paging = ({ onPageChange }) => {
             <PaginationNext
               isActive
               href="#"
-              onClick={() => onPageChange(currentPage + 1)}
+              onClick={() => onPageChange(Number(currentPage) + 1)}
               disabled={currentPage === totalPages}
             />
           </PaginationItem>

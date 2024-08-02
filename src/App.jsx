@@ -71,6 +71,7 @@ function App() {
               handleDashboardClick={handleDashboardClick}
               setConversionType={setConversionType}
               setPropertyCategory={setPropertyCategory}
+              propertyCategory={propertyCategory}
             />
             {/* <Sidebar /> */}
             <ToastContainer />
@@ -83,6 +84,7 @@ function App() {
                       <Dashboard
                         conversionFunction={conversionFunction}
                         propertyCategory={propertyCategory}
+                        setPropertyCategory={setPropertyCategory}
                       />
                     }
                   />
@@ -92,6 +94,7 @@ function App() {
                       <Dashboard
                         conversionFunction={conversionFunction}
                         propertyCategory={propertyCategory}
+                        setPropertyCategory={setPropertyCategory}
                       />
                     }
                   />

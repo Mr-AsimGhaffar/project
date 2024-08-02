@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ const Navbar = ({
   handleDashboardClick,
   setConversionType,
   setPropertyCategory,
+  propertyCategory,
 }) => {
   const [propertyView, setPropertyView] = useState("for_sale");
   const [conversionType, setConversionTypeState] = useState("price");
@@ -22,7 +23,9 @@ const Navbar = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { setTheme } = useTheme();
   const [isBlackTheme, setIsBlackTheme] = useState(false);
-
+  useEffect(() => {
+    setPropertyView(propertyCategory);
+  }, [propertyCategory]);
   const handleThemeToggle = () => {
     const newTheme = isBlackTheme ? "light" : "dark";
     setTheme(newTheme);
@@ -70,14 +73,14 @@ const Navbar = ({
               >
                 Rent
               </Button>
-              <Button
+              {/* <Button
                 variant="primary"
                 className={`rounded-md text-base font-semibold font-montserrat ${
                   propertyView === "For Mortgage" ? "text-[#0071BC]" : ""
                 }`}
               >
                 Mortgage
-              </Button>
+              </Button> */}
             </div>
             <Link to="/dashboard" onClick={handleDashboardClick}>
               <div className="flex items-center gap-1">
@@ -97,7 +100,7 @@ const Navbar = ({
             </Link>
 
             <div className="hidden lg:flex items-center gap-4 opacity-80 ">
-              <div>
+              {/* <div>
                 <Button
                   variant="primary"
                   className="text-base font-semibold font-montserrat tracking-wide"
@@ -112,13 +115,18 @@ const Navbar = ({
                 >
                   Sign-up or Log-in
                 </Button>
-              </div>
+              </div> */}
 
               <div>
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild className="bg-white">
+                  <DropdownMenuTrigger asChild className="bg-white border-none">
                     <Button variant="outline" size="icon">
-                      <img src="img/filter_svg.svg" alt="filter" />
+                      <img
+                        src="img/filter_svg.svg"
+                        alt="filter"
+                        width={16}
+                        height={16}
+                      />
                       <span className="sr-only">Toggle theme</span>
                     </Button>
                   </DropdownMenuTrigger>
@@ -273,5 +281,6 @@ Navbar.propTypes = {
   handleDashboardClick: PropTypes.func.isRequired,
   setConversionType: PropTypes.func.isRequired,
   setPropertyCategory: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string.isRequired,
 };
 export default Navbar;
