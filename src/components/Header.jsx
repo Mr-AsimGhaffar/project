@@ -28,8 +28,9 @@ import PropTypes from "prop-types";
 import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { RxCross2 } from "react-icons/rx";
+import LazyLoad from "react-lazyload";
 
-const Header = ({ propertyCategory }) => {
+const Header = ({ propertyCategory, setPropertyCategory }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -49,6 +50,9 @@ const Header = ({ propertyCategory }) => {
     }
   }, []);
 
+  useEffect(() => {
+    setPropertyView(propertyCategory);
+  }, [propertyCategory]);
   useEffect(() => {
     fetchData();
     simpleContext.setAppState((s) => ({
@@ -247,255 +251,267 @@ const Header = ({ propertyCategory }) => {
     setSearchTerm("");
     setSuggestions([]);
   };
+  console.log(propertyCategory);
   return (
     <div className="relative">
       <div>
-        <img src="img/bg_image.svg" alt="bg_image" className="w-full" />
+        <LazyLoad height={200} offset={100} once>
+          <img src="img/bg_image.svg" alt="bg_image" className="w-full" />
+        </LazyLoad>
       </div>
       <div className="lg:absolute top-20 left-0 right-0 mx-auto max-w-5xl">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="font-montserrat font-semibold text-5xl text-[#FFFFFF] leading-10 py-3">
-              Discover a place you&apos;ll love calling home.
-            </h1>
+            <LazyLoad height={200} offset={100} once>
+              <h1 className="font-montserrat font-semibold text-5xl text-[#FFFFFF] leading-10 py-3">
+                Discover a place you&apos;ll love calling home.
+              </h1>
+            </LazyLoad>
           </div>
         </div>
-        <Card className="relative bg-black bg-opacity-50 border-none">
-          <CardHeader>
-            <div className="flex justify-between">
-              <div className="w-[100%]">
-                <form onSubmit={handleSubmit}>
-                  <div className="flex items-center gap-4 py-2 text-white font-montserrat font-semibold text-lg cursor-pointer">
-                    <input
-                      type="radio"
-                      id="buy"
-                      name="propertyView"
-                      value="for_sale"
-                      checked={
-                        propertyView === "for_sale" ||
-                        propertyCategory == "for_sale"
-                      }
-                      onChange={(e) => setPropertyView(e.target.value)}
-                      className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
-                    />
-                    <label htmlFor="buy" className="cursor-pointer">
-                      Buy
-                    </label>
-                    <input
-                      type="radio"
-                      id="rent"
-                      name="propertyView"
-                      value="for_rent"
-                      checked={
-                        propertyView === "for_rent" ||
-                        propertyCategory == "for_rent"
-                      }
-                      onChange={(e) => setPropertyView(e.target.value)}
-                      className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
-                    />
-                    <label htmlFor="rent" className="cursor-pointer">
-                      Rent
-                    </label>
-
-                    <input
-                      type="radio"
-                      id="other"
-                      name="propertyView"
-                      value="other"
-                      checked={
-                        propertyView === "other" || propertyCategory == "other"
-                      }
-                      className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
-                    />
-                    <label htmlFor="other" className="cursor-pointer">
-                      Other
-                    </label>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg">
-                    <div className="col-span-1 md:col-span-2">
-                      <Select
-                        onOpenChange={emptySearchString}
-                        onValueChange={handleSelectCity}
-                      >
-                        <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
-                          <SelectValue placeholder="Islamabad" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {data.map((item) => (
-                            <SelectItem
-                              className="cursor-pointer"
-                              key={item}
-                              value={item}
-                            >
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="col-span-1 md:col-span-5 relative">
-                      <Input
-                        value={searchTerm}
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                        onClick={isVisible || toggleVisibility}
-                        placeholder="Location"
-                        className="rounded-none"
+        <LazyLoad height={200} offset={100} once>
+          <Card className="relative bg-black bg-opacity-50 border-none p-4">
+            <CardHeader className="p-0">
+              <div className="flex justify-between">
+                <div className="w-[100%]">
+                  <form onSubmit={handleSubmit}>
+                    <div className="flex items-center gap-4 text-white font-montserrat font-semibold text-lg cursor-pointer">
+                      <input
+                        type="radio"
+                        id="buy"
+                        name="propertyView"
+                        value="for_sale"
+                        checked={propertyView === "for_sale"}
+                        onChange={(e) => {
+                          setPropertyCategory(e.target.value);
+                          // setPropertyView(e.target.value);
+                        }}
+                        className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
                       />
-                      <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
-                        {suggestions.length > 0 && (
-                          <ul className="bg-white border border-gray-200 w-full">
-                            {suggestions.map((suggestion, index) => (
-                              <li
-                                key={index}
-                                className={`p-2 cursor-pointer hover:bg-gray-200 text-sm ${
-                                  index === selectedIndex ? "bg-gray-200" : ""
-                                }`}
-                                onClick={() =>
-                                  handleSuggestionClick(suggestion)
-                                }
-                              >
-                                {suggestion.name}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                      <div>
-                        {simpleContext.appState.selectedSuggestions.length >
-                          0 && (
-                          <div className="mt-2 flex flex-wrap gap-2 suggestions-container">
-                            {simpleContext.appState.selectedSuggestions.length >
-                              1 && !isVisibleSuggestions ? (
-                              <>
-                                <div>
-                                  <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300 transition-colors duration-300">
-                                    <span>
-                                      {
-                                        simpleContext.appState.selectedSuggestions[0].name.split(
-                                          ","
-                                        )[0]
-                                      }
-                                    </span>
-                                    <div>
-                                      <RxCross2
-                                        onClick={() =>
-                                          removeSuggestion(
-                                            simpleContext.appState
-                                              .selectedSuggestions[0]
-                                          )
-                                        }
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
+                      <label htmlFor="buy" className="cursor-pointer">
+                        Buy
+                      </label>
+                      <input
+                        type="radio"
+                        id="rent"
+                        name="propertyView"
+                        value="for_rent"
+                        checked={propertyView === "for_rent"}
+                        onChange={(e) => {
+                          setPropertyCategory(e.target.value);
+                          // setPropertyView(e.target.value);
+                        }}
+                        className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
+                      />
+                      <label htmlFor="rent" className="cursor-pointer">
+                        Rent
+                      </label>
 
-                                <div
-                                  className="bg-[#0071BC] p-2 rounded-full cursor-pointer text-xs text-white shadow-md hover:bg-blue-600 transition-colors duration-300"
-                                  onClick={() => setIsVisibleSuggestions(true)}
+                      {/* <input
+                        type="radio"
+                        id="other"
+                        name="propertyView"
+                        value="other"
+                        checked={
+                          propertyView === "other" ||
+                          propertyCategory == "other"
+                        }
+                        className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
+                      />
+                      <label htmlFor="other" className="cursor-pointer">
+                        Other
+                      </label> */}
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg py-2">
+                      <div className="col-span-1 md:col-span-2">
+                        <Select
+                          onOpenChange={emptySearchString}
+                          onValueChange={handleSelectCity}
+                        >
+                          <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
+                            <SelectValue placeholder="Islamabad" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {data.map((item) => (
+                              <SelectItem
+                                className="cursor-pointer"
+                                key={item}
+                                value={item}
+                              >
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="col-span-1 md:col-span-5 relative">
+                        <Input
+                          value={searchTerm}
+                          onChange={handleChange}
+                          onKeyDown={handleKeyDown}
+                          onClick={isVisible || toggleVisibility}
+                          placeholder="Location"
+                          className="rounded-none"
+                        />
+                        <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
+                          {suggestions.length > 0 && (
+                            <ul className="bg-white border border-gray-200 w-full">
+                              {suggestions.map((suggestion, index) => (
+                                <li
+                                  key={index}
+                                  className={`p-2 cursor-pointer hover:bg-gray-200 text-sm ${
+                                    index === selectedIndex ? "bg-gray-200" : ""
+                                  }`}
+                                  onClick={() =>
+                                    handleSuggestionClick(suggestion)
+                                  }
                                 >
-                                  +
-                                  {simpleContext.appState.selectedSuggestions
-                                    .length - 1}{" "}
-                                  more
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                {simpleContext.appState.selectedSuggestions.map(
-                                  (suggestion, index) => (
-                                    <div key={index}>
-                                      <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300">
-                                        <span className="ellipsis-text">
-                                          {suggestion.name.split(",")[0]}
-                                        </span>
-                                        <div>
-                                          <RxCross2
-                                            onClick={() =>
-                                              removeSuggestion(suggestion)
-                                            }
-                                          />
-                                        </div>
+                                  {suggestion.name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                        <div>
+                          {simpleContext.appState.selectedSuggestions.length >
+                            0 && (
+                            <div className="mt-2 flex flex-wrap gap-2 suggestions-container">
+                              {simpleContext.appState.selectedSuggestions
+                                .length > 1 && !isVisibleSuggestions ? (
+                                <>
+                                  <div>
+                                    <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300 transition-colors duration-300">
+                                      <span>
+                                        {
+                                          simpleContext.appState.selectedSuggestions[0].name.split(
+                                            ","
+                                          )[0]
+                                        }
+                                      </span>
+                                      <div>
+                                        <RxCross2
+                                          onClick={() =>
+                                            removeSuggestion(
+                                              simpleContext.appState
+                                                .selectedSuggestions[0]
+                                            )
+                                          }
+                                        />
                                       </div>
                                     </div>
-                                  )
-                                )}
-                                {isVisibleSuggestions && (
-                                  <div className="absolute z-10 w-full text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
-                                    {simpleContext.appState.selectedSuggestions.map(
-                                      (suggestion, index) => (
-                                        <div key={index} className=""></div>
-                                      )
-                                    )}
                                   </div>
-                                )}
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
 
-                    <div className="col-span-1 md:col-span-1">
-                      <Button
-                        onClick={handleSearch}
-                        className="rounded-none flex items-center justify-center rounded-tr-lg rounded-br-lg bg-white text-black hover:bg-gray-100 md:w-full"
-                      >
-                        <CiSearch className="h-5 w-5 mr-2" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div
-                        className={`transition-all duration-500 ${
-                          isVisible
-                            ? "max-h-96 opacity-100"
-                            : "max-h-0 opacity-0 overflow-hidden"
-                        }`}
-                      >
-                        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 font-montserrat font-medium text-lg py-4">
-                          <div>
-                            <p className="text-sm text-white">Price Range</p>
-                            <PriceTag />
-                          </div>
-                          <div>
-                            <p className="text-sm text-white">Property Type</p>
-                            <PropertyTag />
-                          </div>
-                          <div>
-                            <p className="text-sm text-white">Area</p>
-                            <AreaTag />
-                          </div>
-                          <div>
-                            <p className="text-sm text-white">Bedrooms</p>
-                            <BedsTag />
-                          </div>
+                                  <div
+                                    className="bg-[#0071BC] p-2 rounded-full cursor-pointer text-xs text-white shadow-md hover:bg-blue-600 transition-colors duration-300"
+                                    onClick={() =>
+                                      setIsVisibleSuggestions(true)
+                                    }
+                                  >
+                                    +
+                                    {simpleContext.appState.selectedSuggestions
+                                      .length - 1}{" "}
+                                    more
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  {simpleContext.appState.selectedSuggestions.map(
+                                    (suggestion, index) => (
+                                      <div key={index}>
+                                        <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300">
+                                          <span className="ellipsis-text">
+                                            {suggestion.name.split(",")[0]}
+                                          </span>
+                                          <div>
+                                            <RxCross2
+                                              onClick={() =>
+                                                removeSuggestion(suggestion)
+                                              }
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                  {isVisibleSuggestions && (
+                                    <div className="absolute z-10 w-full text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
+                                      {simpleContext.appState.selectedSuggestions.map(
+                                        (suggestion, index) => (
+                                          <div key={index} className=""></div>
+                                        )
+                                      )}
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      <div className="flex justify-end">
+                      <div className="col-span-1 md:col-span-1">
                         <Button
-                          variant="primary"
-                          onClick={toggleVisibility}
-                          className="text-xs text-white font-montserrat font-bold text-base leading-5"
+                          onClick={handleSearch}
+                          className="rounded-none flex items-center justify-center rounded-tr-lg rounded-br-lg bg-white text-black hover:bg-gray-100 md:w-full"
                         >
-                          {isVisible ? "Less" : "More"}
-                          {isVisible ? (
-                            <FaAngleUp className="ml-2" />
-                          ) : (
-                            <FaAngleDown className="ml-2" />
-                          )}
+                          <CiSearch className="h-5 w-5 mr-2" />
                         </Button>
                       </div>
                     </div>
-                  </div>
-                </form>
-                {simpleContext.appState.loading && <Spinner />}
+                    <div>
+                      <div>
+                        <div
+                          className={`transition-all duration-500 ${
+                            isVisible
+                              ? "max-h-96 opacity-100"
+                              : "max-h-0 opacity-0 overflow-hidden"
+                          }`}
+                        >
+                          <div className="grid md:grid-cols-4 grid-cols-1 gap-4 font-montserrat font-medium text-lg py-2">
+                            <div>
+                              <p className="text-sm text-white">Price Range</p>
+                              <PriceTag />
+                            </div>
+                            <div>
+                              <p className="text-sm text-white">
+                                Property Type
+                              </p>
+                              <PropertyTag />
+                            </div>
+                            <div>
+                              <p className="text-sm text-white">Area</p>
+                              <AreaTag />
+                            </div>
+                            <div>
+                              <p className="text-sm text-white">Bedrooms</p>
+                              <BedsTag />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end">
+                          <Button
+                            variant="primary"
+                            onClick={toggleVisibility}
+                            className="text-base text-white font-montserrat font-bold"
+                          >
+                            {isVisible ? "Less" : "More"}
+                            {isVisible ? (
+                              <FaAngleUp className="ml-2" />
+                            ) : (
+                              <FaAngleDown className="ml-2" />
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  {simpleContext.appState.loading && <Spinner />}
+                </div>
               </div>
-            </div>
-          </CardHeader>
-        </Card>
+            </CardHeader>
+          </Card>
+        </LazyLoad>
       </div>
     </div>
   );

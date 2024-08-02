@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import algoliasearch from "algoliasearch";
+// import algoliasearch from "algoliasearch";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -122,7 +122,7 @@ async function searchCityData(
     const queryString = queries.map((query) => `${query}`).join(",");
     const url = `${API_URL}/property/search/${
       city ?? ""
-    }?location_ids=${queryString}&page_size=10&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
+    }?location_ids=${queryString}&page_size=12&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
       .toLowerCase()
       .replace(" ", "_")}&area_min=${area_min ?? ""}&area_max=${
       area_max ?? ""
@@ -219,16 +219,49 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
 }
 
 async function fetchSearchSuggestions(city, query) {
+  //   try {
+  //     const client = algoliasearch(
+  //       "M8TRSWR245",
+  //       "a821e0149ad248fa5240718b3c1a5360"
+  //     );
+  //     const index = client.initIndex("locations");
+  //     const response = await index.search(`${city} ${query}`, {
+  //       attributesToRetrieve: ["id", "name"],
+  //     });
+  //     return response.hits;
+  //   } catch (error) {
+  //     if (error.name !== "AbortError") {
+  //       const errorMessage = error.message || "Failed to search city data.";
+  //       console.error("Error searching city data:", errorMessage);
+  //       toast.error(errorMessage, {
+  //         position: "top-center",
+  //         autoClose: 5000,
+  //       });
+  //       throw error;
+  //     }
+  //     return [];
+  //   }
+  // }
+  const controller = getAbortController("fetchSearchSuggestions");
   try {
-    const client = algoliasearch(
-      "M8TRSWR245",
-      "a821e0149ad248fa5240718b3c1a5360"
-    );
-    const index = client.initIndex("locations");
-    const response = await index.search(`${city} ${query}`, {
-      attributesToRetrieve: ["id", "name"],
+    const url = `${API_URL}/property/suggestions/${city ?? ""}?query=${query}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+      },
+      signal: controller.signal,
     });
-    return response.hits;
+
+    if (!response.ok) {
+      const errorMessage =
+        "Checked that you typed the address correctly, try using our site to find something specific";
+      throw new Error(errorMessage);
+    }
+
+    const jsonData = await response.json();
+    return jsonData.data;
   } catch (error) {
     if (error.name !== "AbortError") {
       const errorMessage = error.message || "Failed to search city data.";
@@ -242,38 +275,6 @@ async function fetchSearchSuggestions(city, query) {
     return [];
   }
 }
-// const controller = getAbortController("fetchSearchSuggestions");
-// try {
-//   const url = `${API_URL}/property/suggestions/${city ?? ""}?query=${query}`;
-
-//   const response = await fetch(url, {
-//     method: "GET",
-//     headers: {
-//       "ngrok-skip-browser-warning": "69420",
-//     },
-//     signal: controller.signal,
-//   });
-
-//   if (!response.ok) {
-//     const errorMessage =
-//       "Checked that you typed the address correctly, try using our site to find something specific";
-//     throw new Error(errorMessage);
-//   }
-
-//   const jsonData = await response.json();
-//   return jsonData.data;
-// } catch (error) {
-//   if (error.name !== "AbortError") {
-//     const errorMessage = error.message || "Failed to search city data.";
-//     console.error("Error searching city data:", errorMessage);
-//     toast.error(errorMessage, {
-//       position: "top-center",
-//       autoClose: 5000,
-//     });
-//     throw error;
-//   }
-//   return [];
-// }
 
 export {
   fetchFeaturedProperties,
