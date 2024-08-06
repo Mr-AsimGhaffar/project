@@ -26,7 +26,7 @@ import { FaBath, FaBed } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { BiSolidDirections } from "react-icons/bi";
 import { DatePickerWithRange } from "../components/ui/DateRangePicker";
-import { Button } from "../components/ui/button";
+// import { Button } from "../components/ui/button";
 import { formatTimeNow } from "../utlils/formatTimeNow";
 import { squareFeetToMarla } from "../utlils/squareFeetToMarla";
 import { toast } from "react-toastify";
@@ -38,7 +38,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     simpleContext.appState.searchTerm
   );
   const [sortOrder, setSortOrder] = useState("ASC");
-  const [sortBy, setSortBy] = useState("id");
+  const [sortBy, setSortBy] = useState("price");
+  const [sortByDate, setSortByDate] = useState("added");
+  const [sortOrderDate, setSortOrderDate] = useState("ASC");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [startDate, setStartDate] = useState(null);
@@ -304,15 +306,66 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   };
 
-  const handleSortChange = (sort_by, sort_order) => {
-    setSortBy(sort_by);
-    setSortOrder(sort_order);
-    handleSearch(sort_by, sort_order);
+  const handleSortChange = (newSortBy) => {
+    let newSortOrder = sortOrder;
+    let newSortOrderDate = sortOrderDate;
+    let newSortByValue = sortBy;
+    let newSortByDateValue = sortByDate;
+
+    if (newSortBy === "price") {
+      if (sortBy === "price") {
+        if (sortOrder === "ASC") {
+          newSortOrder = "DESC";
+        } else if (sortOrder === "DESC") {
+          newSortOrder = null;
+          newSortByValue = null;
+        } else {
+          newSortOrder = "ASC";
+        }
+      } else {
+        newSortByValue = "price";
+        newSortOrder = "ASC";
+      }
+    } else if (newSortBy === "added") {
+      if (sortByDate === "added") {
+        if (sortOrderDate === "ASC") {
+          newSortOrderDate = "DESC";
+        } else if (sortOrderDate === "DESC") {
+          newSortOrderDate = null;
+          newSortByDateValue = null;
+        } else {
+          newSortOrderDate = "ASC";
+        }
+      } else {
+        newSortByDateValue = "added";
+        newSortOrderDate = "ASC";
+      }
+    }
+
+    // Determine the sort and order strings to pass to handleSearch
+    const sort = [];
+    const order = [];
+
+    if (newSortByValue) {
+      sort.push(newSortByValue);
+      order.push(newSortOrder);
+    }
+    if (newSortByDateValue) {
+      sort.push(newSortByDateValue);
+      order.push(newSortOrderDate);
+    }
+
+    setSortBy(newSortByValue);
+    setSortOrder(newSortOrder);
+    setSortByDate(newSortByDateValue);
+    setSortOrderDate(newSortOrderDate);
+
+    handleSearch(sort.join(","), order.join(","));
   };
 
-  const handleDateSortChange = (sortOrder) => {
-    handleSortChange("added", sortOrder);
-  };
+  // const handleDateSortChange = (sortOrder) => {
+  //   handleSortChange("added", sortOrder);
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -470,9 +523,15 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
 
         <div className="flex justify-end mt-4 gap-2">
           <div>
-            <HeaderFilter onSortChange={handleSortChange} />
+            <HeaderFilter
+              onSortChange={handleSortChange}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              sortByDate={sortByDate}
+              sortOrderDate={sortOrderDate}
+            />
           </div>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <Button
               variant="outline"
               className={`px-4 py-2 rounded-3xl border-2 ${
@@ -497,7 +556,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             >
               Newest Date
             </Button>
-          </div>
+          </div> */}
         </div>
       </form>
       {/* <div className="flex justify-left gap-6">
@@ -541,7 +600,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                   <img
                     src={item.cover_photo_url}
                     alt="photo"
-                    className="w-full h-52 object-fit rounded-t-md"
+                    className="w-full h-52 rounded-t-md"
                   />
                 ) : (
                   <img

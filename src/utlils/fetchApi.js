@@ -108,7 +108,7 @@ async function searchCityData(
   city,
   queries = [],
   page_number = 1,
-  sort_by = "id",
+  sort_by = "price",
   sort_order = "ASC",
   filters = {},
   propertyCategory = "for_sale",
@@ -122,7 +122,9 @@ async function searchCityData(
     const queryString = queries.map((query) => `${query}`).join(",");
     const url = `${API_URL}/property/search/${
       city ?? ""
-    }?location_ids=${queryString}&page_size=12&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
+    }?location_ids=${queryString}&page_size=12&page_number=${page_number}&sort_by=${
+      sort_by ?? ""
+    }&sort_order=${sort_order ?? ""}&property_type=${property_type
       .toLowerCase()
       .replace(" ", "_")}&area_min=${area_min ?? ""}&area_max=${
       area_max ?? ""

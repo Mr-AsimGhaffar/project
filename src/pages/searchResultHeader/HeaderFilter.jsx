@@ -1,50 +1,57 @@
 import { Button } from "@/components/ui/button";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { BsArrowUp } from "react-icons/bs";
+import { BsArrowDown } from "react-icons/bs";
 
-const HeaderFilter = ({ onSortChange }) => {
-  const [sortOrder, setSortOrder] = useState(null);
-
-  const handleSortChange = (sortBy, order) => {
-    onSortChange(sortBy, order);
-    setSortOrder(order);
-  };
+const HeaderFilter = ({
+  onSortChange,
+  sortBy,
+  sortOrder,
+  sortByDate,
+  sortOrderDate,
+}) => {
   return (
-    <div className="flex gap-2">
-      <div>
-        <Button
-          variant="outline"
-          className={`flex justify-between items-center rounded-3xl border-2 ${
-            sortOrder === "ASC" ? "bg-gray-800 text-white" : ""
-          }`}
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            handleSortChange("price", "ASC");
-          }}
-        >
-          Prices (Low to High)
-        </Button>
-      </div>
-      <div>
-        <Button
-          variant="outline"
-          className={`flex justify-between items-center rounded-3xl border-2 ${
-            sortOrder === "DESC" ? "bg-gray-800 text-white" : ""
-          }`}
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            handleSortChange("price", "DESC");
-          }}
-        >
-          Prices (High to Low)
-        </Button>
-      </div>
+    <div className="flex justify-end space-x-4">
+      <Button
+        onClick={(e) => {
+          e?.preventDefault();
+          onSortChange("price");
+        }}
+        className={`flex items-center ${sortBy === "price" ? "font-bold" : ""}`}
+      >
+        Sort by Price
+        {sortBy === "price" && sortOrder === "ASC" && (
+          <BsArrowUp className="ml-1" />
+        )}
+        {sortBy === "price" && sortOrder === "DESC" && (
+          <BsArrowDown className="ml-1" />
+        )}
+      </Button>
+      <Button
+        onClick={(e) => {
+          e?.preventDefault();
+          onSortChange("added");
+        }}
+        className={`flex items-center ${
+          sortByDate === "added" ? "font-bold" : ""
+        }`}
+      >
+        Sort by Date
+        {sortByDate === "added" && sortOrderDate === "ASC" && (
+          <BsArrowUp className="ml-1" />
+        )}
+        {sortByDate === "added" && sortOrderDate === "DESC" && (
+          <BsArrowDown className="ml-1" />
+        )}
+      </Button>
     </div>
   );
 };
 HeaderFilter.propTypes = {
   onSortChange: PropTypes.func.isRequired,
+  sortBy: PropTypes.func.isRequired,
+  sortOrder: PropTypes.func.isRequired,
+  sortByDate: PropTypes.func.isRequired,
+  sortOrderDate: PropTypes.func.isRequired,
 };
 export default HeaderFilter;
