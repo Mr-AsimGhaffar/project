@@ -72,19 +72,19 @@ export default function PriceIndexGraph({ areaTrendData }) {
               <p>
                 {formatPrice(
                   areaTrendData.index.change_percentage_by_price.six_months_ago
-                    .avg_price
+                    ?.avg_price
                 )}
               </p>
               <p>
                 {formatPrice(
                   areaTrendData.index.change_percentage_by_price.one_year_ago
-                    .avg_price
+                    ?.avg_price
                 )}
               </p>
               <p>
                 {formatPrice(
                   areaTrendData.index.change_percentage_by_price.two_year_ago
-                    .avg_price
+                    ?.avg_price
                 )}
               </p>
             </div>

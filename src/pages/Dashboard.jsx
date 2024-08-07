@@ -18,7 +18,6 @@ const Dashboard = ({
         conversionFunction={conversionFunction}
         propertyCategory={propertyCategory}
       />
-      <br />
       <FeaturedProperty
         conversionFunction={conversionFunction}
         propertyCategory={propertyCategory}

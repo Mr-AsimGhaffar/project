@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import { priceConversion } from "./utlils/priceConversion";
 import { countConversion } from "./utlils/countConversion";
 import { ThemeProvider } from "./components/theme/themeProvider";
+import PropertyRecommendations from "./pages/propertyRecommendations/PropertyRecommendations";
 
 function App() {
   const [appState, setAppState] = useState({
@@ -106,6 +107,15 @@ function App() {
                       <CardsDetail
                         conversionFunction={conversionFunction}
                         propertyCategory={propertyCategory}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/propertyRecommendations"
+                    element={
+                      <PropertyRecommendations
+                        propertyCategory={propertyCategory}
+                        conversionFunction={conversionFunction}
                       />
                     }
                   />

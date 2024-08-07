@@ -74,11 +74,13 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         </div>
         <div className="relative w-[100%]">
           {property.cover_photo_url ? (
-            <img
-              src={property.cover_photo_url}
-              alt="property"
-              className="w-full h-96 object-fit rounded-t-md"
-            />
+            <div>
+              <img
+                src={property.cover_photo_url}
+                alt="property"
+                className="w-full h-[40rem] object-fit rounded-t-md"
+              />
+            </div>
           ) : (
             <img
               src="/img/NoImage.png"
