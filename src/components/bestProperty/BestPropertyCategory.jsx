@@ -22,6 +22,7 @@ const BestPropertyCategory = ({ setpropertyType }) => {
   const handlePropertyTypeChange = (propertyType) => {
     setPropertyState(propertyType);
     setpropertyType(propertyType);
+    setSelectedSubProperty(null);
   };
 
   const getPropertyTypeStyle = (type) =>
