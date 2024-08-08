@@ -108,7 +108,7 @@ async function searchCityData(
   city,
   queries = [],
   page_number = 1,
-  sort_by = "id",
+  sort_by = "price",
   sort_order = "ASC",
   filters = {},
   propertyCategory = "for_sale",
@@ -116,13 +116,16 @@ async function searchCityData(
   end_date
 ) {
   const controller = getAbortController("searchCityData");
+  const page_size = 12;
   try {
     const { price_min, price_max, area_min, area_max, bedrooms } = filters;
     const property_type = filters.property_type ?? "";
     const queryString = queries.map((query) => `${query}`).join(",");
     const url = `${API_URL}/property/search/${
       city ?? ""
-    }?location_ids=${queryString}&page_size=12&page_number=${page_number}&sort_by=${sort_by}&sort_order=${sort_order}&property_type=${property_type
+    }?location_ids=${queryString}&page_size=${page_size}&page_number=${page_number}&sort_by=${
+      sort_by ?? ""
+    }&sort_order=${sort_order ?? ""}&property_type=${property_type
       .toLowerCase()
       .replace(" ", "_")}&area_min=${area_min ?? ""}&area_max=${
       area_max ?? ""
@@ -276,6 +279,54 @@ async function fetchSearchSuggestions(city, query) {
   }
 }
 
+async function fetchPropertyRecommendations(
+  city,
+  propertyCategory = "for_sale",
+  area_min,
+  area_max,
+  page_number = 1,
+  property_type
+) {
+  const controller = getAbortController("fetchPropertyRecommendations");
+  try {
+    const formattedPropertyType =
+      typeof property_type === "string"
+        ? property_type.toLowerCase().replace(" ", "_")
+        : "";
+    const response = await fetch(
+      `${API_URL}/property/best/${city}?purpose=${propertyCategory}&area_min=${
+        area_min ?? ""
+      }&area_max=${
+        area_max ?? ""
+      }&page_number=${page_number}&property_type=${formattedPropertyType}`,
+      {
+        method: "get",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+        signal: controller.signal,
+      }
+    );
+    if (!response.ok) {
+      const errorMessage =
+        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
+      throw new Error(errorMessage);
+    }
+    const jsonData = await response.json();
+    return jsonData.data;
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      const errorMessage = error.message || "Failed to search city data.";
+      console.error("Error searching city data:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 5000,
+      });
+      throw error;
+    }
+  }
+}
+
 export {
   fetchFeaturedProperties,
   fetchSimilarProperties,
@@ -283,4 +334,5 @@ export {
   searchCityData,
   fetchAvailableCities,
   fetchSearchSuggestions,
+  fetchPropertyRecommendations,
 };

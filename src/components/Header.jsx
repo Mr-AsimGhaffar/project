@@ -251,7 +251,6 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
     setSearchTerm("");
     setSuggestions([]);
   };
-  console.log(propertyCategory);
   return (
     <div className="relative">
       <div>

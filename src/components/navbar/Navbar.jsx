@@ -9,7 +9,7 @@ import {
 } from "../ui/dropdown-menu";
 import { useTheme } from "../theme/themeProvider";
 import Spinner from "../spinner/Spinner";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = ({
   handleDashboardClick,
@@ -18,6 +18,8 @@ const Navbar = ({
   propertyCategory,
 }) => {
   const [propertyView, setPropertyView] = useState("for_sale");
+  const targetPath = "/propertyRecommendations";
+  const location = useLocation();
   const [conversionType, setConversionTypeState] = useState("price");
   const [isLoading, setIsLoading] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,12 +51,15 @@ const Navbar = ({
     setConversionTypeState(newConversionType);
     setConversionType(newConversionType);
   };
+
+  const isActive = location.pathname === targetPath;
+
   return (
     <div>
       <nav>
         <div className="px-4 md:px-44">
           <div className="flex items-center justify-between h-16">
-            <div className="hidden lg:flex items-center gap-4 opacity-80">
+            <div className="w-[20%] hidden lg:flex items-center gap-4 opacity-80">
               <Button
                 variant="primary"
                 className={`rounded-md text-base font-semibold font-montserrat ${
@@ -73,17 +78,24 @@ const Navbar = ({
               >
                 Rent
               </Button>
-              {/* <Button
-                variant="primary"
-                className={`rounded-md text-base font-semibold font-montserrat ${
-                  propertyView === "For Mortgage" ? "text-[#0071BC]" : ""
-                }`}
-              >
-                Mortgage
-              </Button> */}
+              <Link to="/propertyRecommendations">
+                <Button
+                  variant="primary"
+                  className={`rounded-md text-base font-semibold font-montserrat ${
+                    isActive ? "text-[#0071BC]" : ""
+                  }`}
+                  disabled={isActive}
+                >
+                  Best Property
+                </Button>
+              </Link>
             </div>
-            <Link to="/dashboard" onClick={handleDashboardClick}>
-              <div className="flex items-center gap-1">
+            <Link
+              to="/dashboard"
+              onClick={handleDashboardClick}
+              className="w-[60%]"
+            >
+              <div className="flex justify-center items-center gap-1">
                 <div>
                   <img
                     src="img/website_logo.svg"
@@ -99,7 +111,7 @@ const Navbar = ({
               </div>
             </Link>
 
-            <div className="hidden lg:flex items-center gap-4 opacity-80 ">
+            <div className="w-[20%] hidden lg:flex items-center gap-4 opacity-80 justify-end">
               {/* <div>
                 <Button
                   variant="primary"
