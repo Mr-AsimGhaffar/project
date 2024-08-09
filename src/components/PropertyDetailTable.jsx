@@ -8,6 +8,7 @@ import {
 } from "./ui/select";
 import {
   fetchAvailableCities,
+  fetchPropertyDetails,
   fetchPropertyRecommendations,
 } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
@@ -17,10 +18,12 @@ import BestPropertyArea from "./bestProperty/BestPropertyArea";
 import BestPropertyCategory from "./bestProperty/BestPropertyCategory";
 import { marlaToSquareFeet } from "../utlils/marlaToSquareFeet";
 import { Link } from "react-router-dom";
+import BestPropertyMap from "./bestProperty/BestPropertyMap";
 
 const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
   const [data, setData] = useState([]);
   const [city, setCity] = useState("islamabad");
+  const [mapData, setMapData] = useState([]);
   const [propertyRecommendationsData, setPropertyRecommendationData] = useState(
     []
   );
@@ -30,6 +33,20 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProperties, setTotalProperties] = useState(0);
   const [propertyType, setpropertyType] = useState([]);
+
+  const fetchDataMap = useCallback(async () => {
+    try {
+      const fetchedData = await Promise.all(
+        propertyRecommendationsData.map(async (property) => {
+          const propertyDetails = await fetchPropertyDetails(property.id);
+          return propertyDetails[0];
+        })
+      );
+      setMapData(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [propertyRecommendationsData]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -42,7 +59,8 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    fetchDataMap();
+  }, [fetchData, fetchDataMap]);
 
   useEffect(() => {
     async function loadRecommendationsData() {
@@ -103,7 +121,6 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
       }
     }
   }
-
   return (
     <div>
       <div className="py-20">
@@ -294,6 +311,12 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
           </div>
         </div>
       </section>
+      <div>
+        <BestPropertyMap
+          locationData={mapData.map((item) => item.area_trends || [])}
+          loading={loading}
+        />
+      </div>
     </div>
   );
 };
