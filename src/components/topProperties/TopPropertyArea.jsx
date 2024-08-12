@@ -62,11 +62,16 @@ const TopPropertyArea = ({ conversionFunction }) => {
             >
               <Link to={`/property/${item.id}`} state={{ id: item.id }}>
                 {item.cover_photo_url ? (
-                  <img
-                    src={item.cover_photo_url}
-                    alt="photo"
-                    className="w-full h-52 object-cover rounded-t-md"
-                  />
+                  <div className="relative">
+                    <img
+                      src={item.cover_photo_url}
+                      alt="photo"
+                      className="w-full h-52 object-cover rounded-t-md"
+                    />
+                    <div className="absolute top-2 left-2 p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                      {item.type.replace("_", " ")}
+                    </div>
+                  </div>
                 ) : (
                   <img
                     src="/img/NoImage.png"
@@ -81,14 +86,11 @@ const TopPropertyArea = ({ conversionFunction }) => {
                         {item.header}
                       </CardTitle>
                     </div>
-                    <div className="flex justify-between items-center py-2">
+                    <div className="py-2">
                       <div>
                         <CardDescription>
                           Added: {formatTimeNow(item.added)}
                         </CardDescription>
-                      </div>
-                      <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
-                        {item.type.replace("_", " ")}
                       </div>
                     </div>
                     <div className="py-2">
