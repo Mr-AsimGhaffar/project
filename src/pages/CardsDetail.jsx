@@ -4,7 +4,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState, useContext, useEffect, useRef } from "react";
+import {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { CiSearch } from "react-icons/ci";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
@@ -20,7 +27,11 @@ import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "../utlils/formatPrice";
 // import Recommended from "../components/cardsDetails/Recommended";
-import { fetchSearchSuggestions, searchCityData } from "../utlils/fetchApi";
+import {
+  fetchPropertyRecommendations,
+  fetchSearchSuggestions,
+  searchCityData,
+} from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { FaBath, FaBed } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
@@ -30,6 +41,8 @@ import { DatePickerWithRange } from "../components/ui/DateRangePicker";
 import { formatTimeNow } from "../utlils/formatTimeNow";
 import { squareFeetToMarla } from "../utlils/squareFeetToMarla";
 import { toast } from "react-toastify";
+import TopPropertyArea from "../components/topProperties/TopPropertyArea";
+import displayFirstName from "../utlils/displayFirstName";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -52,8 +65,52 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     cardData,
     loading,
     pageData: { total_count: totalCount },
+    propertyState,
   } = simpleContext.appState;
+
   const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
+
+  const selectedCity = simpleContext.appState.selectedCity;
+  const selectedSuggestions = useMemo(
+    () =>
+      simpleContext.appState.selectedSuggestions.map(
+        (suggestion) => suggestion.id
+      ),
+    [simpleContext.appState.selectedSuggestions]
+  );
+
+  const loadRecommendationsData = useCallback(async () => {
+    try {
+      const data = await fetchPropertyRecommendations({
+        city: selectedCity,
+        queries: selectedSuggestions,
+        propertyCategory,
+        property_type:
+          propertyState.selectedSubProperty ||
+          propertyState.selectedPropertyType,
+      });
+      if (data == null) {
+        return;
+      }
+
+      // Only update the state if the data is different
+      if (
+        JSON.stringify(data.properties) !==
+        JSON.stringify(simpleContext.appState.topBestProperty)
+      ) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          topBestProperty: data.properties,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [selectedCity, selectedSuggestions, propertyCategory, propertyState]);
+
+  useEffect(() => {
+    loadRecommendationsData();
+  }, [loadRecommendationsData]);
 
   const fetchCityData = async (
     city,
@@ -386,7 +443,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   };
 
   return (
-    <main className="px-44">
+    <main className="px-4 md:px-20 lg:px-44 py-5">
       <div>
         <div className="text-lg font-bold">
           <span>{formatPrice(totalCount)} Results</span>{" "}
@@ -570,6 +627,17 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           <Nearest />
         </div>
       </div> */}
+
+      <div>
+        <p className="font-montserrat text-2xl font-bold">
+          All Properties in{" "}
+          <span className="text-[#0071BC] font-semibold">
+            {simpleContext.appState.selectedSuggestions
+              .map((suggestion) => displayFirstName(suggestion.name))
+              .join(", ") || simpleContext.appState.selectedCity}
+          </span>
+        </p>
+      </div>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-6 py-5">
         {loading ? (
           Array.from({ length: 12 }).map((_, index) => (
@@ -597,11 +665,16 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             >
               <Link to={`/property/${item.id}`} state={{ id: item.id }}>
                 {item.cover_photo_url ? (
-                  <img
-                    src={item.cover_photo_url}
-                    alt="photo"
-                    className="w-full h-52 rounded-t-md"
-                  />
+                  <div className="relative">
+                    <img
+                      src={item.cover_photo_url}
+                      alt="photo"
+                      className="w-full h-52 object-cover rounded-t-md"
+                    />
+                    <div className="absolute top-2 left-2 p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                      {item.type.replace("_", " ")}
+                    </div>
+                  </div>
                 ) : (
                   <img
                     src="/img/NoImage.png"
@@ -615,16 +688,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                       <CardTitle className="text-base font-semibold">
                         {item.header}
                       </CardTitle>
-                      {/* <LuDollarSign /> */}
                     </div>
-                    <div className="flex justify-between items-center py-2">
+                    <div className="py-2">
                       <div>
                         <CardDescription>
                           Added: {formatTimeNow(item.added)}
                         </CardDescription>
-                      </div>
-                      <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
-                        {item.type.replace("_", " ")}
                       </div>
                     </div>
                     <div className="py-2">
@@ -682,12 +751,16 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           ))
         )}
       </div>
-      <div className="mt-2">
+
+      <div className="py-4">
         <Paging
           currentPage={simpleContext.appState.currentPage}
           totalPages={simpleContext.appState.totalPages}
           onPageChange={handlePageChange}
         />
+      </div>
+      <div>
+        <TopPropertyArea conversionFunction={conversionFunction} />
       </div>
     </main>
   );

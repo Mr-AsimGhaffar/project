@@ -4,19 +4,27 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import PriceIndexGraph from "./PriceIndexGraph";
 import PopularityTrendGraph from "./PopularityTrendGraph";
 import SimilarProperty from "./SimilarProperty";
 import LocationMap from "./LocationMap";
-import SkeletonCard from "../../components/skeleton/Skeleton";
-import { fetchPropertyDetails } from "../../utlils/fetchApi";
+// import SkeletonCard from "../../components/skeleton/Skeleton";
+import {
+  fetchPropertyDetails,
+  fetchPropertyRecommendations,
+} from "../../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { formatTimeNow } from "../../utlils/formatTimeNow";
 import { squareFeetToMarla } from "../../utlils/squareFeetToMarla";
+import TopPropertyPropertyDetail from "../../components/topProperties/TopPropertyPropertyDetail";
+import { appContext } from "../../contexts/Context";
+import Spinner from "../../components/spinner/Spinner";
 
 const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
+  const simpleContext = useContext(appContext);
+
   const [activeButton, setActiveButton] = useState("Overview");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showAllRows, setShowAllRows] = useState(false);
@@ -29,13 +37,52 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const priceIndexRef = useRef(null);
   const trendsRef = useRef(null);
   const [data, setData] = useState([]);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] =
+    useState(false);
+
+  const loadRecommendationsData = useCallback(async () => {
+    try {
+      if (data.length === 0) {
+        return;
+      }
+      const property = data[0];
+
+      const response = await fetchPropertyRecommendations({
+        queries: [property.location_id],
+        propertyCategory,
+      });
+      if (response == null) {
+        return;
+      }
+
+      // Only update the state if the data is different
+      if (
+        JSON.stringify(response.properties) !==
+        JSON.stringify(simpleContext.appState.topBestProperty)
+      ) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          topBestProperty: response.properties,
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [data, simpleContext.appState.selectedSuggestions, propertyCategory]);
+
+  useEffect(() => {
+    loadRecommendationsData();
+  }, [loadRecommendationsData, data]);
 
   const fetchData = useCallback(async () => {
     try {
+      setIsLoadingRecommendations(true);
       const propertyDetails = await fetchPropertyDetails(id);
       setData(propertyDetails);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setIsLoadingRecommendations(false); // Set loading to false after the fetch
     }
   }, [id]);
   useEffect(() => {
@@ -43,8 +90,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   }, [fetchData, id]);
 
   const property = data[0];
-  if (data.length === 0) {
-    return <SkeletonCard />;
+
+  if (data.length === 0 || isLoadingRecommendations) {
+    return <Spinner />;
   }
 
   const scrollToSection = (ref, buttonName) => {
@@ -61,10 +109,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   }
 
   return (
-    <div className="px-44">
+    <div className="px-4 md:px-20 lg:px-44 py-5">
       {/* <h1>{property.header}</h1> */}
       <div>
-        <hr />
         <div>
           <p className="text-xl font-bold">
             {squareFeetToMarla(property.area)}, Brand New House For Sale in{" "}
@@ -114,7 +161,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           {property.area && (
             <div className="flex flex-row items-center gap-1">
               <BiSolidDirections />
-              <p>{property.area}</p>
+              <p>{squareFeetToMarla(property.area)}</p>
             </div>
           )}
         </div>
@@ -341,6 +388,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             propertyCategory={propertyCategory}
           />
         </div>
+      </div>
+      <div>
+        <TopPropertyPropertyDetail conversionFunction={conversionFunction} />
       </div>
     </div>
   );
