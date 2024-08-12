@@ -50,10 +50,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [searchTerm, setSearchTerm] = useState(
     simpleContext.appState.searchTerm
   );
-  const [sortOrder, setSortOrder] = useState("ASC");
-  const [sortBy, setSortBy] = useState("price");
+  const [sortOrder, setSortOrder] = useState(null);
+  const [sortBy, setSortBy] = useState(null);
   const [sortByDate, setSortByDate] = useState("added");
-  const [sortOrderDate, setSortOrderDate] = useState("ASC");
+  const [sortOrderDate, setSortOrderDate] = useState("DESC");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [startDate, setStartDate] = useState(null);
@@ -419,6 +419,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
 
     handleSearch(sort.join(","), order.join(","));
   };
+  useEffect(() => {
+    handleSearch(sortByDate, sortOrderDate);
+  }, []);
 
   // const handleDateSortChange = (sortOrder) => {
   //   handleSortChange("added", sortOrder);
