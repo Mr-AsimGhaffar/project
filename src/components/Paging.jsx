@@ -78,16 +78,15 @@ const Paging = ({ onPageChange }) => {
     onPageChange(1);
   };
   return (
-    <div className="flex justify-center mt-4">
-      <Pagination className="flex flex-row items-center space-x-1 text-sm">
-        <PaginationContent className="flex flex-col sm:flex-row items-center space-x-1">
+    <div>
+      <Pagination>
+        <PaginationContent className="flex flex-col sm:flex-row">
           <PaginationItem>
             <PaginationPrevious
               isActive
               href="#"
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-1 sm:p-2 hover:bg-gray-100 rounded"
             />
           </PaginationItem>
           {showGoToFirst && (
@@ -96,7 +95,7 @@ const Paging = ({ onPageChange }) => {
                 <PaginationItem>
                   <button
                     onClick={goToFirstPage}
-                    className="p-1 sm:p-2 hover:bg-gray-100 rounded"
+                    className="p-2 hover:bg-gray-100 rounded active"
                     disabled={currentPage === 1}
                   >
                     1
@@ -104,7 +103,7 @@ const Paging = ({ onPageChange }) => {
                 </PaginationItem>
               </div>
               <div>
-                <PaginationEllipsis className="hidden sm:block" />
+                <PaginationEllipsis />
               </div>
             </div>
           )}
@@ -115,7 +114,6 @@ const Paging = ({ onPageChange }) => {
               href="#"
               onClick={() => onPageChange(Number(currentPage) + 1)}
               disabled={currentPage === totalPages}
-              className="p-1 sm:p-2 hover:bg-gray-100 rounded"
             />
           </PaginationItem>
         </PaginationContent>
