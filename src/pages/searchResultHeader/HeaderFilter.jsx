@@ -11,7 +11,7 @@ const HeaderFilter = ({
   sortOrderDate,
 }) => {
   return (
-    <div className="flex justify-end space-x-4">
+    <div className="flex flex-col md:flex-row justify-end md:space-x-4 space-y-2 md:space-y-0 mb-2">
       <Button
         onClick={(e) => {
           e?.preventDefault();
