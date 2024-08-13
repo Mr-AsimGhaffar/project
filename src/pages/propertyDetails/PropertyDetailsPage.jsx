@@ -321,7 +321,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               {property.agency && (
                 <div className="text-center">
                   <p>{property.agency}</p>
-                  <Button onClick={openAgencyLink}>Agency Profile</Button>
+                  <Button className="py-2" onClick={openAgencyLink}>
+                    Agency Profile
+                  </Button>
                 </div>
               )}
             </div>
