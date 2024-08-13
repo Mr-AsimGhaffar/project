@@ -33,6 +33,13 @@ const Navbar = ({
     setTheme(newTheme);
     setIsBlackTheme(!isBlackTheme);
   };
+  const handleDropdownClick = () => {
+    // Toggle the theme when the dropdown is clicked
+    handleThemeToggle();
+  };
+  const handleConversionTypeClick = () => {
+    handleConversionType();
+  };
 
   const fetchData = () => {
     setIsLoading(true);
@@ -56,7 +63,7 @@ const Navbar = ({
 
   return (
     <div>
-      <nav>
+      <nav className="dark:bg-gray-800 shadow-md">
         <div className="px-4 md:px-44">
           <div className="flex items-center justify-between h-16">
             <div className="w-[20%] hidden lg:flex items-center gap-4 opacity-80">
@@ -147,7 +154,10 @@ const Navbar = ({
                     align="end"
                     className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
                   >
-                    <DropdownMenuItem className="flex items-center justify-between">
+                    <DropdownMenuItem
+                      onClick={handleDropdownClick}
+                      className="flex items-center justify-between"
+                    >
                       <div>{isBlackTheme ? "Light Theme" : "Black Theme"}</div>
                       <div>
                         <input
@@ -158,7 +168,10 @@ const Navbar = ({
                         />
                       </div>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center justify-between">
+                    <DropdownMenuItem
+                      onClick={handleConversionTypeClick}
+                      className="flex items-center justify-between"
+                    >
                       <div>
                         {conversionType === "count"
                           ? "Currency Value in Million"

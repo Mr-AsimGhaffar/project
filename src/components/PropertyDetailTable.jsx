@@ -66,14 +66,14 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
     async function loadRecommendationsData() {
       try {
         setLoading(true);
-        const data = await fetchPropertyRecommendations(
+        const data = await fetchPropertyRecommendations({
           city,
           propertyCategory,
-          marlaToSquareFeet(bestAreaMin) || "",
-          marlaToSquareFeet(bestAreaMax) || "",
-          currentPage,
-          propertyType
-        );
+          area_min: marlaToSquareFeet(bestAreaMin) || "",
+          area_max: marlaToSquareFeet(bestAreaMax) || "",
+          page_number: currentPage,
+          property_type: propertyType,
+        });
         if (data == null) {
           return;
         }

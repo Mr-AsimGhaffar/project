@@ -279,22 +279,24 @@ async function fetchSearchSuggestions(city, query) {
   }
 }
 
-async function fetchPropertyRecommendations(
-  city,
+async function fetchPropertyRecommendations({
+  city = "",
+  queries = [],
   propertyCategory = "for_sale",
+  property_type,
   area_min,
   area_max,
   page_number = 1,
-  property_type
-) {
+}) {
   const controller = getAbortController("fetchPropertyRecommendations");
   try {
     const formattedPropertyType =
       typeof property_type === "string"
         ? property_type.toLowerCase().replace(" ", "_")
         : "";
+    const queryString = queries.map((query) => `${query}`).join(",");
     const response = await fetch(
-      `${API_URL}/property/best/${city}?purpose=${propertyCategory}&area_min=${
+      `${API_URL}/property/best/${city}?location_ids=${queryString}&purpose=${propertyCategory}&area_min=${
         area_min ?? ""
       }&area_max=${
         area_max ?? ""

@@ -80,7 +80,7 @@ const Paging = ({ onPageChange }) => {
   return (
     <div>
       <Pagination>
-        <PaginationContent>
+        <PaginationContent className="flex flex-col sm:flex-row">
           <PaginationItem>
             <PaginationPrevious
               isActive

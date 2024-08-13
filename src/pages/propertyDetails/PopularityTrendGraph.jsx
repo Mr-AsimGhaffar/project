@@ -41,8 +41,8 @@ export default function PopularityTrendGraph({
         </p>
       </div>
       <div>
-        <div>
-          <div className="p-4 gap-2 flex justify-end">
+        <div className="flex flex-col md:flex-row mb-4">
+          <div className="flex flex-col lg:flex-row justify-start md:justify-end gap-2 mb-4 md:mb-0">
             {months.map((item) => (
               <Button
                 key={item}
@@ -55,20 +55,20 @@ export default function PopularityTrendGraph({
             ))}
           </div>
         </div>
-        <div className="p-5 flex justify-between gap-20">
-          <div className="w[10%] text-center flex flex-col gap-2">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-1/4 text-center flex flex-col gap-2 mb-4 md:mb-0">
             <p>Rank</p>
             {data.map((item, index) => (
               <p key={index}>{index + 1}</p>
             ))}
           </div>
-          <div className="w-[30%] flex flex-col gap-2">
+          <div className="w-full md:w-1/4 flex flex-col gap-2 mb-4 md:mb-0">
             <p>LOCALITY</p>
             {data.map((item) => (
               <p key={item.id}>{item.title}</p>
             ))}
           </div>
-          <div className="w-[50%]">
+          <div className="w-full md:w-1/2">
             <p>PERCENTAGE OF TOTAL SEARCHES (%)</p>
             <div className="text-black">
               <ResponsiveContainer width="100%" height={chartHeight}>
@@ -95,7 +95,7 @@ export default function PopularityTrendGraph({
               </ResponsiveContainer>
             </div>
           </div>
-          <div className="w-[20%] text-center flex flex-col gap-2">
+          <div className="w-full md:w-1/4 text-center flex flex-col gap-2">
             <p>PERFORMANCE</p>
             {data.map((item) => (
               <p key={item.id}>
