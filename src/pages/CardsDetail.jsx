@@ -43,6 +43,7 @@ import { squareFeetToMarla } from "../utlils/squareFeetToMarla";
 import { toast } from "react-toastify";
 import TopPropertyArea from "../components/topProperties/TopPropertyArea";
 import displayFirstName from "../utlils/displayFirstName";
+import HeaderOwnerDetail from "./searchResultHeader/HeaderOwnerDetail";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -110,7 +111,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
 
   useEffect(() => {
     loadRecommendationsData();
-  }, [loadRecommendationsData]);
+  }, [selectedSuggestions, propertyCategory, propertyState]);
 
   const fetchCityData = async (
     city,
@@ -142,6 +143,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         propertyState,
         selectedAreaMin,
         selectedAreaMax,
+        is_agency,
       } = simpleContext.appState;
 
       const filters = {
@@ -153,6 +155,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           propertyState.selectedPropertyType,
         area_max: selectedAreaMax || "",
         area_min: selectedAreaMin || "",
+        is_posted_by_agency: is_agency,
       };
 
       const data = await searchCityData(
@@ -236,6 +239,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           area_min: simpleContext.appState.selectedAreaMin,
           area_max: simpleContext.appState.selectedAreaMax,
           bedrooms: simpleContext.appState.selectBeds.trim(),
+          is_posted_by_agency: simpleContext.appState.is_agency,
           property_type:
             simpleContext.appState.propertyState.selectedSubProperty ||
             simpleContext.appState.propertyState.selectedPropertyType,
@@ -283,6 +287,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     endDate,
     simpleContext.appState.selectedSuggestions,
     propertyCategory,
+    simpleContext.appState.is_agency,
   ]);
 
   const handleSubmit = (e) => {
@@ -419,9 +424,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
 
     handleSearch(sort.join(","), order.join(","));
   };
-  useEffect(() => {
-    handleSearch(sortByDate, sortOrderDate);
-  }, []);
+  // useEffect(() => {
+  //   handleSearch(sortByDate, sortOrderDate);
+  // }, []);
 
   // const handleDateSortChange = (sortOrder) => {
   //   handleSortChange("added", sortOrder);
@@ -579,6 +584,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           <div>
             <HeaderArea />
           </div>
+          <div>
+            <HeaderOwnerDetail />
+          </div>
         </div>
 
         <div className="flex justify-end mt-4 gap-2">
@@ -674,8 +682,15 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                       alt="photo"
                       className="w-full h-52 object-cover rounded-t-md"
                     />
-                    <div className="absolute top-2 left-2 p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
-                      {item.type.replace("_", " ")}
+                    <div className="flex items-center absolute top-2 left-2 gap-2">
+                      <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                        {item.type.replace("_", " ")}
+                      </div>
+                      {item.agency && (
+                        <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                          <div>{item.agency}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (

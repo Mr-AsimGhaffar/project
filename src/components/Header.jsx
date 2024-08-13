@@ -97,6 +97,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         selectedAreaMax,
         selectBeds,
         propertyState,
+        is_agency,
       } = simpleContext.appState;
       const filters = {
         price_min: cleanValue(selectedAmountMin),
@@ -104,6 +105,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         area_min: selectedAreaMin || "",
         area_max: selectedAreaMax || "",
         bedrooms: selectBeds,
+        is_posted_by_agency: is_agency,
         property_type:
           propertyState.selectedSubProperty ||
           propertyState.selectedPropertyType,
@@ -115,8 +117,8 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
           (suggestion) => suggestion.id
         ),
         1,
-        "id",
-        "ASC",
+        "added",
+        "DESC",
         filters,
         propertyView || propertyCategory
       );

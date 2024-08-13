@@ -42,6 +42,7 @@ function App() {
     selectedSuggestions: [],
     selectedCity: "islamabad",
     topBestProperty: [],
+    is_agency: "",
   });
   const setSelectedCity = (city) => {
     setAppState((prevState) => ({
