@@ -118,7 +118,14 @@ async function searchCityData(
   const controller = getAbortController("searchCityData");
   const page_size = 12;
   try {
-    const { price_min, price_max, area_min, area_max, bedrooms } = filters;
+    const {
+      price_min,
+      price_max,
+      area_min,
+      area_max,
+      bedrooms,
+      is_posted_by_agency,
+    } = filters;
     const property_type = filters.property_type ?? "";
     const queryString = queries.map((query) => `${query}`).join(",");
     const url = `${API_URL}/property/search/${
@@ -131,9 +138,9 @@ async function searchCityData(
       area_max ?? ""
     }&price_min=${price_min ?? ""}&price_max=${price_max ?? ""}&bedrooms=${
       bedrooms ?? ""
-    }&purpose=${propertyCategory}&start_date=${start_date ?? ""}&end_date=${
-      end_date ?? ""
-    }`;
+    }&is_posted_by_agency=${is_posted_by_agency}&purpose=${propertyCategory}&start_date=${
+      start_date ?? ""
+    }&end_date=${end_date ?? ""}`;
 
     const response = await fetch(url, {
       method: "GET",
