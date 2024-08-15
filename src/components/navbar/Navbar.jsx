@@ -218,6 +218,19 @@ const Navbar = ({
                 Rent
               </Button>
               <div className="text-center">
+                <Link to="/propertyRecommendations">
+                  <Button
+                    variant="primary"
+                    className={`rounded-md text-base font-semibold font-montserrat ${
+                      isActive ? "text-[#0071BC]" : ""
+                    }`}
+                    disabled={isActive}
+                  >
+                    Best Property
+                  </Button>
+                </Link>
+              </div>
+              <div className="text-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild className="bg-white">
                     <Button variant="outline" size="icon">
