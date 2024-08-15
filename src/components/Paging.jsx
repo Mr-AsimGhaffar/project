@@ -17,6 +17,7 @@ const Paging = ({ onPageChange }) => {
   const { currentPage, totalPages } = appState;
   const [showGoToFirst, setShowGoToFirst] = useState(false);
   const [pages, setPages] = useState(undefined);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     setShowGoToFirst(currentPage > 5);
@@ -24,13 +25,29 @@ const Paging = ({ onPageChange }) => {
 
   useEffect(() => {
     renderPaginationLinks();
-  }, [currentPage, totalPages]);
+  }, [currentPage, totalPages, isSmallScreen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const renderPaginationLinks = () => {
-    let pages = [];
+    let startPage, endPage;
     const additionalPages = currentPage === 9 ? 4 : 0;
-    const startPage = Math.max(1, currentPage - 4);
-    const endPage = Math.min(startPage + 7 + additionalPages, totalPages);
+    if (isSmallScreen) {
+      // On small screens, start pagination after the 2nd page
+      startPage = Math.max(1, currentPage - 1);
+      endPage = Math.min(startPage + 1 + additionalPages, totalPages);
+    } else {
+      // On larger screens, standard pagination logic
+      startPage = Math.max(1, currentPage - 4);
+      endPage = Math.min(startPage + 7 + additionalPages, totalPages);
+    }
+    let pages = [];
 
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
@@ -80,7 +97,7 @@ const Paging = ({ onPageChange }) => {
   return (
     <div>
       <Pagination>
-        <PaginationContent className="flex flex-col sm:flex-row">
+        <PaginationContent className="">
           <PaginationItem>
             <PaginationPrevious
               isActive

@@ -329,7 +329,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           onOpenChange={emptySearchString}
                           onValueChange={handleSelectCity}
                         >
-                          <SelectTrigger className="rounded-none rounded-tl-lg rounded-bl-lg">
+                          <SelectTrigger className="rounded-none md:rounded-tl-lg md:rounded-bl-lg">
                             <SelectValue placeholder="Islamabad" />
                           </SelectTrigger>
                           <SelectContent>
@@ -450,10 +450,10 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                         </div>
                       </div>
 
-                      <div className="col-span-1 md:col-span-1">
+                      <div>
                         <Button
                           onClick={handleSearch}
-                          className="rounded-none flex items-center justify-center rounded-tr-lg rounded-br-lg bg-white text-black hover:bg-gray-100 md:w-full"
+                          className="w-full rounded-none flex items-center justify-center md:rounded-tr-lg md:rounded-br-lg bg-white text-black hover:bg-gray-100"
                         >
                           <CiSearch className="h-5 w-5 mr-2" />
                         </Button>
