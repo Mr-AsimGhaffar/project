@@ -19,6 +19,7 @@ import BestPropertyCategory from "./bestProperty/BestPropertyCategory";
 import { marlaToSquareFeet } from "../utlils/marlaToSquareFeet";
 import { Link } from "react-router-dom";
 import BestPropertyMap from "./bestProperty/BestPropertyMap";
+import BestLocationTree from "./bestProperty/BestLocationTree";
 
 const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
   const [data, setData] = useState([]);
@@ -128,38 +129,37 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
           Best Property In Town
         </h1>
       </div>
+      <div className="font-montserrat md:px-20 lg:px-44 py-2 flex flex-col md:flex-row gap-2">
+        <div className="w-[20%]">
+          <Select onValueChange={setCity}>
+            <SelectTrigger className="">
+              <SelectValue placeholder="Islamabad" />
+            </SelectTrigger>
+            <SelectContent>
+              {data.map((item, index) => (
+                <SelectItem className="cursor-pointer" key={index} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <BestLocationTree />
+        </div>
+        <div className="w-[17%]">
+          <BestPropertyArea
+            setBestAreaMin={setBestAreaMin}
+            setBestAreaMax={setBestAreaMax}
+          />
+        </div>
+        <div className="w-[20%]">
+          <BestPropertyCategory setpropertyType={setpropertyType} />
+        </div>
+      </div>
       <section className="font-montserrat md:px-20 lg:px-44 drop-shadow-2xl">
         <div>
           <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
-            <div className="flex item-center gap-4">
-              <div className="w-[17%]">
-                <Select onValueChange={setCity}>
-                  <SelectTrigger className="">
-                    <SelectValue placeholder="Islamabad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {data.map((item, index) => (
-                      <SelectItem
-                        className="cursor-pointer"
-                        key={index}
-                        value={item}
-                      >
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="w-[17%]">
-                <BestPropertyArea
-                  setBestAreaMin={setBestAreaMin}
-                  setBestAreaMax={setBestAreaMax}
-                />
-              </div>
-              <div className="w-[17%]">
-                <BestPropertyCategory setpropertyType={setpropertyType} />
-              </div>
-            </div>
             <div className="overflow-x-auto">
               {loading ? (
                 <div className="flex justify-center items-center h-64">
@@ -167,7 +167,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
                 </div>
               ) : (
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <thead className="text-xs text-[#0071BC] uppercase bg-gray-50 dark:bg-gray-700">
                     <tr>
                       <th scope="col" className="px-4 py-3">
                         Property Detail
