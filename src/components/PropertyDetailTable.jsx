@@ -124,7 +124,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
   return (
     <div>
       <div className="py-20">
-        <h1 className="font-montserrat font-bold text-3xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
+        <h1 className="font-montserrat font-bold text-xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
           Best Property In Town
         </h1>
       </div>
