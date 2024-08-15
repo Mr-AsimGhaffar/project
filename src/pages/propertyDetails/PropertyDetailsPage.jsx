@@ -117,7 +117,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       {/* <h1>{property.header}</h1> */}
       <div>
         <div>
-          <p className="text-xl font-bold">
+          <p className="md:text-xl text-lg font-bold">
             {squareFeetToMarla(property.area)}, Brand New House For Sale in{" "}
             {property.location}
           </p>
@@ -129,14 +129,14 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               <img
                 src={property.cover_photo_url}
                 alt="property"
-                className="w-full h-[40rem] object-fit rounded-t-md"
+                className="w-full md:h-[40rem] h-[10rem] object-fit rounded-t-md"
               />
             </div>
           ) : (
             <img
               src="/img/NoImage.png"
               alt="dummy"
-              className="w-full h-full object-cover rounded-t-md"
+              className="w-full h-96 object-fit rounded-t-md"
             />
           )}
           <div className="absolute left-5 bottom-5">
@@ -173,7 +173,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       </div>
       <div>
         <div className="w-[100%] overflow-x-auto">
-          <div className="flex justify-between gap-4 bg-black p-2">
+          <div className="flex flex-col md:flex-row justify-between gap-4 bg-black p-2">
             <Button
               variant="ghost"
               className={`w-full${
@@ -240,7 +240,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 items-center">
               <div>
                 <Table>
-                  <div className="flex justify-start gap-10">
+                  <div className="flex flex-col md:flex-row justify-start gap-10">
                     <div>
                       <TableBody>
                         {Object.keys(property)
@@ -297,7 +297,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                                 {capitalizeFirstLetter(item)}
                               </TableCell>
                               <TableCell
-                                className={`${
+                                className={`w-[100%] ${
                                   rowIndex % 2 === 0
                                     ? "bg-gray-100 text-black"
                                     : ""

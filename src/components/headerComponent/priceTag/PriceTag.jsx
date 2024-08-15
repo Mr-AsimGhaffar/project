@@ -98,7 +98,7 @@ const PriceTag = () => {
     isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
-      <Select>
+      <Select className>
         <SelectTrigger>
           <SelectValue placeholder="PRICE" />
           <div>{selectedAmountMin}</div>
