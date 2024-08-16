@@ -336,6 +336,33 @@ async function fetchPropertyRecommendations({
   }
 }
 
+async function fetchLocationTreeData() {
+  try {
+    const response = await fetch(`${API_URL}/property/locations`, {
+      method: "get",
+      headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+      }),
+    });
+    if (!response.ok) {
+      const errorMessage =
+        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
+      throw new Error(errorMessage);
+    }
+    const jsonData = await response.json();
+    return jsonData.data;
+  } catch (error) {
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+    });
+    throw error;
+  }
+}
+
 export {
   fetchFeaturedProperties,
   fetchSimilarProperties,
@@ -344,4 +371,5 @@ export {
   fetchAvailableCities,
   fetchSearchSuggestions,
   fetchPropertyRecommendations,
+  fetchLocationTreeData,
 };
