@@ -15,7 +15,11 @@ const marlaToSquareFeet = (marla) => {
 };
 
 const squareFeetToMarla = (marla) => {
-  return marla / 225;
+  if (marla == null) {
+    return marla;
+  } else {
+    return marla / 225;
+  }
 };
 
 const AreaTag = () => {
@@ -30,12 +34,12 @@ const AreaTag = () => {
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
 
   const handleSelectMaxButton = (area, buttonIndex) => {
-    const newValue = area;
+    const newValue = area === "Any" ? null : area;
     setSelectedAreaMax(newValue);
     setSelectedMaxButton(buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
-      selectedAreaMax: marlaToSquareFeet(newValue),
+      selectedAreaMax: newValue ? marlaToSquareFeet(newValue) : null,
     }));
     saveToLocalStorage("selectedAreaMax", newValue);
   };
@@ -91,9 +95,9 @@ const AreaTag = () => {
       <Select>
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="AREA" />
-          <div>{selectedAreaMin}</div>
+          <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>
           <div>To</div>
-          <div>{selectedAreaMax}</div>
+          <div>{selectedAreaMax === null ? "Any" : selectedAreaMax}</div>
         </SelectTrigger>
         <SelectContent>
           <div className="rounded-md shadow-lg p-4 w-64">

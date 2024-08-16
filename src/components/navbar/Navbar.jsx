@@ -119,23 +119,6 @@ const Navbar = ({
             </Link>
 
             <div className="w-[20%] hidden lg:flex items-center gap-4 opacity-80 justify-end">
-              {/* <div>
-                <Button
-                  variant="primary"
-                  className="text-base font-semibold font-montserrat tracking-wide"
-                >
-                  Saved Searches
-                </Button>
-              </div>
-              <div>
-                <Button
-                  variant="outline"
-                  className="text-base font-semibold font-montserrat"
-                >
-                  Sign-up or Log-in
-                </Button>
-              </div> */}
-
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild className="bg-white border-none">
@@ -234,26 +217,19 @@ const Navbar = ({
               >
                 Rent
               </Button>
-              <Button
-                variant="primary"
-                className={`rounded-md text-base font-semibold font-montserrat ${
-                  propertyView === "For Mortgage" ? "text-[#0071BC]" : ""
-                }`}
-              >
-                Mortgage
-              </Button>
-              <Button
-                variant="primary"
-                className="text-base font-semibold font-montserrat tracking-wide"
-              >
-                Saved Searches
-              </Button>
-              <Button
-                variant="outline"
-                className="text-base font-semibold font-montserrat"
-              >
-                Sign-up or Log-in
-              </Button>
+              <div className="text-center">
+                <Link to="/propertyRecommendations">
+                  <Button
+                    variant="primary"
+                    className={`rounded-md text-base font-semibold font-montserrat ${
+                      isActive ? "text-[#0071BC]" : ""
+                    }`}
+                    disabled={isActive}
+                  >
+                    Best Property
+                  </Button>
+                </Link>
+              </div>
               <div className="text-center">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild className="bg-white">

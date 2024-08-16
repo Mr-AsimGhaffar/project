@@ -19,9 +19,9 @@ export default function BestPropertyMap({ locationData, loading }) {
   const firstLocation = locationData[0]?.index?.location;
 
   return (
-    <div className="px-44">
+    <div className="md:px-44 px-20">
       <div className="py-20">
-        <p className="font-montserrat font-bold text-3xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
+        <p className="font-montserrat font-bold text-xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
           PROPERTIES LOCATION
         </p>
       </div>
