@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "./ui/select";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import {
-  fetchAvailableCities,
+  // fetchAvailableCities,
+  fetchLocationTreeData,
   fetchPropertyDetails,
   fetchPropertyRecommendations,
 } from "../utlils/fetchApi";
@@ -22,8 +23,8 @@ import BestPropertyMap from "./bestProperty/BestPropertyMap";
 import BestLocationTree from "./bestProperty/BestLocationTree";
 
 const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
-  const [data, setData] = useState([]);
-  const [city, setCity] = useState("islamabad");
+  // const [data, setData] = useState([]);
+  // const [city, setCity] = useState("islamabad");
   const [mapData, setMapData] = useState([]);
   const [propertyRecommendationsData, setPropertyRecommendationData] = useState(
     []
@@ -33,7 +34,22 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProperties, setTotalProperties] = useState(0);
-  const [propertyType, setpropertyType] = useState([]);
+  const [propertyType, setpropertyType] = useState("home");
+  const [locationTreeData, setLocationTreeData] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+
+  useEffect(() => {
+    async function loadfetchLocationTreeData() {
+      try {
+        setLoading(true);
+        const data = await fetchLocationTreeData();
+        setLocationTreeData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    loadfetchLocationTreeData();
+  }, []);
 
   const fetchDataMap = useCallback(async () => {
     try {
@@ -49,26 +65,26 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
     }
   }, [propertyRecommendationsData]);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const cities = await fetchAvailableCities();
-      setData(cities);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }, []);
+  // const fetchData = useCallback(async () => {
+  //   try {
+  //     const cities = await fetchAvailableCities();
+  //     setData(cities);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // }, []);
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
     fetchDataMap();
-  }, [fetchData, fetchDataMap]);
+  }, [fetchDataMap]);
 
   useEffect(() => {
     async function loadRecommendationsData() {
       try {
         setLoading(true);
         const data = await fetchPropertyRecommendations({
-          city,
+          queries: [selectedLocation],
           propertyCategory,
           area_min: marlaToSquareFeet(bestAreaMin) || "",
           area_max: marlaToSquareFeet(bestAreaMax) || "",
@@ -88,13 +104,15 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
     }
     loadRecommendationsData();
   }, [
-    city,
+    selectedLocation,
     propertyCategory,
     bestAreaMin,
     bestAreaMax,
     currentPage,
     propertyType,
   ]);
+
+  console.log(propertyType);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -130,7 +148,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
         </h1>
       </div>
       <div className="font-montserrat md:px-20 lg:px-44 py-2 flex flex-col md:flex-row gap-2">
-        <div className="w-[20%]">
+        {/* <div className="w-[20%]">
           <Select onValueChange={setCity}>
             <SelectTrigger className="">
               <SelectValue placeholder="Islamabad" />
@@ -143,9 +161,12 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
               ))}
             </SelectContent>
           </Select>
-        </div>
-        <div>
-          <BestLocationTree />
+        </div> */}
+        <div className="w-[17%]">
+          <BestLocationTree
+            locationTreeData={locationTreeData}
+            setSelectedLocation={setSelectedLocation}
+          />
         </div>
         <div className="w-[17%]">
           <BestPropertyArea

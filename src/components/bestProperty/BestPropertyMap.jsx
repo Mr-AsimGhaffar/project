@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import PropTypes from "prop-types";
 import L from "leaflet";
-import Spinner from "../spinner/Spinner";
+// import Spinner from "../spinner/Spinner";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -13,9 +13,9 @@ L.Icon.Default.mergeOptions({
 });
 
 export default function BestPropertyMap({ locationData, loading }) {
-  if (!locationData || locationData.length === 0) {
-    return <Spinner />;
-  }
+  // if (!loading || loading.length === 0) {
+  //   return <Spinner />;
+  // }
   const firstLocation = locationData[0]?.index?.location;
 
   return (
