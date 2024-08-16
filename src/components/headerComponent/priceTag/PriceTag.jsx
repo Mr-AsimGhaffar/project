@@ -31,12 +31,12 @@ const PriceTag = () => {
   }, [selectedAmountMin]);
 
   const handleSelectMax = (amount, buttonIndex) => {
-    const newValue = amount;
+    const newValue = amount === "Any" ? null : amount;
     setSelectedAmountMax(newValue);
     setSelectedMaxButton(buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
-      selectedAmountMax: newValue,
+      selectedAmountMax: newValue ? newValue : null,
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
   };
@@ -101,9 +101,9 @@ const PriceTag = () => {
       <Select className>
         <SelectTrigger>
           <SelectValue placeholder="PRICE" />
-          <div>{selectedAmountMin}</div>
+          <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
           <div>To</div>
-          <div>{selectedAmountMax}</div>
+          <div>{selectedAmountMax === null ? "Any" : selectedAmountMax}</div>
         </SelectTrigger>
         <SelectContent>
           <div className="rounded-md shadow-lg p-4 w-64">

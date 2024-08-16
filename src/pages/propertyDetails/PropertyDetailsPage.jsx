@@ -270,6 +270,11 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                                     ? conversionFunction(property[item])
                                     : item === "type"
                                     ? property[item].replace("_", " ")
+                                    : item === "location"
+                                    ? property[item]
+                                        .split(",")
+                                        .slice(0, 2)
+                                        .join(",") + "..."
                                     : property[item]
                                   : "-"}
                               </TableCell>

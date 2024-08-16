@@ -23,7 +23,7 @@ function App() {
     selectedAmountMin: "",
     selectedAmountMax: "",
     selectedAreaMin: "",
-    selectedAreaMax: "",
+    selectedAreaMax: null,
     selectBeds: "",
     propertyState: {
       selectedPropertyType: "Home",
