@@ -35,12 +35,12 @@ const HeaderPrice = () => {
   }, [selectedAmountMin]);
 
   const handleSelectMax = (amount, buttonIndex) => {
-    const newValue = amount;
+    const newValue = amount === "Any" ? null : amount;
     setSelectedAmountMax(newValue);
     setSelectedMaxButton(buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
-      selectedAmountMax: newValue,
+      selectedAmountMax: newValue ? newValue : null,
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
   };
@@ -105,11 +105,10 @@ const HeaderPrice = () => {
       <Select>
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="PRICE" />
-          <div className="flex gap-1">
-            <div>{selectedAmountMin}</div>
-            <div>To</div>
-            <div>{selectedAmountMax}</div>
-          </div>
+
+          <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
+          <div>To</div>
+          <div>{selectedAmountMax === null ? "Any" : selectedAmountMax}</div>
         </SelectTrigger>
         <SelectContent>
           <div className="rounded-md shadow-lg p-4 w-64">
