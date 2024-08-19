@@ -36,12 +36,12 @@ export default function PopularityTrendGraph({
     <div>
       <div className="bg-gray-50">
         <hr />
-        <p className="text-2xl text-black p-2">
+        <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
           Trends - Most Searched Locations in {location}
         </p>
       </div>
       <div>
-        <div className="flex flex-col md:flex-row mb-4">
+        <div className="flex flex-col md:flex-row p-2">
           <div className="flex flex-col lg:flex-row justify-start md:justify-end gap-2 mb-4 md:mb-0">
             {months.map((item) => (
               <Button
@@ -62,7 +62,7 @@ export default function PopularityTrendGraph({
               <p key={index}>{index + 1}</p>
             ))}
           </div>
-          <div className="w-full md:w-1/4 flex flex-col gap-2 mb-4 md:mb-0">
+          <div className="w-full md:w-1/4 flex flex-col gap-2 mb-4 md:mb-0 md:text-left text-center">
             <p>LOCALITY</p>
             {data.map((item) => (
               <p key={item.id}>{item.title}</p>
@@ -90,7 +90,7 @@ export default function PopularityTrendGraph({
                   <YAxis type="category" dataKey="name" />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="percentage" fill="green" />
+                  <Bar dataKey="percentage" fill="#0071BC" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

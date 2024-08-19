@@ -1,8 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
-import { FaBed } from "react-icons/fa";
+import { FaBed, FaChartArea } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
-import { BiSolidDirections } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -21,6 +20,7 @@ import { squareFeetToMarla } from "../../utlils/squareFeetToMarla";
 import TopPropertyPropertyDetail from "../../components/topProperties/TopPropertyPropertyDetail";
 import { appContext } from "../../contexts/Context";
 import Spinner from "../../components/spinner/Spinner";
+import { MdRealEstateAgent } from "react-icons/md";
 
 const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -34,6 +34,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const overviewRef = useRef(null);
   const locationRef = useRef(null);
   const similarPropertyRef = useRef(null);
+  const topPropertyPropertyDetailRef = useRef(null);
   const priceIndexRef = useRef(null);
   const trendsRef = useRef(null);
   const [data, setData] = useState([]);
@@ -117,11 +118,13 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       {/* <h1>{property.header}</h1> */}
       <div>
         <div>
-          <p className="md:text-xl text-lg font-bold">
+          <p className="font-montserrat md:text-xl text-lg font-bold">
             {squareFeetToMarla(property.area)}, Brand New House For Sale in{" "}
             {property.location}
           </p>
-          <p>{property.location}</p>
+          <p className="font-montserrat font-normal text-base">
+            {property.location}
+          </p>
         </div>
         <div className="relative w-[100%]">
           {property.cover_photo_url ? (
@@ -129,14 +132,14 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               <img
                 src={property.cover_photo_url}
                 alt="property"
-                className="w-full md:h-[40rem] h-[10rem] object-fit rounded-t-md"
+                className="w-full md:h-[40rem] h-[10rem] object-fit rounded-lg"
               />
             </div>
           ) : (
             <img
               src="/img/NoImage.png"
               alt="dummy"
-              className="w-full h-96 object-fit rounded-t-md"
+              className="w-full h-96 object-fit rounded-lg"
             />
           )}
           <div className="absolute left-5 bottom-5">
@@ -149,23 +152,35 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           </div>
         </div>
         <br />
-        <div className="flex gap-10">
+        <div className="font-montserrat flex items-center text-sm font-semibold gap-10">
           {property.bedroom && (
-            <div className="flex flex-row items-center gap-1">
-              <FaBed />
-              <p>{property.bedroom}</p>
+            <div className="flex flex-col items-center">
+              <div>
+                <FaBed className="w-6 h-6" />
+              </div>
+              <div>
+                <p>{property.bedroom} Beds</p>
+              </div>
             </div>
           )}
           {property.bath && (
-            <div className="flex flex-row items-center gap-1">
-              <FaBath />
-              <p>{property.bath}</p>
+            <div className="flex flex-col items-center">
+              <div>
+                <FaBath className="w-6 h-6" />
+              </div>
+              <div>
+                <p>{property.bath} Baths</p>
+              </div>
             </div>
           )}
           {property.area && (
-            <div className="flex flex-row items-center gap-1">
-              <BiSolidDirections />
-              <p>{squareFeetToMarla(property.area)}</p>
+            <div className="flex flex-col items-center">
+              <div>
+                <FaChartArea className="w-6 h-6" />
+              </div>
+              <div>
+                <p>{squareFeetToMarla(property.area)}</p>
+              </div>
             </div>
           )}
         </div>
@@ -173,7 +188,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       </div>
       <div>
         <div className="w-[100%] overflow-x-auto">
-          <div className="flex flex-col md:flex-row justify-between gap-4 bg-black p-2">
+          <div className="font-montserrat flex flex-col md:flex-row justify-between gap-4 bg-black p-2">
             <Button
               variant="ghost"
               className={`w-full${
@@ -229,18 +244,33 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             >
               <span>Similar Properties</span>
             </Button>
+            <Button
+              variant="ghost"
+              className={`w-full${
+                activeButton === "Top"
+                  ? "bg-white bg-accent rounded-3xl border-2"
+                  : "bg-transparent text-white rounded-3xl border-2 border-none"
+              }`}
+              onClick={() =>
+                scrollToSection(topPropertyPropertyDetailRef, "Top")
+              }
+            >
+              <span>Top Properties</span>
+            </Button>
           </div>
         </div>
         <div ref={overviewRef} className="w-[100%]">
           <div className="bg-gray-100">
-            <p className="text-2xl text-black p-2">Overview</p>
+            <p className="font-montserrat text-2xl text-[#0071BC] font-bold p-2">
+              Overview
+            </p>
           </div>
           <div className="p-2">
-            <p className="font-bold">Details</p>
+            <p className="font-montserrat font-bold">Details</p>
             <div className="grid grid-cols-1 md:grid-cols-2 items-center">
               <div>
                 <Table>
-                  <div className="flex flex-col md:flex-row justify-start gap-10">
+                  <div className="flex flex-col md:flex-row justify-start font-inter gap-10">
                     <div>
                       <TableBody>
                         {Object.keys(property)
@@ -259,7 +289,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                                 {capitalizeFirstLetter(item)}
                               </TableCell>
                               <TableCell
-                                className={`${
+                                className={`w-[100%] ${
                                   rowIndex % 2 === 0
                                     ? "bg-gray-100 text-black"
                                     : ""
@@ -313,6 +343,8 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                                     ? formatTimeNow(property[item])
                                     : item === "area"
                                     ? squareFeetToMarla(property[item])
+                                    : item === "purpose"
+                                    ? property[item].replace("_", " ")
                                     : property[item]
                                   : "-"}
                               </TableCell>
@@ -324,11 +356,20 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                 </Table>
               </div>
               {property.agency && (
-                <div className="text-center">
-                  <p>{property.agency}</p>
-                  <Button className="py-2" onClick={openAgencyLink}>
-                    Agency Profile
-                  </Button>
+                <div className="font-monsterrat text-xl font-bold">
+                  <div className="flex justify-center md:justify-start items-center gap-1">
+                    <MdRealEstateAgent />
+                    <p>{property.agency}</p>
+                  </div>
+                  <div className="flex justify-center md:justify-start py-2">
+                    <Button
+                      onClick={openAgencyLink}
+                      variant="outline"
+                      className="text-[#0071BC] border-[#0071BC] hover:text-[#0071BC]"
+                    >
+                      Agency Profile
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
@@ -336,9 +377,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           <hr />
           <br />
           <div className="p-2">
-            <p className="font-bold">Description</p>
+            <p className="font-montserrat font-bold">Description</p>
             <br />
-            <p className={`${isExpanded ? "" : "line-clamp-2"}`}>
+            <p className={`font-inter ${isExpanded ? "" : "line-clamp-2"}`}>
               {property.description}
             </p>
             <br />
@@ -353,7 +394,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <div className="p-2">
               <p className="font-bold">Amenities</p>
               <br />
-              <div className="p-2 text-black">
+              <div className="font-inter p-2 text-black">
                 <Table>
                   <TableBody>
                     {property.features
@@ -388,20 +429,20 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           )}
         </div>
         <br />
-        <div ref={locationRef} className="p-4">
+        <div ref={locationRef}>
           <LocationMap locationData={property.area_trends || []} />
         </div>
 
-        <div ref={priceIndexRef} className="p-4">
+        <div ref={priceIndexRef}>
           <PriceIndexGraph areaTrendData={property.area_trends || []} />
         </div>
-        <div ref={trendsRef} className="p-4">
+        <div ref={trendsRef}>
           <PopularityTrendGraph
             popularityTrendData={property.popularity_trends || []}
             location={property.location}
           />
         </div>
-        <div ref={similarPropertyRef} className="p-4">
+        <div ref={similarPropertyRef}>
           <SimilarProperty
             similarPropertyId={property.id}
             location={property.location}
@@ -409,9 +450,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             propertyCategory={propertyCategory}
           />
         </div>
-      </div>
-      <div>
-        <TopPropertyPropertyDetail conversionFunction={conversionFunction} />
+        <div ref={topPropertyPropertyDetailRef}>
+          <TopPropertyPropertyDetail conversionFunction={conversionFunction} />
+        </div>
       </div>
     </div>
   );

@@ -20,7 +20,9 @@ export default function LocationMap({ locationData }) {
     <div>
       <div className="bg-gray-50">
         <hr />
-        <p className="text-2xl text-black p-2">Location & Nearby</p>
+        <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
+          Location & Nearby
+        </p>
       </div>
       <MapContainer
         center={[

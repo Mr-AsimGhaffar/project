@@ -29,11 +29,8 @@ const TopPropertyPropertyDetail = ({ conversionFunction }) => {
   return (
     <div>
       <div>
-        <p className="font-montserrat text-2xl font-bold">
-          Top Properties in{" "}
-          <span className="text-[#0071BC] font-semibold">
-            {topBestProperty[0]?.location}
-          </span>
+        <p className="font-montserrat text-[#0071BC] text-2xl font-bold">
+          Top Properties in <span>{topBestProperty[0]?.location}</span>
         </p>
       </div>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-6 py-5">

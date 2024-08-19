@@ -23,10 +23,12 @@ export default function PriceIndexGraph({ areaTrendData }) {
   const percentage =
     ((lastIndex.avg_price - firstIndex.avg_price) / firstIndex.avg_price) * 100;
   return (
-    <div>
+    <div className="py-8">
       <div className="bg-gray-50">
         <hr />
-        <p className="text-2xl text-black p-2">Price Index</p>
+        <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
+          Price Index
+        </p>
       </div>
       <div>
         <p className="text-3xl p-2">
@@ -56,7 +58,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
               )
             </p>
             <br />
-            <p className="text-green-500 text-2xl font-bold">
+            <p className="text-[#0071BC] text-2xl font-bold">
               PKR {formatPrice(firstIndex.avg_price - lastIndex.avg_price)} (
               {Math.abs(percentage).toFixed(2)}%)
             </p>
@@ -118,7 +120,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke="green"
+                stroke="#0071BC"
                 dot={false}
                 activeDot={{ r: 7 }}
                 strokeWidth={3}
