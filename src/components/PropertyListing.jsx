@@ -38,9 +38,6 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   );
   const displayedData = viewAll ? sortedKeys : sortedKeys.slice(0, 4);
 
-  if (loading) {
-    return <Spinner />;
-  }
   return (
     <main className="px-4 md:px-8 lg:px-20 xl:px-44">
       <PropertyDetails
@@ -48,37 +45,43 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
         conversionFunction={conversionFunction}
         propertyCategory={propertyCategory}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 xl:gap-8">
-        {displayedData
-          .map((item, index) => ({
-            id: index,
-            title: item,
-            amount: propertyListingData[item],
-          }))
-          .map((item) => (
-            <div
-              key={item.id}
-              className="font-montserrat font-semibold leading-10 text-center opacity-80"
-            >
-              <Card className="py-4 lg:py-6">
-                <CardHeader>
-                  <div>
-                    <CardTitle className="text-xl lg:text-2xl">
-                      {item.title
-                        .replace("_", " ")
-                        .replace(/\b\w/g, (char) => char.toUpperCase())}
-                    </CardTitle>
-                  </div>
-                  <div>
-                    <CardDescription className="text-2xl lg:text-4xl py-2 lg:py-4">
-                      {conversionFunction(item.amount)}
-                    </CardDescription>
-                  </div>
-                </CardHeader>
-              </Card>
-            </div>
-          ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center py-10 lg:py-20">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 xl:gap-8">
+          {displayedData
+            .map((item, index) => ({
+              id: index,
+              title: item,
+              amount: propertyListingData[item],
+            }))
+            .map((item) => (
+              <div
+                key={item.id}
+                className="font-montserrat font-semibold leading-10 text-center opacity-80"
+              >
+                <Card className="py-4 lg:py-6">
+                  <CardHeader>
+                    <div>
+                      <CardTitle className="text-xl lg:text-2xl">
+                        {item.title
+                          .replace("_", " ")
+                          .replace(/\b\w/g, (char) => char.toUpperCase())}
+                      </CardTitle>
+                    </div>
+                    <div>
+                      <CardDescription className="text-2xl lg:text-4xl py-2 lg:py-4">
+                        {conversionFunction(item.amount)}
+                      </CardDescription>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </div>
+            ))}
+        </div>
+      )}
 
       <div className="flex justify-center py-10 lg:py-20">
         <Button

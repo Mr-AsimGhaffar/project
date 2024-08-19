@@ -256,7 +256,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   return (
     <div className="relative">
       <LazyLoad height={200} offset={100} once>
-        <img src="img/bg_image.svg" alt="bg_image" className="w-full" />
+        <img src="img/bg_image.jpeg" alt="bg_image" className="w-full" />
       </LazyLoad>
 
       <div className="lg:absolute top-20 left-0 right-0 mx-auto max-w-5xl">
@@ -285,7 +285,6 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           checked={propertyView === "for_sale"}
                           onChange={(e) => {
                             setPropertyCategory(e.target.value);
-                            // setPropertyView(e.target.value);
                           }}
                           className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
                         />
@@ -300,28 +299,12 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           checked={propertyView === "for_rent"}
                           onChange={(e) => {
                             setPropertyCategory(e.target.value);
-                            // setPropertyView(e.target.value);
                           }}
                           className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
                         />
                         <label htmlFor="rent" className="cursor-pointer">
                           Rent
                         </label>
-
-                        {/* <input
-                        type="radio"
-                        id="other"
-                        name="propertyView"
-                        value="other"
-                        checked={
-                          propertyView === "other" ||
-                          propertyCategory == "other"
-                        }
-                        className="appearance-none bg-white border-2 border-[#0071BC] rounded-full w-5 h-5 checked:border-[#0071BC] checked:bg-[#0071BC]"
-                      />
-                      <label htmlFor="other" className="cursor-pointer">
-                        Other
-                      </label> */}
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg py-2">
                         <div className="col-span-1 md:col-span-2">
