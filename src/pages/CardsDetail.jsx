@@ -212,7 +212,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setEndDate(end ? new Date(end) : null);
   };
 
-  const handleSearch = async (sort_by = sortBy, sort_order = sortOrder) => {
+  const handleSearch = async (
+    sort_by = sortBy || "added",
+    sort_order = sortOrder || "DESC"
+  ) => {
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -299,8 +302,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.appState.selectedCity,
       simpleContext.appState.selectedSuggestions,
       page_number,
-      sortBy,
-      sortOrder,
+      sortBy || "added",
+      sortOrder || "DESC",
       propertyCategory,
       startDate ? startDate.toISOString() : "",
       endDate ? endDate.toISOString() : ""
@@ -424,13 +427,22 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
 
     handleSearch(sort.join(","), order.join(","));
   };
-  // useEffect(() => {
-  //   handleSearch(sortByDate, sortOrderDate);
-  // }, []);
 
-  // const handleDateSortChange = (sortOrder) => {
-  //   handleSortChange("added", sortOrder);
-  // };
+  useEffect(() => {
+    const sort = [];
+    const order = [];
+
+    if (sortBy) {
+      sort.push(sortBy);
+      order.push(sortOrder);
+    }
+    if (sortByDate) {
+      sort.push(sortByDate);
+      order.push(sortOrderDate);
+    }
+
+    handleSearch(sort.join(","), order.join(","));
+  }, [sortBy, sortOrder, sortByDate, sortOrderDate]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -455,12 +467,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       <div>
         <div className="text-lg font-bold">
           <span>{formatPrice(totalCount)} Results</span>{" "}
-          {/* <span className="text-sm text-gray-500">
-            in{" "}
-            {simpleContext.appState.selectedSuggestions
-              .map((suggestion) => suggestion.name)
-              .join(", ")}
-          </span> */}
         </div>
       </div>
       <div>
@@ -599,46 +605,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               sortOrderDate={sortOrderDate}
             />
           </div>
-          {/* <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className={`px-4 py-2 rounded-3xl border-2 ${
-                sortBy === "added" && sortOrder === "ASC"
-                  ? "bg-gray-800 text-white"
-                  : ""
-              }`}
-              type="button"
-              onClick={() => handleDateSortChange("ASC")}
-            >
-              Oldest Date
-            </Button>
-            <Button
-              variant="outline"
-              className={`px-4 py-2 rounded-3xl border-2 ${
-                sortBy === "added" && sortOrder === "DESC"
-                  ? "bg-gray-800 text-white"
-                  : ""
-              }`}
-              type="button"
-              onClick={() => handleDateSortChange("DESC")}
-            >
-              Newest Date
-            </Button>
-          </div> */}
         </div>
       </form>
-      {/* <div className="flex justify-left gap-6">
-        <div>
-          <Recommended />
-        </div>
-        <div>
-          <Popular />
-        </div>
-        <div>
-          <Nearest />
-        </div>
-      </div> */}
-
       <div>
         <p className="font-montserrat text-2xl font-bold">
           All Properties in{" "}
