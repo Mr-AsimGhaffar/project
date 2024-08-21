@@ -73,7 +73,7 @@ export default function SimilarProperty({
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl font-bold">
+        <p className="font-montserrat text-[#0071BC] text-2xl p-2 font-bold">
           Similar Houses around <span>{location}</span>
         </p>
       </div>

@@ -45,14 +45,14 @@ const BestLocationTree = ({ locationTreeData, setSelectedLocation }) => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="w-[100%] flex justify-start">
+          <Button variant="outline" className="w-full flex justify-start">
             {selectedLocationName}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="max-h-96 overflow-y-auto">
+        <DropdownMenuContent className="max-h-96 overflow-y-auto w-full md:w-auto">
           {renderLocationTree(locationTreeData, handleSelect)}
         </DropdownMenuContent>
       </DropdownMenu>

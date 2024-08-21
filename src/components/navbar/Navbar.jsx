@@ -175,7 +175,7 @@ const Navbar = ({
             </div>
             <div className="lg:hidden">
               <button
-                className="text-gray-800"
+                className="text-gray-800 dark:text-[#0071BC]"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 <svg
@@ -242,7 +242,10 @@ const Navbar = ({
                     align="end"
                     className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
                   >
-                    <DropdownMenuItem className="flex items-center justify-between">
+                    <DropdownMenuItem
+                      onClick={handleDropdownClick}
+                      className="flex items-center justify-between"
+                    >
                       <div>{isBlackTheme ? "Light Theme" : "Black Theme"}</div>
                       <div>
                         <input
@@ -253,7 +256,10 @@ const Navbar = ({
                         />
                       </div>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center justify-between">
+                    <DropdownMenuItem
+                      onClick={handleConversionTypeClick}
+                      className="flex items-center justify-between"
+                    >
                       <div>
                         {conversionType === "count"
                           ? "Currency Value in Million"

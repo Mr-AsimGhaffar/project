@@ -26,7 +26,6 @@ import Paging from "@/components/Paging";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "../utlils/formatPrice";
-// import Recommended from "../components/cardsDetails/Recommended";
 import {
   fetchPropertyRecommendations,
   fetchSearchSuggestions,
@@ -37,7 +36,6 @@ import { FaBath, FaBed } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { BiSolidDirections } from "react-icons/bi";
 import { DatePickerWithRange } from "../components/ui/DateRangePicker";
-// import { Button } from "../components/ui/button";
 import { formatTimeNow } from "../utlils/formatTimeNow";
 import { squareFeetToMarla } from "../utlils/squareFeetToMarla";
 import { toast } from "react-toastify";
@@ -81,6 +79,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   );
 
   const loadRecommendationsData = useCallback(async () => {
+    if (!mounted.current) return;
     try {
       const data = await fetchPropertyRecommendations({
         city: selectedCity,
@@ -108,10 +107,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       console.error("Error fetching data:", error);
     }
   }, [selectedCity, selectedSuggestions, propertyCategory, propertyState]);
-
-  useEffect(() => {
-    loadRecommendationsData();
-  }, [selectedSuggestions, propertyCategory, propertyState]);
 
   const fetchCityData = async (
     city,
@@ -456,6 +451,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    loadRecommendationsData();
+  }, [selectedSuggestions, propertyCategory, propertyState]);
 
   const emptySearchString = () => {
     setSearchTerm("");

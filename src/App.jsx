@@ -2,9 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
 import { appContext } from "./contexts/Context";
 import Navbar from "./components/navbar/Navbar";
-// import Sidebar from "./components/sidebar/SideBar";
 import Dashboard from "./pages/Dashboard";
-// import Home from "./components/Home";
 import Header from "./components/Header";
 import CardsDetail from "./pages/CardsDetail";
 import PropertyDetailsPage from "./pages/propertyDetails/PropertyDetailsPage";
@@ -75,7 +73,6 @@ function App() {
               setPropertyCategory={setPropertyCategory}
               propertyCategory={propertyCategory}
             />
-            {/* <Sidebar /> */}
             <ToastContainer />
             <div>
               <div>

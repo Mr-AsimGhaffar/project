@@ -29,7 +29,7 @@ const TopPropertyPropertyDetail = ({ conversionFunction }) => {
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl font-bold">
+        <p className="font-montserrat text-[#0071BC] text-2xl p-2 font-bold">
           Top Properties in <span>{topBestProperty[0]?.location}</span>
         </p>
       </div>

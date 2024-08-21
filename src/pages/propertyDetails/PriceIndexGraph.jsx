@@ -24,8 +24,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
     ((lastIndex.avg_price - firstIndex.avg_price) / firstIndex.avg_price) * 100;
   return (
     <div className="py-8">
-      <div className="bg-gray-50">
-        <hr />
+      <div>
         <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
           Price Index
         </p>
@@ -46,10 +45,8 @@ export default function PriceIndexGraph({ areaTrendData }) {
         <div className="col-span-3 text-center">
           <p>Current Price (May 2024)</p>
           <p>PKR {formatPrice(areaTrendData.index.avg_price)}</p>
-          <br />
           <hr />
-          <div>
-            <br />
+          <div className="py-12">
             <p>
               Price Change (
               {formatIsoToMonthYear(lastIndex.month_year) +
@@ -57,14 +54,13 @@ export default function PriceIndexGraph({ areaTrendData }) {
                 formatIsoToMonthYear(firstIndex.month_year)}
               )
             </p>
-            <br />
+
             <p className="text-[#0071BC] text-2xl font-bold">
               PKR {formatPrice(firstIndex.avg_price - lastIndex.avg_price)} (
               {Math.abs(percentage).toFixed(2)}%)
             </p>
           </div>
-          <br />
-          <div className="flex justify-between p-2 bg-gray-50 text-black">
+          <div className="flex justify-between p-2 bg-gray-50 dark:bg-black text-black dark:text-white">
             <div>
               <p>6 months ago</p>
               <p>12 months ago</p>
@@ -93,7 +89,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
           </div>
         </div>
         <div
-          className="col-span-9 text-black"
+          className="col-span-9 text-black py-2"
           style={{ width: "100%", height: "100%" }}
         >
           <ResponsiveContainer width="100%" height={400}>

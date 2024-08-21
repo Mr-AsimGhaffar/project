@@ -20,31 +20,16 @@ const Footer = () => {
               </h1>
             </div>
             <div className="flex justify-center lg:justify-start items-center gap-4 py-6 lg:py-12">
-              <img
-                src="img/facebook.svg"
-                alt="facebook"
-                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
-              />
-              <img
-                src="img/instagram.svg"
-                alt="instagram"
-                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
-              />
-              <img
-                src="img/linkedin.svg"
-                alt="linkedin"
-                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
-              />
-              <img
-                src="img/whatsapp.svg"
-                alt="whatsapp"
-                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
-              />
-              <img
-                src="img/telegram.svg"
-                alt="telegram"
-                className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
-              />
+              <a
+                href="https://www.linkedin.com/company/ali-square"
+                target="blank"
+              >
+                <img
+                  src="img/linkedin.svg"
+                  alt="linkedin"
+                  className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
+                />
+              </a>
             </div>
           </div>
           <div className="text-center lg:text-left">
@@ -79,7 +64,7 @@ const Footer = () => {
                 </div>
                 <div className="opacity-60">
                   <h1 className="text-center lg:text-left">
-                    (+92) 333 123-1234
+                    (+39) 349 794 9275
                   </h1>
                 </div>
               </div>
@@ -93,7 +78,7 @@ const Footer = () => {
                 </div>
                 <div className="opacity-60">
                   <h1 className="text-center lg:text-left">
-                    properties@alisquare.com
+                    support@alisquare.com
                   </h1>
                 </div>
               </div>
@@ -109,9 +94,6 @@ const Footer = () => {
               </div>
               <div>
                 <h1 className="border-b-2 border-[#0071BC] py-5">Rent</h1>
-              </div>
-              <div>
-                <h1 className="border-b-2 border-[#0071BC] py-5">Mortgage</h1>
               </div>
             </div>
           </div>

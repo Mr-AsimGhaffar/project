@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-// import algoliasearch from "algoliasearch";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -229,29 +228,6 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
 }
 
 async function fetchSearchSuggestions(city, query) {
-  //   try {
-  //     const client = algoliasearch(
-  //       "M8TRSWR245",
-  //       "a821e0149ad248fa5240718b3c1a5360"
-  //     );
-  //     const index = client.initIndex("locations");
-  //     const response = await index.search(`${city} ${query}`, {
-  //       attributesToRetrieve: ["id", "name"],
-  //     });
-  //     return response.hits;
-  //   } catch (error) {
-  //     if (error.name !== "AbortError") {
-  //       const errorMessage = error.message || "Failed to search city data.";
-  //       console.error("Error searching city data:", errorMessage);
-  //       toast.error(errorMessage, {
-  //         position: "top-center",
-  //         autoClose: 5000,
-  //       });
-  //       throw error;
-  //     }
-  //     return [];
-  //   }
-  // }
   const controller = getAbortController("fetchSearchSuggestions");
   try {
     const url = `${API_URL}/property/suggestions/${city ?? ""}?query=${query}`;
@@ -295,7 +271,6 @@ async function fetchPropertyRecommendations({
   area_max,
   page_number = 1,
 }) {
-  const controller = getAbortController("fetchPropertyRecommendations");
   try {
     const formattedPropertyType =
       typeof property_type === "string"
@@ -313,7 +288,6 @@ async function fetchPropertyRecommendations({
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
-        signal: controller.signal,
       }
     );
     if (!response.ok) {
