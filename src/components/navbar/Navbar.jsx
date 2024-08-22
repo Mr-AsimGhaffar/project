@@ -27,11 +27,18 @@ const Navbar = ({
   const [isBlackTheme, setIsBlackTheme] = useState(false);
   useEffect(() => {
     setPropertyView(propertyCategory);
-  }, [propertyCategory]);
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+      setIsBlackTheme(savedTheme === "dark");
+    }
+  }, [propertyCategory, setTheme]);
+
   const handleThemeToggle = () => {
     const newTheme = isBlackTheme ? "light" : "dark";
     setTheme(newTheme);
     setIsBlackTheme(!isBlackTheme);
+    localStorage.setItem("theme", newTheme);
   };
   const handleDropdownClick = () => {
     // Toggle the theme when the dropdown is clicked
