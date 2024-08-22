@@ -256,7 +256,11 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   return (
     <div className="relative">
       <LazyLoad height={200} offset={100} once>
-        <img src="img/bg_image.jpeg" alt="bg_image" className="w-full" />
+        <img
+          src="img/bg_image.jpeg"
+          alt="bg_image"
+          className="w-full md:h-[30rem] h-[10rem]"
+        />
       </LazyLoad>
 
       <div className="lg:absolute top-20 left-0 right-0 mx-auto max-w-5xl">
