@@ -18,8 +18,7 @@ export default function LocationMap({ locationData }) {
   }
   return (
     <div>
-      <div className="bg-gray-50">
-        <hr />
+      <div>
         <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
           Location & Nearby
         </p>

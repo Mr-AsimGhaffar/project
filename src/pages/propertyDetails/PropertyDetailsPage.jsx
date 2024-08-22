@@ -9,7 +9,6 @@ import PriceIndexGraph from "./PriceIndexGraph";
 import PopularityTrendGraph from "./PopularityTrendGraph";
 import SimilarProperty from "./SimilarProperty";
 import LocationMap from "./LocationMap";
-// import SkeletonCard from "../../components/skeleton/Skeleton";
 import {
   fetchPropertyDetails,
   fetchPropertyRecommendations,
@@ -115,7 +114,6 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
 
   return (
     <div className="px-4 md:px-20 lg:px-44 py-5">
-      {/* <h1>{property.header}</h1> */}
       <div>
         <div>
           <p className="font-montserrat md:text-xl text-lg font-bold">
@@ -126,28 +124,30 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             {property.location}
           </p>
         </div>
-        <div className="relative w-[100%]">
+        <div className="relative w-[100%] py-4">
           {property.cover_photo_url ? (
-            <div>
+            <div className="shadow-xl bg-gray-50 dark:bg-black">
               <img
                 src={property.cover_photo_url}
                 alt="property"
-                className="w-full md:h-[40rem] h-[10rem] object-fit rounded-lg"
+                className="w-full md:h-[40rem] h-[10rem] object-contain rounded-lg"
               />
             </div>
           ) : (
-            <img
-              src="/img/NoImage.png"
-              alt="dummy"
-              className="w-full h-96 object-fit rounded-lg"
-            />
+            <div className="shadow-xl bg-gray-50 dark:bg-black">
+              <img
+                src="/img/NoImage.png"
+                alt="dummy"
+                className="w-full md:h-[40rem] h-[10rem] object-contain rounded-lg"
+              />
+            </div>
           )}
-          <div className="absolute left-5 bottom-5">
+          <div className="absolute left-5 bottom-8 shadow-lg">
             <a href={property.url} target="_blank" rel="noopener noreferrer">
               <Button variant="outline">View more details</Button>
             </a>
           </div>
-          <div className="absolute right-5 bottom-5">
+          <div className="absolute right-5 bottom-8">
             <CiHeart className="w-[30px] h-[30px] bg-gray-400 rounded-3xl text-white" />
           </div>
         </div>
@@ -260,8 +260,8 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           </div>
         </div>
         <div ref={overviewRef} className="w-[100%]">
-          <div className="bg-gray-100">
-            <p className="font-montserrat text-2xl text-[#0071BC] font-bold p-2">
+          <div>
+            <p className="font-montserrat text-2xl text-[#0071BC] font-bold p-2 bg-gray-50 dark:bg-transparent">
               Overview
             </p>
           </div>
@@ -282,7 +282,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                               <TableCell
                                 className={`${
                                   rowIndex % 2 === 0
-                                    ? "bg-gray-100 text-black"
+                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
                                     : ""
                                 }`}
                               >
@@ -291,7 +291,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                               <TableCell
                                 className={`w-[100%] ${
                                   rowIndex % 2 === 0
-                                    ? "bg-gray-100 text-black"
+                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
                                     : ""
                                 }`}
                               >
@@ -325,7 +325,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                               <TableCell
                                 className={`${
                                   rowIndex % 2 === 0
-                                    ? "bg-gray-100 text-black"
+                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
                                     : ""
                                 }`}
                               >
@@ -334,7 +334,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                               <TableCell
                                 className={`w-[100%] ${
                                   rowIndex % 2 === 0
-                                    ? "bg-gray-100 text-black"
+                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
                                     : ""
                                 }`}
                               >

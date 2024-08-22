@@ -1,13 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "./ui/select";
 import {
-  // fetchAvailableCities,
   fetchLocationTreeData,
   fetchPropertyDetails,
   fetchPropertyRecommendations,
@@ -23,8 +15,6 @@ import BestPropertyMap from "./bestProperty/BestPropertyMap";
 import BestLocationTree from "./bestProperty/BestLocationTree";
 
 const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
-  // const [data, setData] = useState([]);
-  // const [city, setCity] = useState("islamabad");
   const [mapData, setMapData] = useState([]);
   const [propertyRecommendationsData, setPropertyRecommendationData] = useState(
     []
@@ -65,17 +55,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
     }
   }, [propertyRecommendationsData]);
 
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const cities = await fetchAvailableCities();
-  //     setData(cities);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }, []);
-
   useEffect(() => {
-    // fetchData();
     fetchDataMap();
   }, [fetchDataMap]);
 
@@ -147,34 +127,20 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
           Best Property In Town
         </h1>
       </div>
-      <div className="font-montserrat md:px-20 lg:px-44 py-2 flex flex-col md:flex-row gap-2">
-        {/* <div className="w-[20%]">
-          <Select onValueChange={setCity}>
-            <SelectTrigger className="">
-              <SelectValue placeholder="Islamabad" />
-            </SelectTrigger>
-            <SelectContent>
-              {data.map((item, index) => (
-                <SelectItem className="cursor-pointer" key={index} value={item}>
-                  {item}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div> */}
-        <div className="w-[17%]">
+      <div className="font-montserrat px-2 md:px-44 py-2 flex flex-col md:flex-row gap-2 max-w-screen-xl">
+        <div className="flex-grow md:flex-basis-1/5">
           <BestLocationTree
             locationTreeData={locationTreeData}
             setSelectedLocation={setSelectedLocation}
           />
         </div>
-        <div className="w-[17%]">
+        <div className="flex-grow md:flex-basis-1/5">
           <BestPropertyArea
             setBestAreaMin={setBestAreaMin}
             setBestAreaMax={setBestAreaMax}
           />
         </div>
-        <div className="w-[20%]">
+        <div className="flex-grow md:flex-basis-1/5">
           <BestPropertyCategory setpropertyType={setpropertyType} />
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import PropTypes from "prop-types";
 import L from "leaflet";
-// import Spinner from "../spinner/Spinner";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -13,13 +12,10 @@ L.Icon.Default.mergeOptions({
 });
 
 export default function BestPropertyMap({ locationData, loading }) {
-  // if (!loading || loading.length === 0) {
-  //   return <Spinner />;
-  // }
   const firstLocation = locationData[0]?.index?.location;
 
   return (
-    <div className="md:px-44 px-20">
+    <div className="md:px-44 px-2">
       <div className="py-20">
         <p className="font-montserrat font-bold text-xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
           PROPERTIES LOCATION
