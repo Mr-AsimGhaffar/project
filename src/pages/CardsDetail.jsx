@@ -42,6 +42,7 @@ import { toast } from "react-toastify";
 import TopPropertyArea from "../components/topProperties/TopPropertyArea";
 import displayFirstName from "../utlils/displayFirstName";
 import HeaderOwnerDetail from "./searchResultHeader/HeaderOwnerDetail";
+import firstLetterUpperCase from "../utlils/firstLetterUpperCase";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -461,6 +462,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setSuggestions([]);
   };
 
+  const displayText =
+    propertyState.selectedSubProperty || propertyState.selectedPropertyType;
+  const capitalizedText = firstLetterUpperCase(displayText);
+
   return (
     <main className="px-4 md:px-20 lg:px-44 py-5">
       <div>
@@ -608,7 +613,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </form>
       <div>
         <p className="font-montserrat text-2xl font-bold">
-          All Properties in{" "}
+          <span>{capitalizedText}</span> Properties in{" "}
           <span className="text-[#0071BC] font-semibold">
             {simpleContext.appState.selectedSuggestions
               .map((suggestion) => displayFirstName(suggestion.name))

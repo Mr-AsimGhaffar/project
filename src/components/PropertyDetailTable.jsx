@@ -312,4 +312,5 @@ PropertyDetailTable.propTypes = {
   conversionFunction: PropTypes.func.isRequired,
   propertyCategory: PropTypes.string.isRequired,
 };
+
 export default PropertyDetailTable;

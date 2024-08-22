@@ -39,8 +39,9 @@ export function DatePickerWithRange({ onChange, className }) {
             id="date"
             variant={"outline"}
             className={cn(
-              "justify-start text-left font-normal rounded-3xl border-2",
-              !date && "text-muted-foreground"
+              "flex items-center justify-start text-left font-normal rounded-3xl border-2",
+              !date && "text-muted-foreground",
+              "w-full sm:w-auto"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -58,15 +59,17 @@ export function DatePickerWithRange({ onChange, className }) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            initialFocus
-            mode="range"
-            selected={date}
-            onSelect={handleDateChange}
-            numberOfMonths={2}
-            toDate={today}
-          />
+        <PopoverContent className="w-full sm:w-auto p-0" align="start">
+          <div className="md:h-auto overflow-y-auto h-52">
+            <Calendar
+              initialFocus
+              mode="range"
+              selected={date}
+              onSelect={handleDateChange}
+              numberOfMonths={2}
+              toDate={today}
+            />
+          </div>
           <div className="flex justify-end p-2">
             <Button variant="outline" onClick={handleClear}>
               Clear

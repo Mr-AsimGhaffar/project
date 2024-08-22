@@ -7,10 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { fetchFeaturedProperties } from "../utlils/fetchApi";
-import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { formatTimeNow } from "../utlils/formatTimeNow";
-// import Spinner from "./spinner/Spinner";
 
 export default function FeaturedProperty({
   conversionFunction,
@@ -27,14 +25,7 @@ export default function FeaturedProperty({
         const data = await fetchFeaturedProperties(propertyCategory);
         setfeaturedData(data);
       } catch (error) {
-        const errorMessage =
-          error.message || "Failed to fetch featured properties.";
-        console.error("Error fetching featured properties:", errorMessage);
-        toast.error(errorMessage, {
-          position: "top-center",
-          autoClose: 5000,
-        });
-        throw error;
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }

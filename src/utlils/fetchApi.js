@@ -14,6 +14,7 @@ function getAbortController(key) {
 }
 
 async function fetchFeaturedProperties(propertyCategory = "for_sale") {
+  const controller = getAbortController("fetchFeaturedProperties");
   try {
     const response = await fetch(
       `${API_URL}/property/featured?purpose=${propertyCategory}`,
@@ -22,6 +23,7 @@ async function fetchFeaturedProperties(propertyCategory = "for_sale") {
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
+        signal: controller.signal,
       }
     );
     if (!response.ok) {
@@ -32,13 +34,18 @@ async function fetchFeaturedProperties(propertyCategory = "for_sale") {
     const jsonData = await response.json();
     return jsonData.data.properties;
   } catch (error) {
-    const errorMessage =
-      error.message || "Failed to fetch featured properties.";
-    console.error("Error fetching featured properties:", errorMessage);
-    toast.error(errorMessage, {
-      position: "top-center",
-      autoClose: 5000,
-    });
+    if (error.name === "AbortError") {
+      // Request was canceled; do not show an error message
+    } else {
+      // Handle other errors
+      const errorMessage =
+        error.message || "Failed to fetch featured properties.";
+      console.error("Error fetching featured properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 5000,
+      });
+    }
     throw error;
   }
 }
@@ -186,18 +193,21 @@ async function fetchAvailableCities() {
     const jsonData = await response.json();
     return jsonData.data;
   } catch (error) {
-    const errorMessage =
-      error.message || "Failed to fetch featured properties.";
-    console.error("Error fetching featured properties:", errorMessage);
-    toast.error(errorMessage, {
-      position: "top-center",
-      autoClose: 5000,
-    });
-    throw error;
+    if (error.name !== "AbortError") {
+      const errorMessage =
+        error.message || "Failed to fetch featured properties.";
+      console.error("Error fetching featured properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 5000,
+      });
+      throw error;
+    }
   }
 }
 
 export async function fetchPropertyCount(propertyCategory = "for_sale") {
+  const controller = getAbortController("fetchPropertyCount");
   try {
     const response = await fetch(
       `${API_URL}/property/count?purpose=${propertyCategory}`,
@@ -206,6 +216,7 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
+        signal: controller.signal,
       }
     );
     if (!response.ok) {
@@ -216,13 +227,17 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
     const jsonData = await response.json();
     return jsonData.data;
   } catch (error) {
-    const errorMessage =
-      error.message || "Failed to fetch featured properties.";
-    console.error("Error fetching featured properties:", errorMessage);
-    toast.error(errorMessage, {
-      position: "top-center",
-      autoClose: 5000,
-    });
+    if (error.name === "AbortError") {
+      // Request was canceled; do not show an error message
+    } else {
+      // Handle other errors
+      const errorMessage = error.message || "Failed to fetch count properties.";
+      console.error("Error fetching count properties:", errorMessage);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 5000,
+      });
+    }
     throw error;
   }
 }
