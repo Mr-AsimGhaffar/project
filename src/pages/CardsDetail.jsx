@@ -78,9 +78,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       ),
     [simpleContext.appState.selectedSuggestions]
   );
-
   const loadRecommendationsData = useCallback(async () => {
-    if (!mounted.current) return;
     try {
       const data = await fetchPropertyRecommendations({
         city: selectedCity,
@@ -273,7 +271,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       mounted.current = true;
       return;
     }
-    handleSearch();
+    handleSortChange();
   }, [
     simpleContext.appState.selectedAmountMin,
     simpleContext.appState.selectedAmountMax,
@@ -288,6 +286,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     propertyCategory,
     simpleContext.appState.is_agency,
   ]);
+
+  useEffect(() => {
+    loadRecommendationsData();
+  }, [selectedSuggestions, propertyCategory, propertyState]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -436,8 +438,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       sort.push(sortByDate);
       order.push(sortOrderDate);
     }
-
-    handleSearch(sort.join(","), order.join(","));
   }, [sortBy, sortOrder, sortByDate, sortOrderDate]);
 
   useEffect(() => {
@@ -452,10 +452,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    loadRecommendationsData();
-  }, [selectedSuggestions, propertyCategory, propertyState]);
 
   const emptySearchString = () => {
     setSearchTerm("");

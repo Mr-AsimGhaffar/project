@@ -103,7 +103,7 @@ const BestLocationTree = ({ locationTreeData, setSelectedLocation }) => {
       </Button>
       <div className="absolute z-10 w-full">
         {isDropdownVisible && (
-          <ScrollArea className="w-full mt-2 bg-white rounded-md border border-gray-300 shadow-lg overflow-y-auto h-52">
+          <ScrollArea className="w-full mt-2 bg-white dark:bg-gray-950 rounded-md border border-gray-300 shadow-lg overflow-y-auto h-52">
             <div className="p-4">
               {renderLocationTree(
                 locationTreeData,

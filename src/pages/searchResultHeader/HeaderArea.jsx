@@ -101,6 +101,9 @@ const AreaTag = () => {
         </SelectTrigger>
         <SelectContent>
           <div className="rounded-md shadow-lg p-4 w-64">
+            <Button className="mb-4 w-[100%]" variant="secondary">
+              Area unit (Marla)
+            </Button>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <div className="text-xs font-semibold text-gray-500 mb-1">
