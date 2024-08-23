@@ -1,6 +1,7 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import PropTypes from "prop-types";
 import L from "leaflet";
+import { useEffect } from "react";
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -10,9 +11,23 @@ L.Icon.Default.mergeOptions({
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/marker-shadow.png",
 });
+function MapCenter({ center }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) {
+      map.setView(center, map.getZoom(), { animate: true });
+    }
+  }, [center, map]);
 
+  return null;
+}
 export default function BestPropertyMap({ locationData, loading }) {
   const firstLocation = locationData[0]?.index?.location;
+
+  const initialCenter = [
+    firstLocation?.latitude ?? "33.738045",
+    firstLocation?.longitude ?? "73.0363",
+  ];
 
   return (
     <div className="md:px-44 px-2">
@@ -28,13 +43,11 @@ export default function BestPropertyMap({ locationData, loading }) {
       ) : (
         <div className="dark:bg-gray-800 shadow-lg sm:rounded-lg">
           <MapContainer
-            center={[
-              firstLocation?.latitude ?? "33.738045",
-              firstLocation?.longitude ?? "73.0363",
-            ]}
+            center={initialCenter}
             zoom={13}
             style={{ height: "400px", width: "100%" }}
           >
+            <MapCenter center={initialCenter} />
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
             {locationData.map((location, index) => (
@@ -62,4 +75,7 @@ export default function BestPropertyMap({ locationData, loading }) {
 BestPropertyMap.propTypes = {
   locationData: PropTypes.array.isRequired,
   loading: PropTypes.array.isRequired,
+};
+MapCenter.propTypes = {
+  center: PropTypes.arrayOf(PropTypes.number).isRequired,
 };

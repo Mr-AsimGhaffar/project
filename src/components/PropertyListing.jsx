@@ -5,7 +5,6 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { fetchPropertyCount } from "../utlils/fetchApi";
 import PropTypes from "prop-types";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-// import Spinner from "./spinner/Spinner";
 
 const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const [propertyListingData, setPropertyListingData] = useState({});

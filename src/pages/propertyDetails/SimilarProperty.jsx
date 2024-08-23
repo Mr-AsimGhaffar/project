@@ -9,9 +9,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { FaBed } from "react-icons/fa";
+import { FaBed, FaChartArea } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
-import { BiSolidDirections } from "react-icons/bi";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchSimilarProperties } from "../../utlils/fetchApi";
 import { formatTimeNow } from "../../utlils/formatTimeNow";
@@ -129,7 +128,7 @@ export default function SimilarProperty({
                           )}
                           {item.area && (
                             <div className="flex flex-row items-center gap-1">
-                              <BiSolidDirections />
+                              <FaChartArea />
                               <p>{item.area} sqft</p>
                             </div>
                           )}

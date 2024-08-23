@@ -42,6 +42,7 @@ import { toast } from "react-toastify";
 import TopPropertyArea from "../components/topProperties/TopPropertyArea";
 import displayFirstName from "../utlils/displayFirstName";
 import HeaderOwnerDetail from "./searchResultHeader/HeaderOwnerDetail";
+import firstLetterUpperCase from "../utlils/firstLetterUpperCase";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -77,9 +78,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       ),
     [simpleContext.appState.selectedSuggestions]
   );
-
   const loadRecommendationsData = useCallback(async () => {
-    if (!mounted.current) return;
     try {
       const data = await fetchPropertyRecommendations({
         city: selectedCity,
@@ -272,7 +271,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       mounted.current = true;
       return;
     }
-    handleSearch();
+    handleSortChange();
   }, [
     simpleContext.appState.selectedAmountMin,
     simpleContext.appState.selectedAmountMax,
@@ -287,6 +286,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     propertyCategory,
     simpleContext.appState.is_agency,
   ]);
+
+  useEffect(() => {
+    loadRecommendationsData();
+  }, [selectedSuggestions, propertyCategory, propertyState]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -435,8 +438,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       sort.push(sortByDate);
       order.push(sortOrderDate);
     }
-
-    handleSearch(sort.join(","), order.join(","));
   }, [sortBy, sortOrder, sortByDate, sortOrderDate]);
 
   useEffect(() => {
@@ -452,14 +453,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     };
   }, []);
 
-  useEffect(() => {
-    loadRecommendationsData();
-  }, [selectedSuggestions, propertyCategory, propertyState]);
-
   const emptySearchString = () => {
     setSearchTerm("");
     setSuggestions([]);
   };
+
+  const displayText =
+    propertyState.selectedSubProperty || propertyState.selectedPropertyType;
+  const capitalizedText = firstLetterUpperCase(displayText);
 
   return (
     <main className="px-4 md:px-20 lg:px-44 py-5">
@@ -608,7 +609,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </form>
       <div>
         <p className="font-montserrat text-2xl font-bold">
-          All Properties in{" "}
+          <span>{capitalizedText}</span> Properties in{" "}
           <span className="text-[#0071BC] font-semibold">
             {simpleContext.appState.selectedSuggestions
               .map((suggestion) => displayFirstName(suggestion.name))

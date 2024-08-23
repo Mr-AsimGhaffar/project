@@ -80,24 +80,6 @@ const HeaderPrice = () => {
     setSelectedMaxButton(null);
   };
 
-  function ChevronUpIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="m18 15-6-6-6 6" />
-      </svg>
-    );
-  }
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 text-white" : "";
   return (
@@ -114,7 +96,6 @@ const HeaderPrice = () => {
           <div className="rounded-md shadow-lg p-4 w-64">
             <div className="flex justify-between items-center mb-4">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
-              <ChevronUpIcon className="h-4 w-4 text-gray-400" />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>

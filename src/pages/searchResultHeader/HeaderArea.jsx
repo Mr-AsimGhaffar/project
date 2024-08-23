@@ -102,7 +102,7 @@ const AreaTag = () => {
         <SelectContent>
           <div className="rounded-md shadow-lg p-4 w-64">
             <Button className="mb-4 w-[100%]" variant="secondary">
-              Change area unit (Marla)
+              Area unit (Marla)
             </Button>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>

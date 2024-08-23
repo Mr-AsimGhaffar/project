@@ -10,10 +10,11 @@ import { FaBath, FaBed } from "react-icons/fa";
 import { BiSolidDirections } from "react-icons/bi";
 import { squareFeetToMarla } from "../../utlils/squareFeetToMarla";
 import PropTypes from "prop-types";
+import firstLetterUpperCase from "../../utlils/firstLetterUpperCase";
 
 const TopPropertyArea = ({ conversionFunction }) => {
   const simpleContext = useContext(appContext);
-  const { topBestProperty, loading } = simpleContext.appState;
+  const { topBestProperty, loading, propertyState } = simpleContext.appState;
   const [expandedCards, setExpandedCards] = useState({});
 
   const handleToggleExpand = (id) => {
@@ -22,12 +23,15 @@ const TopPropertyArea = ({ conversionFunction }) => {
       [id]: !prev[id],
     }));
   };
+  const displayText =
+    propertyState.selectedSubProperty || propertyState.selectedPropertyType;
+  const capitalizedText = firstLetterUpperCase(displayText);
 
   return (
     <div className="py-4">
       <div>
         <p className="font-montserrat text-2xl font-bold">
-          Top Properties in{" "}
+          Top <span>{capitalizedText}</span> Properties in{" "}
           <span className="text-[#0071BC] font-semibold">
             {simpleContext.appState.selectedSuggestions
               .map((suggestion) => displayFirstName(suggestion.name))
