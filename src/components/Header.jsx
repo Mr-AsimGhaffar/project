@@ -315,7 +315,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           onOpenChange={emptySearchString}
                           onValueChange={handleSelectCity}
                         >
-                          <SelectTrigger className="rounded-none md:rounded-tl-lg md:rounded-bl-lg">
+                          <SelectTrigger className="rounded-md md:rounded-tr-none md:rounded-br-none">
                             <SelectValue placeholder="Islamabad" />
                           </SelectTrigger>
                           <SelectContent>
@@ -338,7 +338,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           onKeyDown={handleKeyDown}
                           onClick={isVisible || toggleVisibility}
                           placeholder="Location"
-                          className="rounded-none"
+                          className="rounded-md md:rounded-none"
                         />
                         <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
                           {suggestions.length > 0 && (
@@ -439,7 +439,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                       <div>
                         <Button
                           onClick={handleSearch}
-                          className="w-full rounded-none flex items-center justify-center md:rounded-tr-lg md:rounded-br-lg bg-white text-black hover:bg-gray-100"
+                          className="w-full rounded-md flex items-center justify-center md:rounded-tl-none md:rounded-bl-none bg-white text-black hover:bg-gray-100"
                         >
                           <CiSearch className="h-5 w-5 mr-2" />
                         </Button>

@@ -31,7 +31,7 @@ const TopPropertyArea = ({ conversionFunction }) => {
     <div className="py-4">
       <div>
         <p className="font-montserrat text-2xl font-bold">
-          <span>{capitalizedText}</span> Properties in{" "}
+          Top <span>{capitalizedText}</span> Properties in{" "}
           <span className="text-[#0071BC] font-semibold">
             {simpleContext.appState.selectedSuggestions
               .map((suggestion) => displayFirstName(suggestion.name))
