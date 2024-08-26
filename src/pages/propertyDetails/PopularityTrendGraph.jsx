@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { formatDateToMonthYear } from "../../utlils/dateToMonthYear";
+import displayFirstName from "../../utlils/displayFirstName";
 
 export default function PopularityTrendGraph({
   popularityTrendData,
@@ -36,7 +37,7 @@ export default function PopularityTrendGraph({
     <div>
       <div>
         <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
-          Trends - Most Searched Locations in {location}
+          Trends - Most Searched Locations in {displayFirstName(location)}
         </p>
       </div>
       <div>
@@ -54,7 +55,7 @@ export default function PopularityTrendGraph({
             ))}
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-4 font-inter text-sm">
           <div className="w-full md:w-1/4 text-center flex flex-col gap-2 mb-4 md:mb-0">
             <p>Rank</p>
             {data.map((item, index) => (

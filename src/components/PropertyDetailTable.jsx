@@ -92,8 +92,6 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
     propertyType,
   ]);
 
-  console.log(propertyType);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };

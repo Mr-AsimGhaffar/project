@@ -175,11 +175,11 @@ DropdownMenuSubContent.propTypes = {
 };
 DropdownMenuItem.propTypes = {
   className: PropTypes.string.isRequired,
-  inset: PropTypes.string.isRequired,
+  inset: PropTypes.string,
 };
 DropdownMenuContent.propTypes = {
   className: PropTypes.string.isRequired,
-  sideOffset: PropTypes.string.isRequired,
+  sideOffset: PropTypes.string,
 };
 DropdownMenuCheckboxItem.propTypes = {
   className: PropTypes.string.isRequired,

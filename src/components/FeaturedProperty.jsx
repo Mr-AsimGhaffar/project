@@ -103,12 +103,10 @@ export default function FeaturedProperty({
                           PKR {conversionFunction(item.price)}
                         </CardDescription>
                         <CardDescription className="truncate">
-                          {item.location}
+                          {item.header}
                         </CardDescription>
-                        <br />
-
                         <CardDescription>
-                          <div className="flex justify-left gap-3 text-xs">
+                          <div className="flex justify-left gap-3 text-xs mt-4">
                             {item.bedroom && (
                               <div className="flex flex-row items-center gap-1">
                                 <FaBed />
