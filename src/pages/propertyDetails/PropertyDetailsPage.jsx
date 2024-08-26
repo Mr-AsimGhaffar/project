@@ -39,6 +39,42 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const [data, setData] = useState([]);
   const [isLoadingRecommendations, setIsLoadingRecommendations] =
     useState(false);
+  const [isNavbarFixed, setIsNavbarFixed] = useState(false);
+  const [lastScrollPosition, setLastScrollPosition] = useState(0);
+  const navbarRef = useRef(null);
+  const triggerDivRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (triggerDivRef.current && navbarRef.current) {
+        const triggerDivPosition =
+          triggerDivRef.current.getBoundingClientRect().bottom;
+        const currentScrollPosition = window.scrollY;
+
+        if (
+          currentScrollPosition > lastScrollPosition &&
+          triggerDivPosition <= 0
+        ) {
+          // Scrolling down past the trigger div
+          setIsNavbarFixed(true);
+        } else if (
+          currentScrollPosition < lastScrollPosition &&
+          currentScrollPosition < triggerDivRef.current.offsetTop
+        ) {
+          // Scrolling up and moving above the trigger div
+          setIsNavbarFixed(false);
+        }
+
+        // Update last scroll position
+        setLastScrollPosition(currentScrollPosition);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollPosition]);
 
   const loadRecommendationsData = useCallback(async () => {
     try {
@@ -186,76 +222,86 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         <br />
       </div>
       <div>
-        <div className="w-[100%] overflow-x-auto">
-          <div className="font-montserrat flex flex-col md:flex-row justify-between gap-4 bg-black p-2">
-            <Button
-              variant="ghost"
-              className={`w-full${
-                activeButton === "Overview"
-                  ? "bg-white bg-accent rounded-3xl border-2"
-                  : "bg-black text-white rounded-3xl border-2 border-none"
-              }`}
-              onClick={() => scrollToSection(overviewRef, "Overview")}
-            >
-              <span>Overview</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={`  w-full${
-                activeButton === "Location"
-                  ? "bg-white bg-accent rounded-3xl border-2"
-                  : "bg-inherit text-white rounded-3xl border-2 border-none"
-              }`}
-              onClick={() => scrollToSection(locationRef, "Location")}
-            >
-              <span>Location & Nearby</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={`w-full${
-                activeButton === "PriceIndex"
-                  ? "bg-white bg-accent rounded-3xl border-2"
-                  : "bg-transparent text-white rounded-3xl border-2 border-none"
-              }`}
-              onClick={() => scrollToSection(priceIndexRef, "PriceIndex")}
-            >
-              <span>Price Index</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={`w-full${
-                activeButton === "Trends"
-                  ? "bg-white bg-accent rounded-3xl border-2"
-                  : "bg-transparent text-white rounded-3xl border-2 border-none"
-              }`}
-              onClick={() => scrollToSection(trendsRef, "Trends")}
-            >
-              <span>Trends</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={`w-full${
-                activeButton === "Similar"
-                  ? "bg-white bg-accent rounded-3xl border-2"
-                  : "bg-transparent text-white rounded-3xl border-2 border-none"
-              }`}
-              onClick={() => scrollToSection(similarPropertyRef, "Similar")}
-            >
-              <span>Similar Properties</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={`w-full${
-                activeButton === "Top"
-                  ? "bg-white bg-accent rounded-3xl border-2"
-                  : "bg-transparent text-white rounded-3xl border-2 border-none"
-              }`}
-              onClick={() =>
-                scrollToSection(topPropertyPropertyDetailRef, "Top")
-              }
-            >
-              <span>Top Properties</span>
-            </Button>
+        <div>
+          <div ref={triggerDivRef}>
+            {/* The content of the trigger div goes here */}
+          </div>
+          <div
+            className={`w-[100%] overflow-x-auto bg-black ${
+              isNavbarFixed ? "fixed top-0 left-0 z-50 md:px-20 lg:px-44" : ""
+            }`}
+            ref={navbarRef}
+          >
+            <div className="font-montserrat flex justify-between gap-4 bg-black p-2">
+              <Button
+                variant="ghost"
+                className={`w-full${
+                  activeButton === "Overview"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-black text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() => scrollToSection(overviewRef, "Overview")}
+              >
+                <span>Overview</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className={`  w-full${
+                  activeButton === "Location"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-inherit text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() => scrollToSection(locationRef, "Location")}
+              >
+                <span>Location & Nearby</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className={`w-full${
+                  activeButton === "PriceIndex"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-transparent text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() => scrollToSection(priceIndexRef, "PriceIndex")}
+              >
+                <span>Price Index</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className={`w-full${
+                  activeButton === "Trends"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-transparent text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() => scrollToSection(trendsRef, "Trends")}
+              >
+                <span>Trends</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className={`w-full${
+                  activeButton === "Similar"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-transparent text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() => scrollToSection(similarPropertyRef, "Similar")}
+              >
+                <span>Similar Properties</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className={`w-full${
+                  activeButton === "Top"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-transparent text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() =>
+                  scrollToSection(topPropertyPropertyDetailRef, "Top")
+                }
+              >
+                <span>Top Properties</span>
+              </Button>
+            </div>
           </div>
         </div>
         <div ref={overviewRef} className="w-[100%]">
