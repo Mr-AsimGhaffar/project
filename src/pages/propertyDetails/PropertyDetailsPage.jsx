@@ -68,13 +68,50 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         // Update last scroll position
         setLastScrollPosition(currentScrollPosition);
       }
+
+      // New functionality
+      const overviewPosition = overviewRef.current.offsetTop;
+      const locationPosition = locationRef.current.offsetTop;
+      const priceIndexPosition = priceIndexRef.current.offsetTop;
+      const trendsPosition = trendsRef.current.offsetTop;
+      const similarPosition = similarPropertyRef.current.offsetTop;
+      const topPosition = topPropertyPropertyDetailRef.current.offsetTop;
+      const currentScrollPosition = window.scrollY + 10;
+      if (
+        currentScrollPosition >= overviewPosition &&
+        currentScrollPosition < locationPosition
+      ) {
+        setActiveButton("Overview");
+      } else if (
+        currentScrollPosition >= locationPosition &&
+        currentScrollPosition < priceIndexPosition
+      ) {
+        setActiveButton("Location");
+      } else if (
+        currentScrollPosition >= priceIndexPosition &&
+        currentScrollPosition < trendsPosition
+      ) {
+        setActiveButton("PriceIndex");
+      } else if (
+        currentScrollPosition >= trendsPosition &&
+        currentScrollPosition < similarPosition
+      ) {
+        setActiveButton("Trends");
+      } else if (
+        currentScrollPosition >= similarPosition &&
+        currentScrollPosition < topPosition
+      ) {
+        setActiveButton("Similar");
+      } else if (currentScrollPosition >= topPosition) {
+        setActiveButton("Top");
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastScrollPosition]);
+  }, [lastScrollPosition, activeButton]);
 
   const loadRecommendationsData = useCallback(async () => {
     try {
@@ -135,6 +172,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
     setActiveButton(buttonName);
     ref.current.scrollIntoView({ behavior: "smooth" });
   };
+
   const toggleExpanded = () => setIsExpanded(!isExpanded);
   const toggleShowRows = () => setShowAllRows(!showAllRows);
   function capitalizeFirstLetter(str) {
@@ -240,7 +278,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     ? "bg-white bg-accent rounded-3xl border-2"
                     : "bg-black text-white rounded-3xl border-2 border-none"
                 }`}
-                onClick={() => scrollToSection(overviewRef, "Overview")}
+                onClick={() => {
+                  scrollToSection(overviewRef, "Overview");
+                  setActiveButton("Overview");
+                }}
               >
                 <span>Overview</span>
               </Button>
@@ -251,7 +292,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     ? "bg-white bg-accent rounded-3xl border-2"
                     : "bg-inherit text-white rounded-3xl border-2 border-none"
                 }`}
-                onClick={() => scrollToSection(locationRef, "Location")}
+                onClick={() => {
+                  scrollToSection(locationRef, "Location");
+                  setActiveButton("Location");
+                }}
               >
                 <span>Location & Nearby</span>
               </Button>
@@ -262,7 +306,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     ? "bg-white bg-accent rounded-3xl border-2"
                     : "bg-transparent text-white rounded-3xl border-2 border-none"
                 }`}
-                onClick={() => scrollToSection(priceIndexRef, "PriceIndex")}
+                onClick={() => {
+                  scrollToSection(priceIndexRef, "PriceIndex");
+                  setActiveButton("PriceIndex");
+                }}
               >
                 <span>Price Index</span>
               </Button>
@@ -273,7 +320,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     ? "bg-white bg-accent rounded-3xl border-2"
                     : "bg-transparent text-white rounded-3xl border-2 border-none"
                 }`}
-                onClick={() => scrollToSection(trendsRef, "Trends")}
+                onClick={() => {
+                  scrollToSection(trendsRef, "Trends");
+                  setActiveButton("Trends");
+                }}
               >
                 <span>Trends</span>
               </Button>
@@ -284,7 +334,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     ? "bg-white bg-accent rounded-3xl border-2"
                     : "bg-transparent text-white rounded-3xl border-2 border-none"
                 }`}
-                onClick={() => scrollToSection(similarPropertyRef, "Similar")}
+                onClick={() => {
+                  scrollToSection(similarPropertyRef, "Similar");
+                  setActiveButton("Similar");
+                }}
               >
                 <span>Similar Properties</span>
               </Button>
@@ -295,9 +348,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     ? "bg-white bg-accent rounded-3xl border-2"
                     : "bg-transparent text-white rounded-3xl border-2 border-none"
                 }`}
-                onClick={() =>
-                  scrollToSection(topPropertyPropertyDetailRef, "Top")
-                }
+                onClick={() => {
+                  scrollToSection(topPropertyPropertyDetailRef, "Top");
+                  setActiveButton("Top");
+                }}
               >
                 <span>Top Properties</span>
               </Button>
