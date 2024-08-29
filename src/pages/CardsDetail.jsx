@@ -43,8 +43,11 @@ import TopPropertyArea from "../components/topProperties/TopPropertyArea";
 import displayFirstName from "../utlils/displayFirstName";
 import HeaderOwnerDetail from "./searchResultHeader/HeaderOwnerDetail";
 import firstLetterUpperCase from "../utlils/firstLetterUpperCase";
+import HeaderCity from "./searchResultHeader/HeaderCity";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
+  const abortController = new AbortController();
+  const [isRequestInProgress, setIsRequestInProgress] = useState(false);
   const simpleContext = useContext(appContext);
   const [expandedCards, setExpandedCards] = useState({});
   const [searchTerm, setSearchTerm] = useState(
@@ -117,6 +120,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     start_date,
     end_date
   ) => {
+    if (isRequestInProgress) return; // Prevent new requests while one is in progress
+    setIsRequestInProgress(true);
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -182,6 +187,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     } catch (error) {
       console.error("Error fetching data:", error);
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
+    } finally {
+      setIsRequestInProgress(false);
     }
   };
   useEffect(() => {
@@ -210,6 +217,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     sort_by = sortBy || "added",
     sort_order = sortOrder || "DESC"
   ) => {
+    if (isRequestInProgress) return; // Prevent new requests while one is in progress
+    setIsRequestInProgress(true);
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -263,6 +272,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     } catch (error) {
       console.error("Error fetching data:", error);
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
+    } finally {
+      setIsRequestInProgress(false);
     }
   };
 
@@ -537,6 +548,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="grid lg:grid-cols-5 grid-cols-1 gap-4 py-4">
+          <div>
+            <HeaderCity abortController={abortController} />
+          </div>
           <div className="relative">
             <div className=" w-[100%]">
               <Input
@@ -603,6 +617,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               sortOrder={sortOrder}
               sortByDate={sortByDate}
               sortOrderDate={sortOrderDate}
+              totalCount={totalCount}
             />
           </div>
         </div>
@@ -744,11 +759,13 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
 
       <div className="py-4">
-        <Paging
-          currentPage={simpleContext.appState.currentPage}
-          totalPages={simpleContext.appState.totalPages}
-          onPageChange={handlePageChange}
-        />
+        {cardData.length > 0 && cardData.length >= 12 && (
+          <Paging
+            currentPage={simpleContext.appState.pageData.page_number}
+            totalPages={simpleContext.appState.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
       <div>
         <TopPropertyArea conversionFunction={conversionFunction} />

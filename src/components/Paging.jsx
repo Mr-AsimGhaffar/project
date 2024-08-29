@@ -94,10 +94,11 @@ const Paging = ({ onPageChange }) => {
   const goToFirstPage = () => {
     onPageChange(1);
   };
+
   return (
     <div>
       <Pagination>
-        <PaginationContent className="">
+        <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
               isActive
@@ -140,6 +141,7 @@ const Paging = ({ onPageChange }) => {
 };
 Paging.propTypes = {
   onPageChange: PropTypes.func.isRequired,
+  totalCount: PropTypes.number.isRequired,
 };
 
 export default Paging;
