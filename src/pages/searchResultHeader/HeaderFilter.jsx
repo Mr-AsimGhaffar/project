@@ -9,7 +9,9 @@ const HeaderFilter = ({
   sortOrder,
   sortByDate,
   sortOrderDate,
+  totalCount,
 }) => {
+  const isDisabled = totalCount === 0;
   return (
     <div className="flex flex-col md:flex-row justify-end md:space-x-4 space-y-2 md:space-y-0 mb-2">
       <Button
@@ -18,6 +20,7 @@ const HeaderFilter = ({
           onSortChange("price");
         }}
         className={`flex items-center ${sortBy === "price" ? "font-bold" : ""}`}
+        disabled={isDisabled}
       >
         Sort by Price
         {sortBy === "price" && sortOrder === "ASC" && (
@@ -35,6 +38,7 @@ const HeaderFilter = ({
         className={`flex items-center ${
           sortByDate === "added" ? "font-bold" : ""
         }`}
+        disabled={isDisabled}
       >
         Sort by Date
         {sortByDate === "added" && sortOrderDate === "ASC" && (
@@ -53,5 +57,6 @@ HeaderFilter.propTypes = {
   sortOrder: PropTypes.func.isRequired,
   sortByDate: PropTypes.func.isRequired,
   sortOrderDate: PropTypes.func.isRequired,
+  totalCount: PropTypes.number.isRequired,
 };
 export default HeaderFilter;
