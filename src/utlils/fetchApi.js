@@ -193,16 +193,13 @@ async function fetchAvailableCities() {
     const jsonData = await response.json();
     return jsonData.data;
   } catch (error) {
-    if (error.name !== "AbortError") {
-      const errorMessage =
-        error.message || "Failed to fetch featured properties.";
-      console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 5000,
-      });
-      throw error;
-    }
+    const errorMessage = error.message || "Failed to fetch available cities";
+    console.error("Error fetching available cities:", errorMessage);
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+    });
+    throw error;
   }
 }
 
