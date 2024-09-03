@@ -12,8 +12,38 @@ import {
 import { formatPrice } from "../../utlils/formatPrice";
 import { formatIsoToMonthYear } from "../../utlils/formatIsoToMonthYear";
 import { formatIsoToYear } from "../../utlils/formatIsoToYear";
+import { useCallback, useEffect, useState } from "react";
+import { fetchPricePredictor } from "../../utlils/fetchApi";
 
-export default function PriceIndexGraph({ areaTrendData }) {
+export default function PriceIndexGraph({
+  city,
+  type,
+  locationId,
+  area,
+  purpose,
+  areaTrendData,
+}) {
+  const [predictData, setPredictData] = useState(null);
+
+  const fetchPredictData = useCallback(async () => {
+    try {
+      const data = await fetchPricePredictor({
+        area,
+        city,
+        purpose,
+        sub_location: locationId,
+        type,
+      });
+      setPredictData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [area, city, purpose, locationId, type]);
+
+  useEffect(() => {
+    fetchPredictData();
+  }, [fetchPredictData]);
+
   const pricePercentage = areaTrendData.index?.index_values || [];
   if (pricePercentage.length === 0) {
     return <></>;
@@ -43,10 +73,26 @@ export default function PriceIndexGraph({ areaTrendData }) {
       </div>
       <div className="grid lg:grid-cols-12 grid-cols-1">
         <div className="col-span-3 text-center font-inter">
-          <p>Current Price (May 2024)</p>
-          <p>PKR {formatPrice(areaTrendData.index.avg_price)}</p>
-          <hr />
-          <div className="py-12">
+          <div>
+            <p>
+              Current Price (
+              {formatIsoToMonthYear(
+                areaTrendData.index.index_values[0].month_year
+              )}
+              )
+            </p>
+            <p className="text-[#0071BC] font-bold">
+              PKR {formatPrice(areaTrendData.index.avg_price)}
+            </p>
+          </div>
+          <div className="py-2">
+            <p>Predicted Price</p>
+            <p className="text-[#0071BC] font-bold">
+              PKR {predictData ? formatPrice(predictData) : "Loading..."}
+            </p>
+            <hr />
+          </div>
+          <div className="py-4">
             <p>
               Price Change (
               {formatIsoToMonthYear(lastIndex.month_year) +
@@ -130,5 +176,10 @@ export default function PriceIndexGraph({ areaTrendData }) {
   );
 }
 PriceIndexGraph.propTypes = {
+  city: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  locationId: PropTypes.string.isRequired,
+  area: PropTypes.number.isRequired,
+  purpose: PropTypes.string.isRequired,
   areaTrendData: PropTypes.array.isRequired,
 };

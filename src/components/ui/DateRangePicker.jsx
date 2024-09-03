@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePickerWithRange({ onChange, className }) {
+export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
   const [date, setDate] = React.useState(null);
 
   const handleDateChange = (newDate) => {
@@ -43,6 +43,9 @@ export function DatePickerWithRange({ onChange, className }) {
               !date && "text-muted-foreground",
               "w-full sm:w-auto"
             )}
+            style={{
+              pointerEvents: isSelectOpen ? "none" : "auto",
+            }}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (
@@ -82,5 +85,6 @@ export function DatePickerWithRange({ onChange, className }) {
 }
 DatePickerWithRange.propTypes = {
   onChange: PropTypes.func.isRequired,
-  className: PropTypes.string, // Add className to propTypes
+  className: PropTypes.string,
+  isSelectOpen: PropTypes.bool,
 };

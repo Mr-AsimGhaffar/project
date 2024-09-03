@@ -544,7 +544,14 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         </div>
 
         <div ref={priceIndexRef}>
-          <PriceIndexGraph areaTrendData={property.area_trends || []} />
+          <PriceIndexGraph
+            city={property.city}
+            type={property.type}
+            locationId={property.location_id}
+            area={property.area}
+            purpose={property.purpose}
+            areaTrendData={property.area_trends || []}
+          />
         </div>
         <div ref={trendsRef}>
           <PopularityTrendGraph

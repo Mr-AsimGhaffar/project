@@ -63,6 +63,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [endDate, setEndDate] = useState(null);
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
   const mounted = useRef(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   const {
     cardData,
@@ -120,7 +121,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     start_date,
     end_date
   ) => {
-    if (isRequestInProgress) return; // Prevent new requests while one is in progress
+    if (isRequestInProgress) return;
+    // Prevent new requests while one is in progress
     setIsRequestInProgress(true);
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
@@ -212,13 +214,32 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setStartDate(start ? new Date(start) : null);
     setEndDate(end ? new Date(end) : null);
   };
-
+  let prevCity = null;
+  let timeoutId = null;
   const handleSearch = async (
     sort_by = sortBy || "added",
     sort_order = sortOrder || "DESC"
   ) => {
-    if (isRequestInProgress) return; // Prevent new requests while one is in progress
-    setIsRequestInProgress(true);
+    const newCity = simpleContext.appState.selectedCity;
+    if (newCity !== prevCity) {
+      // Clear the previous timeout
+      clearTimeout(timeoutId);
+
+      // Set a new timeout to delay the request
+      timeoutId = setTimeout(() => {
+        // Reset the flag or cancel the previous request
+        setIsRequestInProgress(false);
+        prevCity = newCity;
+
+        // Make the API request
+        makeRequest(sort_by, sort_order);
+      }, 100); // Adjust the delay time as needed
+    } else {
+      makeRequest(sort_by, sort_order);
+    }
+  };
+  const makeRequest = async (sort_by, sort_order) => {
+    if (isRequestInProgress) return;
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -284,6 +305,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
     handleSortChange();
   }, [
+    simpleContext.appState.selectedCity,
     simpleContext.appState.selectedAmountMin,
     simpleContext.appState.selectedAmountMax,
     simpleContext.appState.selectBeds,
@@ -549,7 +571,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       <form onSubmit={handleSubmit}>
         <div className="grid lg:grid-cols-5 grid-cols-1 gap-4 py-4">
           <div>
-            <HeaderCity abortController={abortController} />
+            <HeaderCity
+              abortController={abortController}
+              setIsSelectOpen={setIsSelectOpen}
+            />
           </div>
           <div className="relative">
             <div className=" w-[100%]">
@@ -560,6 +585,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 type="text"
                 placeholder="Search Here..."
                 className="rounded-3xl border-2 pr-12"
+                style={{
+                  pointerEvents: isSelectOpen ? "none" : "auto",
+                }}
               />
             </div>
             <div>
@@ -599,7 +627,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <HeaderProperty />
           </div>
           <div>
-            <DatePickerWithRange onChange={handleDateChange} />
+            <DatePickerWithRange
+              onChange={handleDateChange}
+              isSelectOpen={isSelectOpen}
+            />
           </div>
           <div>
             <HeaderArea />

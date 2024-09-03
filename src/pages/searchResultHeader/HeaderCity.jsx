@@ -10,7 +10,7 @@ import { fetchAvailableCities } from "../../utlils/fetchApi";
 import { appContext } from "../../contexts/Context";
 import PropTypes from "prop-types";
 
-const HeaderCity = ({ abortController }) => {
+const HeaderCity = ({ abortController, setIsSelectOpen }) => {
   const simpleContext = useContext(appContext);
   const [cityOptions, setCityOptions] = useState([]);
 
@@ -35,11 +35,15 @@ const HeaderCity = ({ abortController }) => {
       selectedSuggestions: [],
     }));
   };
+  const handleOpenChange = (open) => {
+    setIsSelectOpen(open);
+  };
 
   return (
     <div>
       <Select
         onValueChange={handleCityChange}
+        onOpenChange={handleOpenChange}
         value={simpleContext.appState.selectedCity}
       >
         <SelectTrigger className="rounded-3xl border-2">
@@ -59,6 +63,7 @@ const HeaderCity = ({ abortController }) => {
 
 HeaderCity.propTypes = {
   abortController: PropTypes.object.isRequired,
+  setIsSelectOpen: PropTypes.func.isRequired,
 };
 
 export default HeaderCity;
