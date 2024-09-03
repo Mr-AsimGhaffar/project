@@ -75,6 +75,15 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    const {
+      selectedAmountMin,
+      selectedAmountMax,
+      selectedAreaMin,
+      selectedAreaMax,
+      selectBeds,
+      propertyState,
+      is_agency,
+    } = simpleContext.appState;
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -91,15 +100,6 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         loading: true,
       }));
 
-      const {
-        selectedAmountMin,
-        selectedAmountMax,
-        selectedAreaMin,
-        selectedAreaMax,
-        selectBeds,
-        propertyState,
-        is_agency,
-      } = simpleContext.appState;
       const filters = {
         price_min: cleanValue(selectedAmountMin),
         price_max: cleanValue(selectedAmountMax),
@@ -111,6 +111,48 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
           propertyState.selectedSubProperty ||
           propertyState.selectedPropertyType,
       };
+      const queryString = new URLSearchParams();
+
+      if (simpleContext.appState.selectedCity) {
+        queryString.set("city", simpleContext.appState.selectedCity);
+      }
+
+      if (simpleContext.appState.selectedSuggestions.length > 0) {
+        queryString.set(
+          "location_ids",
+          simpleContext.appState.selectedSuggestions
+            .map((suggestion) => suggestion.name.split(",")[0])
+            .join(",")
+        );
+      }
+
+      if (filters.price_min) {
+        queryString.set("price_min", filters.price_min);
+      }
+
+      if (filters.price_max) {
+        queryString.set("price_max", filters.price_max);
+      }
+
+      if (filters.area_min) {
+        queryString.set("area_min", filters.area_min);
+      }
+
+      if (filters.area_max) {
+        queryString.set("area_max", filters.area_max);
+      }
+
+      if (filters.property_type) {
+        queryString.set("propertyType", filters.property_type);
+      }
+
+      if (filters.bedrooms) {
+        queryString.set("beds", filters.bedrooms);
+      }
+
+      if (filters.is_posted_by_agency) {
+        queryString.set("agency", filters.is_posted_by_agency.toString());
+      }
 
       const data = await searchCityData(
         simpleContext.appState.selectedCity,
@@ -138,7 +180,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         isApiCall: true,
       }));
 
-      navigate("/search-results", {
+      navigate(`/search-results?${queryString.toString()}`, {
         state: {
           cardData: data.properties,
           totalCount: data.total_count,
