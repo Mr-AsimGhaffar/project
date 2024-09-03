@@ -38,6 +38,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [propertyView, setPropertyView] = useState("");
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const simpleContext = useContext(appContext);
   const navigate = useNavigate();
 
@@ -253,6 +254,11 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
     setSearchTerm("");
     setSuggestions([]);
   };
+
+  const handleOpenChange = (open) => {
+    setIsSelectOpen(open);
+    emptySearchString();
+  };
   return (
     <div className="relative">
       <LazyLoad height={200} offset={100} once>
@@ -312,7 +318,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                     <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg py-2">
                       <div className="col-span-1 md:col-span-2">
                         <Select
-                          onOpenChange={emptySearchString}
+                          onOpenChange={handleOpenChange}
                           onValueChange={handleSelectCity}
                         >
                           <SelectTrigger className="rounded-md md:rounded-tr-none md:rounded-br-none">
@@ -339,6 +345,9 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           onClick={isVisible || toggleVisibility}
                           placeholder="Location"
                           className="rounded-md md:rounded-none"
+                          style={{
+                            pointerEvents: isSelectOpen ? "none" : "auto",
+                          }}
                         />
                         <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
                           {suggestions.length > 0 && (
@@ -438,6 +447,9 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
 
                       <div>
                         <Button
+                          style={{
+                            pointerEvents: isSelectOpen ? "none" : "auto",
+                          }}
                           onClick={handleSearch}
                           className="w-full rounded-md flex items-center justify-center md:rounded-tl-none md:rounded-bl-none bg-white text-black hover:bg-gray-100"
                         >
@@ -504,8 +516,8 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   );
 };
 Header.propTypes = {
-  propertyCategory: PropTypes.string.isRequired,
-  setPropertyCategory: PropTypes.func.isRequired,
+  propertyCategory: PropTypes.string,
+  setPropertyCategory: PropTypes.func,
 };
 
 export default Header;

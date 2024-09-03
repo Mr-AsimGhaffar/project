@@ -42,7 +42,7 @@ export default function PriceIndexGraph({ areaTrendData }) {
         <p className="text-xl p-3">PRICE (PKR)</p>
       </div>
       <div className="grid lg:grid-cols-12 grid-cols-1">
-        <div className="col-span-3 text-center">
+        <div className="col-span-3 text-center font-inter">
           <p>Current Price (May 2024)</p>
           <p>PKR {formatPrice(areaTrendData.index.avg_price)}</p>
           <hr />

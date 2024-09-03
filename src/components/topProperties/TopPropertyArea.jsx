@@ -91,6 +91,11 @@ const TopPropertyArea = ({ conversionFunction }) => {
                       </CardTitle>
                     </div>
                     <div className="py-2">
+                      <CardDescription className="text-base font-semibold">
+                        {item.location.split(",").slice(0, 2)}
+                      </CardDescription>
+                    </div>
+                    <div className="py-2">
                       <div>
                         <CardDescription>
                           Added: {formatTimeNow(item.added)}

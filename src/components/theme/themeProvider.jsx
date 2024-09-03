@@ -61,7 +61,7 @@ export const useTheme = () => {
 };
 
 ThemeProvider.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
   defaultTheme: PropTypes.string.isRequired,
   storageKey: PropTypes.string.isRequired,
 };

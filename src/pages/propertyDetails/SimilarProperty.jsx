@@ -14,6 +14,7 @@ import { FaBath } from "react-icons/fa";
 import SkeletonCard from "../../components/skeleton/Skeleton";
 import { fetchSimilarProperties } from "../../utlils/fetchApi";
 import { formatTimeNow } from "../../utlils/formatTimeNow";
+import displayFirstName from "../../utlils/displayFirstName";
 
 const responsive = {
   desktop: {
@@ -73,7 +74,7 @@ export default function SimilarProperty({
     <div>
       <div>
         <p className="font-montserrat text-[#0071BC] text-2xl p-2 font-bold">
-          Similar Houses around <span>{location}</span>
+          Similar Houses around <span>{displayFirstName(location)}</span>
         </p>
       </div>
       <div className="p-3 cursor-pointer">
@@ -110,10 +111,8 @@ export default function SimilarProperty({
                       <CardDescription className="truncate">
                         {item.location}
                       </CardDescription>
-                      <br />
-
                       <CardDescription>
-                        <div className="flex justify-left gap-3 text-xs">
+                        <div className="flex justify-left gap-3 text-xs mt-4">
                           {item.bedroom && (
                             <div className="flex flex-row items-center gap-1">
                               <FaBed />

@@ -117,8 +117,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       <div>
         <div>
           <p className="font-montserrat md:text-xl text-lg font-bold">
-            {squareFeetToMarla(property.area)}, Brand New House For Sale in{" "}
-            {property.location}
+            {squareFeetToMarla(property.area)}, {property.header}
           </p>
           <p className="font-montserrat font-normal text-base">
             {property.location}
@@ -270,7 +269,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 items-center">
               <div>
                 <Table>
-                  <div className="flex flex-col md:flex-row justify-start font-inter gap-10">
+                  <div className="flex flex-col md:flex-row justify-start font-inter gap-10 text-sm">
                     <div>
                       <TableBody>
                         {Object.keys(property)
@@ -379,9 +378,20 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           <div className="p-2">
             <p className="font-montserrat font-bold">Description</p>
             <br />
-            <p className={`font-inter ${isExpanded ? "" : "line-clamp-2"}`}>
-              {property.description}
-            </p>
+            <div
+              className={`font-inter text-sm ${
+                isExpanded ? "" : "line-clamp-2"
+              }`}
+            >
+              {property.description
+                .replace(/\n\n/g, "\n")
+                .split("\n")
+                .map((line, index) => (
+                  <p key={index} className="py-2">
+                    {line.trim()}
+                  </p>
+                ))}
+            </div>
             <br />
             <div className="text-right">
               <button onClick={toggleExpanded} className="text-green-500">
@@ -459,6 +469,6 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
 };
 PropertyDetailsPage.propTypes = {
   conversionFunction: PropTypes.func.isRequired,
-  propertyCategory: PropTypes.string.isRequired,
+  propertyCategory: PropTypes.string,
 };
 export default PropertyDetailsPage;
