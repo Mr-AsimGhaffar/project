@@ -1,4 +1,4 @@
-const displayFirstName = (name) => {
+const displayFirstName = (name = "") => {
   return name.split(",")[0];
 };
 
