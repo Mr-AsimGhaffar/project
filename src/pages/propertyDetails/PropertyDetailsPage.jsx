@@ -547,7 +547,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           <PriceIndexGraph
             city={property.city}
             type={property.type}
-            locationId={property.location_id}
+            location={property.location}
             area={property.area}
             purpose={property.purpose}
             areaTrendData={property.area_trends || []}

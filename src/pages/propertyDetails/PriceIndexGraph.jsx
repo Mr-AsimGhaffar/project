@@ -18,7 +18,7 @@ import { fetchPricePredictor } from "../../utlils/fetchApi";
 export default function PriceIndexGraph({
   city,
   type,
-  locationId,
+  location,
   area,
   purpose,
   areaTrendData,
@@ -31,14 +31,14 @@ export default function PriceIndexGraph({
         area,
         city,
         purpose,
-        sub_location: locationId,
+        sub_location: location,
         type,
       });
       setPredictData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, [area, city, purpose, locationId, type]);
+  }, [area, city, purpose, location, type]);
 
   useEffect(() => {
     fetchPredictData();
@@ -178,7 +178,7 @@ export default function PriceIndexGraph({
 PriceIndexGraph.propTypes = {
   city: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  locationId: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
   area: PropTypes.number.isRequired,
   purpose: PropTypes.string.isRequired,
   areaTrendData: PropTypes.array.isRequired,

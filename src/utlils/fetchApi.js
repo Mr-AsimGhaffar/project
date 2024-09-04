@@ -371,6 +371,13 @@ async function fetchPricePredictor({
         "Content-Type": "application/json",
         "ngrok-skip-browser-warning": "69420",
       }),
+      body: JSON.stringify({
+        city: city,
+        type: type,
+        sub_location: sub_location,
+        area: area,
+        purpose: purpose,
+      }),
     });
 
     if (!response.ok) {
