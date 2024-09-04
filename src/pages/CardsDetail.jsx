@@ -14,7 +14,7 @@ import {
 } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import { appContext } from "@/contexts/Context";
 import HeaderPrice from "./searchResultHeader/HeaderPrice";
@@ -44,6 +44,7 @@ import displayFirstName from "../utlils/displayFirstName";
 import HeaderOwnerDetail from "./searchResultHeader/HeaderOwnerDetail";
 import firstLetterUpperCase from "../utlils/firstLetterUpperCase";
 import HeaderCity from "./searchResultHeader/HeaderCity";
+import formatDate from "../utlils/formatDate";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const abortController = new AbortController();
@@ -63,7 +64,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [endDate, setEndDate] = useState(null);
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
   const mounted = useRef(false);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const navigate = useNavigate();
 
   const {
     cardData,
@@ -121,9 +122,17 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     start_date,
     end_date
   ) => {
-    if (isRequestInProgress) return;
-    // Prevent new requests while one is in progress
+    if (isRequestInProgress) return; // Prevent new requests while one is in progress
     setIsRequestInProgress(true);
+    const {
+      selectedAmountMin,
+      selectedAmountMax,
+      selectBeds,
+      propertyState,
+      selectedAreaMin,
+      selectedAreaMax,
+      is_agency,
+    } = simpleContext.appState;
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -137,16 +146,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
 
-      const {
-        selectedAmountMin,
-        selectedAmountMax,
-        selectBeds,
-        propertyState,
-        selectedAreaMin,
-        selectedAreaMax,
-        is_agency,
-      } = simpleContext.appState;
-
       const filters = {
         price_min: cleanValue(selectedAmountMin),
         price_max: cleanValue(selectedAmountMax),
@@ -158,6 +157,64 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         area_min: selectedAreaMin || "",
         is_posted_by_agency: is_agency,
       };
+
+      const queryString = new URLSearchParams();
+
+      if (simpleContext.appState.selectedCity) {
+        queryString.set("city", simpleContext.appState.selectedCity);
+      }
+
+      if (simpleContext.appState.selectedSuggestions.length > 0) {
+        queryString.set(
+          "location_ids",
+          simpleContext.appState.selectedSuggestions
+            .map((suggestion) => suggestion.name.split(",")[0])
+            .join(",")
+        );
+      }
+
+      if (filters.price_min) {
+        queryString.set("price_min", filters.price_min);
+      }
+
+      if (filters.price_max) {
+        queryString.set("price_max", filters.price_max);
+      }
+
+      if (filters.area_min) {
+        queryString.set("area_min", filters.area_min);
+      }
+
+      if (filters.area_max) {
+        queryString.set("area_max", filters.area_max);
+      }
+
+      if (filters.property_type) {
+        queryString.set("propertyType", filters.property_type);
+      }
+
+      if (filters.bedrooms) {
+        queryString.set("beds", filters.bedrooms);
+      }
+
+      if (filters.is_posted_by_agency) {
+        queryString.set("agency", filters.is_posted_by_agency.toString());
+      }
+
+      if (sort_by) {
+        queryString.set("sort_by", sort_by);
+      }
+      if (sort_order) {
+        queryString.set("sort_order", sort_order);
+      }
+      const formattedStartDate = formatDate(startDate);
+      const formattedEndDate = formatDate(endDate);
+      if (formattedStartDate) {
+        queryString.set("startDate", formattedStartDate);
+      }
+      if (formattedEndDate) {
+        queryString.set("end_date", formattedEndDate);
+      }
 
       const data = await searchCityData(
         simpleContext.appState.selectedCity,
@@ -186,6 +243,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         currentPage: page_number,
         loading: data == null,
       }));
+      navigate(`/search-results?${queryString.toString()}`, {
+        state: {
+          cardData: properties,
+          totalCount: total_count,
+        },
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
@@ -214,32 +277,22 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setStartDate(start ? new Date(start) : null);
     setEndDate(end ? new Date(end) : null);
   };
-  let prevCity = null;
-  let timeoutId = null;
+
   const handleSearch = async (
     sort_by = sortBy || "added",
     sort_order = sortOrder || "DESC"
   ) => {
-    const newCity = simpleContext.appState.selectedCity;
-    if (newCity !== prevCity) {
-      // Clear the previous timeout
-      clearTimeout(timeoutId);
-
-      // Set a new timeout to delay the request
-      timeoutId = setTimeout(() => {
-        // Reset the flag or cancel the previous request
-        setIsRequestInProgress(false);
-        prevCity = newCity;
-
-        // Make the API request
-        makeRequest(sort_by, sort_order);
-      }, 100); // Adjust the delay time as needed
-    } else {
-      makeRequest(sort_by, sort_order);
-    }
-  };
-  const makeRequest = async (sort_by, sort_order) => {
-    if (isRequestInProgress) return;
+    if (isRequestInProgress) return; // Prevent new requests while one is in progress
+    setIsRequestInProgress(true);
+    const {
+      selectedAmountMin,
+      selectedAmountMax,
+      selectBeds,
+      propertyState,
+      selectedAreaMin,
+      selectedAreaMax,
+      is_agency,
+    } = simpleContext.appState;
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -252,6 +305,75 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
+      const filters = {
+        price_min: cleanValue(selectedAmountMin),
+        price_max: cleanValue(selectedAmountMax),
+        area_min: selectedAreaMin,
+        area_max: selectedAreaMax,
+        bedrooms: selectBeds.trim(),
+        is_posted_by_agency: is_agency,
+        property_type:
+          propertyState.selectedSubProperty ||
+          propertyState.selectedPropertyType,
+      };
+      const queryString = new URLSearchParams();
+
+      if (simpleContext.appState.selectedCity) {
+        queryString.set("city", simpleContext.appState.selectedCity);
+      }
+
+      if (simpleContext.appState.selectedSuggestions.length > 0) {
+        queryString.set(
+          "location_ids",
+          simpleContext.appState.selectedSuggestions
+            .map((suggestion) => suggestion.name.split(",")[0])
+            .join(",")
+        );
+      }
+
+      if (filters.price_min) {
+        queryString.set("price_min", filters.price_min);
+      }
+
+      if (filters.price_max) {
+        queryString.set("price_max", filters.price_max);
+      }
+
+      if (filters.area_min) {
+        queryString.set("area_min", filters.area_min);
+      }
+
+      if (filters.area_max) {
+        queryString.set("area_max", filters.area_max);
+      }
+
+      if (filters.property_type) {
+        queryString.set("propertyType", filters.property_type);
+      }
+
+      if (filters.bedrooms) {
+        queryString.set("beds", filters.bedrooms);
+      }
+
+      if (filters.is_posted_by_agency) {
+        queryString.set("agency", filters.is_posted_by_agency.toString());
+      }
+
+      if (sort_by) {
+        queryString.set("sort_by", sort_by);
+      }
+      if (sort_order) {
+        queryString.set("sort_order", sort_order);
+      }
+      const formattedStartDate = formatDate(startDate);
+      const formattedEndDate = formatDate(endDate);
+      if (formattedStartDate) {
+        queryString.set("startDate", formattedStartDate);
+      }
+      if (formattedEndDate) {
+        queryString.set("end_date", formattedEndDate);
+      }
+
       const data = await searchCityData(
         simpleContext.appState.selectedCity,
         simpleContext.appState.selectedSuggestions.map(
@@ -260,17 +382,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         1,
         sort_by,
         sort_order,
-        {
-          price_min: cleanValue(simpleContext.appState.selectedAmountMin),
-          price_max: cleanValue(simpleContext.appState.selectedAmountMax),
-          area_min: simpleContext.appState.selectedAreaMin,
-          area_max: simpleContext.appState.selectedAreaMax,
-          bedrooms: simpleContext.appState.selectBeds.trim(),
-          is_posted_by_agency: simpleContext.appState.is_agency,
-          property_type:
-            simpleContext.appState.propertyState.selectedSubProperty ||
-            simpleContext.appState.propertyState.selectedPropertyType,
-        },
+        filters,
         propertyCategory,
         startDate ? startDate.toDateString() : "",
         endDate ? endDate.toDateString() : ""
@@ -290,6 +402,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         currentPage: page_number,
         loading: data == null,
       }));
+      navigate(`/search-results?${queryString.toString()}`, {
+        state: {
+          cardData: properties,
+          totalCount: total_count,
+        },
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
@@ -305,7 +423,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
     handleSortChange();
   }, [
-    simpleContext.appState.selectedCity,
     simpleContext.appState.selectedAmountMin,
     simpleContext.appState.selectedAmountMax,
     simpleContext.appState.selectBeds,
@@ -571,10 +688,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       <form onSubmit={handleSubmit}>
         <div className="grid lg:grid-cols-5 grid-cols-1 gap-4 py-4">
           <div>
-            <HeaderCity
-              abortController={abortController}
-              setIsSelectOpen={setIsSelectOpen}
-            />
+            <HeaderCity abortController={abortController} />
           </div>
           <div className="relative">
             <div className=" w-[100%]">
@@ -585,9 +699,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 type="text"
                 placeholder="Search Here..."
                 className="rounded-3xl border-2 pr-12"
-                style={{
-                  pointerEvents: isSelectOpen ? "none" : "auto",
-                }}
               />
             </div>
             <div>
@@ -627,10 +738,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <HeaderProperty />
           </div>
           <div>
-            <DatePickerWithRange
-              onChange={handleDateChange}
-              isSelectOpen={isSelectOpen}
-            />
+            <DatePickerWithRange onChange={handleDateChange} />
           </div>
           <div>
             <HeaderArea />

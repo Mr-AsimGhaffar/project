@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -17,23 +18,16 @@ function getAbortController(key) {
 async function fetchFeaturedProperties(propertyCategory = "for_sale") {
   const controller = getAbortController("fetchFeaturedProperties");
   try {
-    const response = await fetch(
+    const response = await axios.get(
       `${API_URL}/property/featured?purpose=${propertyCategory}`,
       {
-        method: "get",
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
         signal: controller.signal,
       }
     );
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data.properties;
+    return response.data.data.properties;
   } catch (error) {
     if (error.name === "AbortError") {
       // Request was canceled; do not show an error message
@@ -56,22 +50,16 @@ async function fetchSimilarProperties(
   propertyCategory = "for_sale"
 ) {
   try {
-    const response = await fetch(
+    const response = await axios.get(
       `${API_URL}/property/similar?id=${similarPropertyId}&purpose=${propertyCategory}`,
       {
-        method: "get",
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
       }
     );
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data.properties;
+
+    return response.data.data.properties;
   } catch (error) {
     const errorMessage =
       error.message || "Failed to fetch featured properties.";
@@ -86,19 +74,12 @@ async function fetchSimilarProperties(
 
 async function fetchPropertyDetails(id) {
   try {
-    const response = await fetch(`${API_URL}/property/${id}`, {
-      method: "get",
+    const response = await axios.get(`${API_URL}/property/${id}`, {
       headers: new Headers({
         "ngrok-skip-browser-warning": "69420",
       }),
     });
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     const errorMessage =
       error.message || "Failed to fetch featured properties.";
@@ -124,6 +105,7 @@ async function searchCityData(
 ) {
   const controller = getAbortController("searchCityData");
   const page_size = 12;
+
   try {
     const {
       price_min,
@@ -132,39 +114,40 @@ async function searchCityData(
       area_max,
       bedrooms,
       is_posted_by_agency,
+      property_type = "",
     } = filters;
-    const property_type = filters.property_type ?? "";
-    const queryString = queries.map((query) => `${query}`).join(",");
-    const url = `${API_URL}/property/search/${
-      city ?? ""
-    }?location_ids=${queryString}&page_size=${page_size}&page_number=${page_number}&sort_by=${
-      sort_by ?? ""
-    }&sort_order=${sort_order ?? ""}&property_type=${property_type
-      .toLowerCase()
-      .replace(" ", "_")}&area_min=${area_min ?? ""}&area_max=${
-      area_max ?? ""
-    }&price_min=${price_min ?? ""}&price_max=${price_max ?? ""}&bedrooms=${
-      bedrooms ?? ""
-    }&is_posted_by_agency=${is_posted_by_agency}&purpose=${propertyCategory}&start_date=${
-      start_date ?? ""
-    }&end_date=${end_date ?? ""}`;
 
-    const response = await fetch(url, {
-      method: "GET",
+    const queryString = queries.join(",");
+
+    // Create an instance of URLSearchParams to build the query string
+    const params = new URLSearchParams({
+      location_ids: queryString,
+      page_size: page_size.toString(),
+      page_number: page_number.toString(),
+      sort_by,
+      sort_order,
+      property_type: property_type.toLowerCase().replace(" ", "_"),
+      area_min: area_min || "",
+      area_max: area_max || "",
+      price_min: price_min || "",
+      price_max: price_max || "",
+      bedrooms: bedrooms || "",
+      is_posted_by_agency: is_posted_by_agency?.toString() || "",
+      purpose: propertyCategory,
+      start_date: start_date || "",
+      end_date: end_date || "",
+    });
+
+    const url = `${API_URL}/property/search/${city ?? ""}?${params.toString()}`;
+
+    const response = await axios.get(url, {
       headers: {
         "ngrok-skip-browser-warning": "69420",
       },
       signal: controller.signal,
     });
 
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     if (error.name !== "AbortError") {
       const errorMessage = error.message || "Failed to search city data.";
@@ -180,19 +163,12 @@ async function searchCityData(
 
 async function fetchAvailableCities() {
   try {
-    const response = await fetch(`${API_URL}/property/available-cities`, {
-      method: "get",
+    const response = await axios.get(`${API_URL}/property/available-cities`, {
       headers: new Headers({
         "ngrok-skip-browser-warning": "69420",
       }),
     });
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     const errorMessage = error.message || "Failed to fetch available cities";
     console.error("Error fetching available cities:", errorMessage);
@@ -207,23 +183,16 @@ async function fetchAvailableCities() {
 export async function fetchPropertyCount(propertyCategory = "for_sale") {
   const controller = getAbortController("fetchPropertyCount");
   try {
-    const response = await fetch(
+    const response = await axios.get(
       `${API_URL}/property/count?purpose=${propertyCategory}`,
       {
-        method: "get",
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
         signal: controller.signal,
       }
     );
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     if (error.name === "AbortError") {
       // Request was canceled; do not show an error message
@@ -245,33 +214,24 @@ async function fetchSearchSuggestions(city, query) {
   try {
     const url = `${API_URL}/property/suggestions/${city ?? ""}?query=${query}`;
 
-    const response = await fetch(url, {
-      method: "GET",
+    const response = await axios.get(url, {
       headers: {
         "ngrok-skip-browser-warning": "69420",
       },
       signal: controller.signal,
     });
-
-    if (!response.ok) {
-      const errorMessage =
-        "Checked that you typed the address correctly, try using our site to find something specific";
-      throw new Error(errorMessage);
-    }
-
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     if (error.name !== "AbortError") {
-      const errorMessage = error.message || "Failed to search city data.";
-      console.error("Error searching city data:", errorMessage);
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 5000,
-      });
-      throw error;
+      return [];
     }
-    return [];
+    const errorMessage = error.message || "Failed to search city data.";
+    console.error("Error searching city data:", errorMessage);
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+    });
+    throw error;
   }
 }
 
@@ -290,26 +250,19 @@ async function fetchPropertyRecommendations({
         ? property_type.toLowerCase().replace(" ", "_")
         : "";
     const queryString = queries.map((query) => `${query}`).join(",");
-    const response = await fetch(
+    const response = await axios.get(
       `${API_URL}/property/best/${city}?location_ids=${queryString}&purpose=${propertyCategory}&area_min=${
         area_min ?? ""
       }&area_max=${
         area_max ?? ""
       }&page_number=${page_number}&property_type=${formattedPropertyType}`,
       {
-        method: "get",
         headers: new Headers({
           "ngrok-skip-browser-warning": "69420",
         }),
       }
     );
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     if (error.name !== "AbortError") {
       const errorMessage = error.message || "Failed to search city data.";
@@ -325,19 +278,12 @@ async function fetchPropertyRecommendations({
 
 async function fetchLocationTreeData() {
   try {
-    const response = await fetch(`${API_URL}/property/locations`, {
-      method: "get",
+    const response = await axios.get(`${API_URL}/property/locations`, {
       headers: new Headers({
         "ngrok-skip-browser-warning": "69420",
       }),
     });
-    if (!response.ok) {
-      const errorMessage =
-        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
-      throw new Error(errorMessage);
-    }
-    const jsonData = await response.json();
-    return jsonData.data;
+    return response.data.data;
   } catch (error) {
     const errorMessage =
       error.message || "Failed to fetch featured properties.";
