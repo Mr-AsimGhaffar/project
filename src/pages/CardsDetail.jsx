@@ -63,6 +63,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isVisibleSuggestions, setIsVisibleSuggestions] = useState(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
   const mounted = useRef(false);
   const navigate = useNavigate();
 
@@ -688,7 +689,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       <form onSubmit={handleSubmit}>
         <div className="grid lg:grid-cols-5 grid-cols-1 gap-4 py-4">
           <div>
-            <HeaderCity abortController={abortController} />
+            <HeaderCity
+              abortController={abortController}
+              setIsSelectOpen={setIsSelectOpen}
+            />
           </div>
           <div className="relative">
             <div className=" w-[100%]">
@@ -699,6 +703,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 type="text"
                 placeholder="Search Here..."
                 className="rounded-3xl border-2 pr-12"
+                style={{
+                  pointerEvents: isSelectOpen ? "none" : "auto",
+                }}
               />
             </div>
             <div>
