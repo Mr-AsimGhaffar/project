@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const PRICE_PREDICT_API_URL = import.meta.env.VITE_PREDCIT_API_URL;
 
 const abortControllers = new Map();
 
@@ -295,6 +296,55 @@ async function fetchLocationTreeData() {
   }
 }
 
+async function fetchPricePredictor({
+  city,
+  type,
+  sub_location,
+  area,
+  purpose,
+}) {
+  try {
+    const url = new URL(`${PRICE_PREDICT_API_URL}/predict/`);
+    url.searchParams.append("city", city);
+    url.searchParams.append("type", type);
+    url.searchParams.append("sub_location", sub_location);
+    url.searchParams.append("area", area);
+    url.searchParams.append("purpose", purpose);
+
+    const response = await fetch(url.toString(), {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420",
+      }),
+      body: JSON.stringify({
+        city: city,
+        type: type,
+        sub_location: sub_location,
+        area: area,
+        purpose: purpose,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorMessage =
+        "The page you were looking for doesn't exist. You may have misstyped the address or the page may have moved";
+      throw new Error(errorMessage);
+    }
+
+    const jsonData = await response.json();
+    return jsonData.predicted_price;
+  } catch (error) {
+    const errorMessage = error.message || "Failed to fetch price prediction";
+    console.error("Error fetching price prediction", errorMessage);
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+    });
+    throw error;
+  }
+}
+
 export {
   fetchFeaturedProperties,
   fetchSimilarProperties,
@@ -304,4 +354,5 @@ export {
   fetchSearchSuggestions,
   fetchPropertyRecommendations,
   fetchLocationTreeData,
+  fetchPricePredictor,
 };
