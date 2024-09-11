@@ -26,5 +26,5 @@ volumes:
 
 networks:
   backend:
-    # external: true
-    # name: scrapper_zameen_backend_backend
+    external: true
+    name: scrapper_zameen_backend_backend
