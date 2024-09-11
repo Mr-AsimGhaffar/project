@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:lts-alpine3.20
 
 # Copy Dir
 COPY . ./app
@@ -8,12 +8,6 @@ WORKDIR /app
 
 # Install Node Package
 RUN npm install
-
-# Build the project
-RUN npm run build --no-cache
-
-# Ensure the dist directory exists
-RUN ls -alh dist
 
 # Install 'serve' globally
 RUN npm install -g serve

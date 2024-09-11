@@ -6,10 +6,10 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: "1g"
+          memory: "0.5g"
     container_name: frontend_container
     build:
-      context: ./
+      context: .
       dockerfile: DockerFile
     ports:
       - "4000:5000"
