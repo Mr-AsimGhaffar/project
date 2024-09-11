@@ -37,7 +37,7 @@ jobs:
         run: |
           ssh -i ec2_private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p $REPO_NAME"
           npm install && npm run build --no-cache
-          rsync -avz --no-g --exclude='.git/' --exclude='ec2_private_key.pem' --exclude='node_modules/' -e 'ssh -i ec2_private_key.pem -o StrictHostKeyChecking=no' $(pwd)/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/$REPO_NAME
+          rsync -avz --no-g --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r --exclude='.git/' --exclude='ec2_private_key.pem' --exclude='node_modules/' -e 'ssh -i ec2_private_key.pem -o StrictHostKeyChecking=no' $(pwd)/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/$REPO_NAME
           # ssh -i ec2_private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cd $REPO_NAME && mkdir -p certs && cd certs && echo \"$FULL_CHAIN_CERTIFICATE_PEM_FILE\" > fullchain.pem && echo \"$PRIV_KEY_CERTIFICATE_PEM_FILE\" > privkey.pem && chmod 644 fullchain.pem && chmod 600 privkey.pem"
       - name: Deploy to EC2
         env:
