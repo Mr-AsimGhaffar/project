@@ -6,7 +6,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: "0.5g"
+          memory: "0.8g"
     container_name: frontend_container
     build:
       context: ./
