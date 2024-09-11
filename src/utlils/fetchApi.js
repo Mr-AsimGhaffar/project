@@ -4,6 +4,10 @@ import { toast } from "react-toastify";
 const API_URL = import.meta.env.VITE_API_URL;
 const PRICE_PREDICT_API_URL = import.meta.env.VITE_PREDCIT_API_URL;
 
+const headers = {
+  "Content-Type": "application/json",
+};
+
 const abortControllers = new Map();
 
 function getAbortController(key) {
@@ -21,9 +25,7 @@ async function fetchFeaturedProperties(propertyCategory = "for_sale") {
     const response = await axios.get(
       `${API_URL}/property/featured?purpose=${propertyCategory}`,
       {
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
+        headers,
         signal: controller.signal,
       }
     );
@@ -53,9 +55,7 @@ async function fetchSimilarProperties(
     const response = await axios.get(
       `${API_URL}/property/similar?id=${similarPropertyId}&purpose=${propertyCategory}`,
       {
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
+        headers,
       }
     );
 
@@ -75,9 +75,7 @@ async function fetchSimilarProperties(
 async function fetchPropertyDetails(id) {
   try {
     const response = await axios.get(`${API_URL}/property/${id}`, {
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
+      headers,
     });
     return response.data.data;
   } catch (error) {
@@ -141,9 +139,7 @@ async function searchCityData(
     const url = `${API_URL}/property/search/${city ?? ""}?${params.toString()}`;
 
     const response = await axios.get(url, {
-      headers: {
-        "ngrok-skip-browser-warning": "69420",
-      },
+      headers,
       signal: controller.signal,
     });
 
@@ -164,9 +160,7 @@ async function searchCityData(
 async function fetchAvailableCities() {
   try {
     const response = await axios.get(`${API_URL}/property/available-cities`, {
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
+      headers,
     });
     return response.data.data;
   } catch (error) {
@@ -186,9 +180,7 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
     const response = await axios.get(
       `${API_URL}/property/count?purpose=${propertyCategory}`,
       {
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
+        headers,
         signal: controller.signal,
       }
     );
@@ -215,9 +207,7 @@ async function fetchSearchSuggestions(city, query) {
     const url = `${API_URL}/property/suggestions/${city ?? ""}?query=${query}`;
 
     const response = await axios.get(url, {
-      headers: {
-        "ngrok-skip-browser-warning": "69420",
-      },
+      headers,
       signal: controller.signal,
     });
     return response.data.data;
@@ -257,9 +247,7 @@ async function fetchPropertyRecommendations({
         area_max ?? ""
       }&page_number=${page_number}&property_type=${formattedPropertyType}`,
       {
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "69420",
-        }),
+        headers,
       }
     );
     return response.data.data;
@@ -279,9 +267,7 @@ async function fetchPropertyRecommendations({
 async function fetchLocationTreeData() {
   try {
     const response = await axios.get(`${API_URL}/property/locations`, {
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
+      headers,
     });
     return response.data.data;
   } catch (error) {
@@ -313,10 +299,7 @@ async function fetchPricePredictor({
 
     const response = await fetch(url.toString(), {
       method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "69420",
-      }),
+      headers,
       body: JSON.stringify({
         city: city,
         type: type,
