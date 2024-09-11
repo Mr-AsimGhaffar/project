@@ -6,7 +6,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: "0.8g"
+          memory: "0.5g"
     container_name: frontend_container
     build:
       context: ./
@@ -19,6 +19,8 @@ services:
     restart: "unless-stopped"
     networks:
       - backend
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=512
 
 volumes:
   data:
