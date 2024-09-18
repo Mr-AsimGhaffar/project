@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const PRICE_PREDICT_API_URL = import.meta.env.VITE_PREDCIT_API_URL;
+const RECOMMENDATION_API_URL = import.meta.env.VITE_RECOMMENDATION_API_URL;
 
 const headers = {
   "Content-Type": "application/json",
@@ -328,6 +329,27 @@ async function fetchPricePredictor({
   }
 }
 
+async function fetchRecommendationProperties(id) {
+  try {
+    const response = await axios.get(
+      `${RECOMMENDATION_API_URL}/recommend_properties?property_id=${id}`,
+      {
+        headers,
+      }
+    );
+    return response.data.recommended_properties;
+  } catch (error) {
+    const errorMessage =
+      error.message || "Failed to fetch Recommendation Properties";
+    console.error("Error fetching Recommendation Properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+    });
+    throw error;
+  }
+}
+
 export {
   fetchFeaturedProperties,
   fetchSimilarProperties,
@@ -338,4 +360,5 @@ export {
   fetchPropertyRecommendations,
   fetchLocationTreeData,
   fetchPricePredictor,
+  fetchRecommendationProperties,
 };
