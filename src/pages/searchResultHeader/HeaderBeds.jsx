@@ -8,12 +8,28 @@ import {
 import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const HeaderBeds = () => {
   const simpleContext = useContext(appContext);
+  const location = useLocation();
   const [selectBeds, setSelectBeds] = useState(
     simpleContext.appState.selectBeds
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const selectBedsFromUrl = params.get("beds");
+
+    if (selectBedsFromUrl) {
+      setSelectBeds(selectBedsFromUrl);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectBeds: selectBedsFromUrl,
+      }));
+    }
+  }, []);
+
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,

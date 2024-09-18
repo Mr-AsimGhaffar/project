@@ -9,10 +9,12 @@ import {
 import { fetchAvailableCities } from "../../utlils/fetchApi";
 import { appContext } from "../../contexts/Context";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
 const HeaderCity = ({ abortController, setIsSelectOpen }) => {
   const simpleContext = useContext(appContext);
   const [cityOptions, setCityOptions] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -27,8 +29,19 @@ const HeaderCity = ({ abortController, setIsSelectOpen }) => {
     fetchCities();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const cityFromUrl = params.get("city");
+    if (cityFromUrl) {
+      simpleContext.setAppState((s) => ({ ...s, selectedCity: cityFromUrl }));
+    }
+  }, []);
+
   const handleCityChange = (city) => {
     abortController.abort();
+    if (!city) {
+      return;
+    }
     simpleContext.setAppState((s) => ({
       ...s,
       selectedCity: city,
@@ -44,7 +57,7 @@ const HeaderCity = ({ abortController, setIsSelectOpen }) => {
       <Select
         onValueChange={handleCityChange}
         onOpenChange={handleOpenChange}
-        value={simpleContext.appState.selectedCity}
+        value={simpleContext.appState.selectedCity || ""}
       >
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="Select a city" />

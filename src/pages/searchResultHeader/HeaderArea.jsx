@@ -7,8 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { appContext } from "@/contexts/Context";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { useLocation } from "react-router-dom";
 
 const marlaToSquareFeet = (marla) => {
   return marla * 225;
@@ -24,6 +25,7 @@ const squareFeetToMarla = (marla) => {
 
 const AreaTag = () => {
   const simpleContext = useContext(appContext);
+  const location = useLocation();
   const [selectedAreaMin, setSelectedAreaMin] = useState(
     squareFeetToMarla(simpleContext.appState.selectedAreaMin)
   );
@@ -32,6 +34,27 @@ const AreaTag = () => {
   );
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const minAreaFromUrl = params.get("area_min");
+    const maxAreaFromUrl = params.get("area_max");
+
+    if (minAreaFromUrl) {
+      setSelectedAreaMin(squareFeetToMarla(minAreaFromUrl));
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMin: minAreaFromUrl,
+      }));
+    }
+    if (maxAreaFromUrl) {
+      setSelectedAreaMax(squareFeetToMarla(maxAreaFromUrl));
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMax: maxAreaFromUrl,
+      }));
+    }
+  }, []);
 
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area === "Any" ? null : area;

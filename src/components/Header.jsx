@@ -54,6 +54,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   useEffect(() => {
     setPropertyView(propertyCategory);
   }, [propertyCategory]);
+
   useEffect(() => {
     fetchData();
     simpleContext.setAppState((s) => ({
@@ -61,6 +62,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       selectedSuggestions: [],
       selectedAreaMin: "",
       selectedAreaMax: null,
+      selectedCity: "islamabad",
     }));
   }, []);
 
@@ -117,14 +119,12 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         queryString.set("city", simpleContext.appState.selectedCity);
       }
 
-      if (simpleContext.appState.selectedSuggestions.length > 0) {
-        queryString.set(
-          "location_ids",
-          simpleContext.appState.selectedSuggestions
-            .map((suggestion) => suggestion.name.split(",")[0])
-            .join(",")
-        );
-      }
+      queryString.set(
+        "location_ids",
+        simpleContext.appState.selectedSuggestions
+          .map(({ id, name }) => `${id}:${name.split(",")[0]}`)
+          .join(",")
+      );
 
       if (filters.price_min) {
         queryString.set("price_min", filters.price_min);

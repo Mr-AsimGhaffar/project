@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -7,10 +7,25 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { appContext } from "../../contexts/Context";
+import { useLocation } from "react-router-dom";
 
 const HeaderOwnerDetail = () => {
   const simpleContext = useContext(appContext);
+  const location = useLocation();
   const { is_agency } = simpleContext.appState;
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const selectAgencyFromUrl = params.get("agency");
+
+    if (selectAgencyFromUrl) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        is_agency: selectAgencyFromUrl,
+      }));
+    }
+  }, []);
+
   const handleSelectAgent = (agent) => {
     simpleContext.setAppState((s) => ({
       ...s,

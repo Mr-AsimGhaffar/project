@@ -13,9 +13,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useLocation } from "react-router-dom";
+import { appContext } from "../../contexts/Context";
 
 export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
+  const simpleContext = React.useContext(appContext);
   const [date, setDate] = React.useState(null);
+  const location = useLocation();
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const startDateFromUrl = params.get("start_date");
+    const endDateFromUrl = params.get("end_date");
+
+    if (startDateFromUrl || endDateFromUrl) {
+      const startDate = startDateFromUrl ? new Date(startDateFromUrl) : null;
+      const endDate = endDateFromUrl ? new Date(endDateFromUrl) : null;
+      setDate({ from: startDate, to: endDate });
+
+      simpleContext.setAppState((s) => ({
+        ...s,
+        startDate,
+        endDate,
+      }));
+    }
+  }, []);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
