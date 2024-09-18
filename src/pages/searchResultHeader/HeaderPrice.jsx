@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/select";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
+import { useLocation } from "react-router-dom";
 
 const HeaderPrice = () => {
   const simpleContext = useContext(appContext);
+  const location = useLocation();
   const [selectedAmountMax, setSelectedAmountMax] = useState(
     simpleContext.appState.selectedAmountMax
   );
@@ -20,19 +22,35 @@ const HeaderPrice = () => {
   );
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+
   useEffect(() => {
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMax: selectedAmountMax,
-    }));
-  }, [selectedAmountMax]);
+    const params = new URLSearchParams(location.search);
+    const minPriceFromUrl = params.get("price_min");
+    const maxPriceFromUrl = params.get("price_max");
+
+    if (minPriceFromUrl) {
+      setSelectedAmountMin(minPriceFromUrl);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMin: minPriceFromUrl,
+      }));
+    }
+    if (maxPriceFromUrl) {
+      setSelectedAmountMax(maxPriceFromUrl);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMax: maxPriceFromUrl,
+      }));
+    }
+  }, []);
 
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
+      selectedAmountMax: selectedAmountMax,
       selectedAmountMin: selectedAmountMin,
     }));
-  }, [selectedAmountMin]);
+  }, [selectedAmountMax, selectedAmountMin]);
 
   const handleSelectMax = (amount, buttonIndex) => {
     const newValue = amount === "Any" ? null : amount;

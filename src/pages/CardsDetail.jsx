@@ -45,8 +45,10 @@ import HeaderOwnerDetail from "./searchResultHeader/HeaderOwnerDetail";
 import firstLetterUpperCase from "../utlils/firstLetterUpperCase";
 import HeaderCity from "./searchResultHeader/HeaderCity";
 import formatDate from "../utlils/formatDate";
+import useQueryParams from "../hooks/useQueryParams";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
+  const queryParams = useQueryParams();
   const abortController = new AbortController();
   const [isRequestInProgress, setIsRequestInProgress] = useState(false);
   const simpleContext = useContext(appContext);
@@ -54,10 +56,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [searchTerm, setSearchTerm] = useState(
     simpleContext.appState.searchTerm
   );
-  const [sortOrder, setSortOrder] = useState(null);
   const [sortBy, setSortBy] = useState(null);
-  const [sortByDate, setSortByDate] = useState("added");
-  const [sortOrderDate, setSortOrderDate] = useState("DESC");
+  const [sortByDate, setSortByDate] = useState(
+    queryParams.sortByDatePrice || "added"
+  );
+  const [sortOrder, setSortOrder] = useState(null);
+  const [sortOrderDate, setSortOrderDate] = useState(
+    queryParams.sortByAscDesc || "DESC"
+  );
   const [suggestions, setSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [startDate, setStartDate] = useState(null);
@@ -74,9 +80,67 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     propertyState,
   } = simpleContext.appState;
 
+  useEffect(() => {
+    // Set initial state based on query parameters when component mounts
+    if (queryParams.selectedSuggestions.length > 0) {
+      // Map suggestions from URL to { id, name }
+      const suggestionsArray = queryParams.selectedSuggestions.map(
+        ({ id, name }) => ({
+          id,
+          name,
+        })
+      );
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedCity: queryParams.selectedCity || s.selectedCity,
+        selectedSuggestions: suggestionsArray,
+        selectedAmountMin: queryParams.priceMin || s.selectedAmountMin,
+        selectedAmountMax: queryParams.priceMax || s.selectedAmountMax,
+        selectBeds: queryParams.beds || s.selectBeds,
+        propertyState: {
+          ...s.propertyState,
+          selectedPropertyType:
+            queryParams.property_type || s.propertyState.selectedPropertyType,
+          selectedSubProperty: s.propertyState.selectedSubProperty, // Keep existing sub-property
+        },
+        startDate: queryParams.firstDate || s.startDate,
+        endDate: queryParams.lastDate || s.endDate,
+        selectedAreaMin: queryParams.areaMin || s.selectedAreaMin,
+        selectedAreaMax: queryParams.areaMax || s.selectedAreaMax,
+        is_agency: queryParams.agency || s.is_agency,
+      }));
+    }
+    if (queryParams.sortByDatePrice) {
+      setSortBy(queryParams.sortByDatePrice);
+    }
+    if (queryParams.sortByAscDesc) {
+      setSortOrder(queryParams.sortByAscDesc);
+    }
+  }, []);
+
   const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
 
   const selectedCity = simpleContext.appState.selectedCity;
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const suggestionsFromUrl = params.get("location_ids");
+
+    if (suggestionsFromUrl) {
+      const suggestionsArray = suggestionsFromUrl
+        .split(",")
+        .map((suggestion) => {
+          const [id, name] = suggestion.split(":"); // Split 'id:name'
+          return { id, name }; // Return both id and name
+        });
+
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedSuggestions: suggestionsArray, // Set both id and name in the state
+      }));
+    }
+  }, []);
+
   const selectedSuggestions = useMemo(
     () =>
       simpleContext.appState.selectedSuggestions.map(
@@ -165,14 +229,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("city", simpleContext.appState.selectedCity);
       }
 
-      if (simpleContext.appState.selectedSuggestions.length > 0) {
-        queryString.set(
-          "location_ids",
-          simpleContext.appState.selectedSuggestions
-            .map((suggestion) => suggestion.name.split(",")[0])
-            .join(",")
-        );
-      }
+      queryString.set(
+        "location_ids",
+        simpleContext.appState.selectedSuggestions
+          .map(({ id, name }) => `${id}:${name.split(",")[0]}`)
+          .join(",")
+      );
 
       if (filters.price_min) {
         queryString.set("price_min", filters.price_min);
@@ -202,12 +264,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("agency", filters.is_posted_by_agency.toString());
       }
 
-      if (sort_by) {
-        queryString.set("sort_by", sort_by);
-      }
-      if (sort_order) {
-        queryString.set("sort_order", sort_order);
-      }
       const formattedStartDate = formatDate(startDate);
       const formattedEndDate = formatDate(endDate);
       if (formattedStartDate) {
@@ -216,6 +272,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       if (formattedEndDate) {
         queryString.set("end_date", formattedEndDate);
       }
+
+      queryString.set("sort_by", sort_by);
+      queryString.set("sort_order", sort_order);
 
       const data = await searchCityData(
         simpleContext.appState.selectedCity,
@@ -294,6 +353,16 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       selectedAreaMax,
       is_agency,
     } = simpleContext.appState;
+
+    if (!simpleContext.appState.selectedCity) {
+      toast.error("Please select a city.", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      setIsRequestInProgress(false);
+      return;
+    }
+
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -319,18 +388,16 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       };
       const queryString = new URLSearchParams();
 
-      if (simpleContext.appState.selectedCity) {
-        queryString.set("city", simpleContext.appState.selectedCity);
+      if (selectedCity) {
+        queryString.set("city", selectedCity);
       }
 
-      if (simpleContext.appState.selectedSuggestions.length > 0) {
-        queryString.set(
-          "location_ids",
-          simpleContext.appState.selectedSuggestions
-            .map((suggestion) => suggestion.name.split(",")[0])
-            .join(",")
-        );
-      }
+      queryString.set(
+        "location_ids",
+        simpleContext.appState.selectedSuggestions
+          .map(({ id, name }) => `${id}:${name.split(",")[0]}`)
+          .join(",")
+      );
 
       if (filters.price_min) {
         queryString.set("price_min", filters.price_min);
@@ -360,23 +427,21 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("agency", filters.is_posted_by_agency.toString());
       }
 
-      if (sort_by) {
-        queryString.set("sort_by", sort_by);
-      }
-      if (sort_order) {
-        queryString.set("sort_order", sort_order);
-      }
       const formattedStartDate = formatDate(startDate);
       const formattedEndDate = formatDate(endDate);
+
       if (formattedStartDate) {
-        queryString.set("startDate", formattedStartDate);
+        queryString.set("start_date", formattedStartDate);
       }
       if (formattedEndDate) {
         queryString.set("end_date", formattedEndDate);
       }
 
+      queryString.set("sort_by", sort_by);
+      queryString.set("sort_order", sort_order);
+
       const data = await searchCityData(
-        simpleContext.appState.selectedCity,
+        selectedCity,
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
@@ -661,7 +726,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                     <div key={index}>
                       <div className="flex items-center gap-2 relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300">
                         <span className="ellipsis-text">
-                          {suggestion.name.split(",")[0]}
+                          {suggestion.name && suggestion.name.split(",")[0]}
                         </span>
                         <div>
                           <RxCross2
@@ -674,11 +739,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 )}
                 {isVisibleSuggestions && (
                   <div className="absolute z-10 w-full text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-2">
-                    {simpleContext.appState.selectedSuggestions.map(
-                      (suggestion, index) => (
-                        <div key={index} className=""></div>
-                      )
-                    )}
+                    {simpleContext.appState.selectedSuggestions.map((index) => (
+                      <div key={index} className=""></div>
+                    ))}
                   </div>
                 )}
               </>
