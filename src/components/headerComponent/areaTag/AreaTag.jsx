@@ -17,6 +17,7 @@ const AreaTag = () => {
   const [selectedAreaMin, setSelectedAreaMin] = useState(null);
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
 
   const handleSelectMaxButton = (area, buttonIndex) => {
@@ -78,7 +79,11 @@ const AreaTag = () => {
 
   return (
     <div>
-      <Select>
+      <Select
+        className="touch-auto"
+        onOpenChange={(open) => setIsDropdownOpen(open)}
+        open={isDropdownOpen}
+      >
         <SelectTrigger>
           <SelectValue placeholder="AREA" />
           <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>
@@ -175,6 +180,76 @@ const AreaTag = () => {
                   onClick={() => handleSelectMaxButton("5", 3)}
                 >
                   5
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 3)}
+                  onClick={() => handleSelectMinButton("5", 3)}
+                >
+                  10
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("5", 3)}
+                >
+                  10
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 3)}
+                  onClick={() => handleSelectMinButton("5", 3)}
+                >
+                  15
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("5", 3)}
+                >
+                  15
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 3)}
+                  onClick={() => handleSelectMinButton("5", 3)}
+                >
+                  20
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("5", 3)}
+                >
+                  20
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 3)}
+                  onClick={() => handleSelectMinButton("5", 3)}
+                >
+                  30
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("5", 3)}
+                >
+                  30
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 3)}
+                  onClick={() => handleSelectMinButton("5", 3)}
+                >
+                  40
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("5", 3)}
+                >
+                  40
                 </Button>
               </div>
             </div>

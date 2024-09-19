@@ -11,6 +11,7 @@ import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
 
 const HeaderPrice = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
   const [selectedAmountMax, setSelectedAmountMax] = useState(
     simpleContext.appState.selectedAmountMax
@@ -84,7 +85,11 @@ const HeaderPrice = () => {
     isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
-      <Select>
+      <Select
+        className="touch-auto"
+        onOpenChange={(open) => setIsDropdownOpen(open)}
+        open={isDropdownOpen}
+      >
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="PRICE" />
 

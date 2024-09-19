@@ -21,7 +21,11 @@ const HeaderOwnerDetail = () => {
     is_agency === "" ? "all" : is_agency === "true" ? "true" : "false";
   return (
     <div>
-      <Select defaultValue={selectedValue} onValueChange={handleSelectAgent}>
+      <Select
+        className="touch-auto"
+        defaultValue={selectedValue}
+        onValueChange={handleSelectAgent}
+      >
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="Owner Detail" />
         </SelectTrigger>

@@ -48,7 +48,7 @@ const HeaderProperty = () => {
 
   return (
     <div>
-      <Select>
+      <Select className="touch-auto">
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="PROPERTY TYPE" />
           <div>

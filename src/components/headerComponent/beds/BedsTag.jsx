@@ -50,7 +50,7 @@ const BedsTag = () => {
 
   return (
     <div>
-      <Select>
+      <Select className="touch-auto">
         <SelectTrigger>
           <SelectValue placeholder="BEDS" />
           <div>{selectBeds}</div>
@@ -129,6 +129,20 @@ const BedsTag = () => {
                 style={buttonStyles("8")}
               >
                 8
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSelectBeds("9")}
+                style={buttonStyles("9")}
+              >
+                9
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSelectBeds("10")}
+                style={buttonStyles("10")}
+              >
+                10+
               </Button>
             </div>
           </div>

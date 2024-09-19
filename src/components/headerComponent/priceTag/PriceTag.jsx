@@ -15,6 +15,7 @@ const PriceTag = () => {
   const [selectedAmountMin, setSelectedAmountMin] = useState(null);
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
   useEffect(() => {
     simpleContext.setAppState((s) => ({
@@ -79,7 +80,11 @@ const PriceTag = () => {
     isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
-      <Select className>
+      <Select
+        className="touch-auto"
+        onOpenChange={(open) => setIsDropdownOpen(open)}
+        open={isDropdownOpen}
+      >
         <SelectTrigger>
           <SelectValue placeholder="PRICE" />
           <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>

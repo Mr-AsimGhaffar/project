@@ -52,7 +52,7 @@ const HeaderBeds = () => {
 
   return (
     <div>
-      <Select>
+      <Select className="touch-auto">
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="BEDS" />
           <div>{selectBeds}</div>
@@ -131,6 +131,20 @@ const HeaderBeds = () => {
                 style={buttonStyles("8")}
               >
                 8
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSelectBeds("9")}
+                style={buttonStyles("9")}
+              >
+                9
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSelectBeds("10")}
+                style={buttonStyles("10")}
+              >
+                10+
               </Button>
             </div>
           </div>

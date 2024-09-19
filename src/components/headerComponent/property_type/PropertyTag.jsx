@@ -47,7 +47,7 @@ const PropertyTag = () => {
 
   return (
     <div>
-      <Select>
+      <Select className="touch-auto">
         <SelectTrigger>
           <SelectValue placeholder="PROPERTY TYPE" />
           <div>
