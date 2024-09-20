@@ -319,8 +319,11 @@ async function fetchPricePredictor({
     const jsonData = await response.json();
     return jsonData.predicted_price;
   } catch (error) {
-    const errorMessage = error.message || "Failed to fetch price prediction";
-    console.error("Error fetching price prediction", errorMessage);
+    if (error.name !== "AbortError") {
+      return [];
+    }
+    const errorMessage = error.message || "Failed to search city data.";
+    console.error("Error searching city data:", errorMessage);
     toast.error(errorMessage, {
       position: "top-center",
       autoClose: 5000,
@@ -339,9 +342,11 @@ async function fetchRecommendationProperties(id) {
     );
     return response.data.recommended_properties;
   } catch (error) {
-    const errorMessage =
-      error.message || "Failed to fetch Recommendation Properties";
-    console.error("Error fetching Recommendation Properties:", errorMessage);
+    if (error.name !== "AbortError") {
+      return [];
+    }
+    const errorMessage = error.message || "Failed to search city data.";
+    console.error("Error searching city data:", errorMessage);
     toast.error(errorMessage, {
       position: "top-center",
       autoClose: 5000,
