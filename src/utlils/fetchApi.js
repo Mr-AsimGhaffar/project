@@ -319,11 +319,9 @@ async function fetchPricePredictor({
     const jsonData = await response.json();
     return jsonData.predicted_price;
   } catch (error) {
-    if (error.name !== "AbortError") {
-      return [];
-    }
-    const errorMessage = error.message || "Failed to search city data.";
-    console.error("Error searching city data:", errorMessage);
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
     toast.error(errorMessage, {
       position: "top-center",
       autoClose: 5000,
