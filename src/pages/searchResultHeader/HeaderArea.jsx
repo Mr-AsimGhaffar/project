@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { appContext } from "@/contexts/Context";
 import { useContext, useState } from "react";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { IoIosArrowDown } from "react-icons/io";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
 
 const marlaToSquareFeet = (marla) => {
   return marla * 225;
@@ -93,19 +93,25 @@ const AreaTag = () => {
 
   return (
     <div>
-      <Select
-        className="touch-auto"
+      <Popover
         onOpenChange={(open) => setIsDropdownOpen(open)}
         open={isDropdownOpen}
       >
-        <SelectTrigger className="rounded-3xl border-2">
-          <SelectValue placeholder="AREA" />
-          <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>
-          <div>To</div>
-          <div>{selectedAreaMax === null ? "Any" : selectedAreaMax}</div>
-        </SelectTrigger>
-        <SelectContent>
-          <div className="rounded-md shadow-lg p-4 w-64">
+        <PopoverTrigger asChild className="rounded-3xl border-2">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white opacity-80">
+            <div className="flex justify-between items-center w-full">
+              <p>AREA</p>
+              <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>
+              <div>To</div>
+              <div>{selectedAreaMax === null ? "Any" : selectedAreaMax}</div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
             <Button className="mb-4 w-[100%]" variant="secondary">
               Area unit (Marla)
             </Button>
@@ -156,41 +162,27 @@ const AreaTag = () => {
                 <Button
                   variant="outline"
                   className={buttonStyles(selectedMinButton === 1)}
-                  onClick={() => handleSelectMinButton("2", 1)}
+                  onClick={() => handleSelectMinButton("3", 1)}
                 >
-                  2
+                  3
                 </Button>
                 <Button
                   variant="outline"
                   className={buttonStyles(selectedMaxButton === 1)}
-                  onClick={() => handleSelectMaxButton("2", 1)}
+                  onClick={() => handleSelectMaxButton("3", 1)}
                 >
-                  2
+                  3
                 </Button>
                 <Button
                   variant="outline"
                   className={buttonStyles(selectedMinButton === 2)}
-                  onClick={() => handleSelectMinButton("3", 2)}
+                  onClick={() => handleSelectMinButton("5", 3)}
                 >
-                  3
+                  5
                 </Button>
                 <Button
                   variant="outline"
                   className={buttonStyles(selectedMaxButton === 2)}
-                  onClick={() => handleSelectMaxButton("3", 2)}
-                >
-                  3
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("5", 3)}
-                >
-                  5
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
                   onClick={() => handleSelectMaxButton("5", 3)}
                 >
                   5
@@ -198,72 +190,58 @@ const AreaTag = () => {
                 <Button
                   variant="outline"
                   className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("5", 3)}
+                  onClick={() => handleSelectMinButton("7", 3)}
+                >
+                  7
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 3)}
+                  onClick={() => handleSelectMaxButton("7", 3)}
+                >
+                  7
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 4)}
+                  onClick={() => handleSelectMinButton("8", 4)}
+                >
+                  8
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMaxButton === 4)}
+                  onClick={() => handleSelectMaxButton("8", 4)}
+                >
+                  8
+                </Button>
+                <Button
+                  variant="outline"
+                  className={buttonStyles(selectedMinButton === 5)}
+                  onClick={() => handleSelectMinButton("10", 5)}
                 >
                   10
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMaxButton("5", 3)}
+                  className={buttonStyles(selectedMaxButton === 5)}
+                  onClick={() => handleSelectMaxButton("10", 5)}
                 >
                   10
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("5", 3)}
-                >
-                  15
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMaxButton("5", 3)}
-                >
-                  15
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("5", 3)}
+                  className={buttonStyles(selectedMinButton === 6)}
+                  onClick={() => handleSelectMinButton("20", 6)}
                 >
                   20
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMaxButton("5", 3)}
+                  className={buttonStyles(selectedMaxButton === 6)}
+                  onClick={() => handleSelectMaxButton("20", 6)}
                 >
                   20
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("5", 3)}
-                >
-                  30
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMaxButton("5", 3)}
-                >
-                  30
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("5", 3)}
-                >
-                  40
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMaxButton("5", 3)}
-                >
-                  40
                 </Button>
               </div>
             </div>
@@ -273,8 +251,8 @@ const AreaTag = () => {
               </Button>
             </div>
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

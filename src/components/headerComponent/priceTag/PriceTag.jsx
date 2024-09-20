@@ -1,21 +1,16 @@
 import { useContext, useEffect, useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
 const PriceTag = () => {
   const [selectedAmountMax, setSelectedAmountMax] = useState(null);
   const [selectedAmountMin, setSelectedAmountMin] = useState(null);
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
   useEffect(() => {
     simpleContext.setAppState((s) => ({
@@ -80,19 +75,24 @@ const PriceTag = () => {
     isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
-      <Select
-        className="touch-auto"
-        onOpenChange={(open) => setIsDropdownOpen(open)}
-        open={isDropdownOpen}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="PRICE" />
-          <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
-          <div>To</div>
-          <div>{selectedAmountMax === null ? "Any" : selectedAmountMax}</div>
-        </SelectTrigger>
-        <SelectContent>
-          <div className="rounded-md shadow-lg p-4 w-64">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white">
+            <div className="flex justify-between items-center w-full">
+              <p>PRICE</p>
+              <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
+              <div>To</div>
+              <div>
+                {selectedAmountMax === null ? "Any" : selectedAmountMax}
+              </div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
             <div className="flex justify-between items-center mb-4">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
             </div>
@@ -103,10 +103,12 @@ const PriceTag = () => {
                 </div>
                 <Input
                   type="number"
+                  inputMode="numeric"
                   className="text-center"
                   placeholder="0"
                   value={selectedAmountMin || ""}
                   onChange={handleMinChange}
+                  onClick={(e) => e.stopPropagation()}
                 />
               </div>
               <div>
@@ -115,10 +117,12 @@ const PriceTag = () => {
                 </div>
                 <Input
                   type="number"
+                  inputMode="numeric"
                   className="text-center"
                   placeholder="Any"
                   value={selectedAmountMax || ""}
                   onChange={handleMaxChange}
+                  onClick={(e) => e.stopPropagation()}
                 />
               </div>
             </div>
@@ -302,8 +306,8 @@ const PriceTag = () => {
               </Button>
             </div>
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

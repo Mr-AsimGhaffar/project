@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
 
 const HeaderBeds = () => {
   const simpleContext = useContext(appContext);
@@ -52,12 +52,19 @@ const HeaderBeds = () => {
 
   return (
     <div>
-      <Select className="touch-auto">
-        <SelectTrigger className="rounded-3xl border-2">
-          <SelectValue placeholder="BEDS" />
-          <div>{selectBeds}</div>
-        </SelectTrigger>
-        <SelectContent>
+      <Popover className="touch-auto">
+        <PopoverTrigger asChild className="rounded-3xl border-2">
+          <Button className="w-full bg-white text-[#434343] focus:bg-white active:bg-white hover:bg-white opacity-80">
+            <div className="w-full flex justify-between items-center">
+              <p>BEDS</p>
+              <div>{selectBeds}</div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
           <div className="rounded-md shadow-lg p-4 w-64">
             <div className="grid grid-cols-1">
               <Button
@@ -148,8 +155,8 @@ const HeaderBeds = () => {
               </Button>
             </div>
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

@@ -778,7 +778,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           </span>
         </p>
       </div>
-      <div className="grid md:grid-cols-3 sm:grid-cols-2  grid-cols-1 gap-6 py-5">
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 py-5">
         {loading ? (
           Array.from({ length: 12 }).map((_, index) => (
             <div key={index} className="flex items-center justify-center">
