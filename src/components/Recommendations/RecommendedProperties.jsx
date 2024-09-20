@@ -69,68 +69,74 @@ const RecommendedProperties = ({
         </p>
       </div>
       <div className="p-3 cursor-pointer">
-        <Carousel responsive={responsive}>
-          {RecommendedData.map((item) => (
-            <Card key={item.id} className="m-4">
-              <div onClick={() => handleClick(item)}>
-                {item.cover_photo_url ? (
-                  <img
-                    src={item.cover_photo_url}
-                    alt="photo"
-                    className="w-full h-52 object-fit rounded-t-md"
-                  />
-                ) : (
-                  <img
-                    src="/img/NoImage.png"
-                    alt="dummy"
-                    className="w-full h-52 object-fit rounded-t-md"
-                  />
-                )}
-                <CardHeader>
-                  <div>
-                    <div className="flex justify-between items-center">
-                      <CardTitle className="text-base font-semibold w-[90%]">
-                        <span className="font-light text-sm">
-                          Added: {formatTimeNow(item.added)}
-                        </span>
-                      </CardTitle>
+        {RecommendedData.length === 0 ? (
+          <p className="text-center font-semibold text-gray-500">
+            No properties found
+          </p>
+        ) : (
+          <Carousel responsive={responsive}>
+            {RecommendedData.map((item) => (
+              <Card key={item.id} className="m-4">
+                <div onClick={() => handleClick(item)}>
+                  {item.cover_photo_url ? (
+                    <img
+                      src={item.cover_photo_url}
+                      alt="photo"
+                      className="w-full h-52 object-fit rounded-t-md"
+                    />
+                  ) : (
+                    <img
+                      src="/img/NoImage.png"
+                      alt="dummy"
+                      className="w-full h-52 object-fit rounded-t-md"
+                    />
+                  )}
+                  <CardHeader>
+                    <div>
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-base font-semibold w-[90%]">
+                          <span className="font-light text-sm">
+                            Added: {formatTimeNow(item.added)}
+                          </span>
+                        </CardTitle>
+                      </div>
+                      <div className="py-2 font-bold">
+                        <CardDescription>
+                          PKR {conversionFunction(item.price)}
+                        </CardDescription>
+                        <CardDescription className="truncate">
+                          {item.sub_location}
+                        </CardDescription>
+                        <CardDescription>
+                          <div className="flex justify-left gap-3 text-xs mt-4">
+                            {item.bedroom && (
+                              <div className="flex flex-row items-center gap-1">
+                                <FaBed />
+                                <p>{item.bedroom}</p>
+                              </div>
+                            )}
+                            {item.bath && (
+                              <div className="flex flex-row items-center gap-1">
+                                <FaBath />
+                                <p>{item.bath}</p>
+                              </div>
+                            )}
+                            {item.area && (
+                              <div className="flex flex-row items-center gap-1">
+                                <FaChartArea />
+                                <p>{item.area} sqft</p>
+                              </div>
+                            )}
+                          </div>
+                        </CardDescription>
+                      </div>
                     </div>
-                    <div className="py-2 font-bold">
-                      <CardDescription>
-                        PKR {conversionFunction(item.price)}
-                      </CardDescription>
-                      <CardDescription className="truncate">
-                        {item.sub_location}
-                      </CardDescription>
-                      <CardDescription>
-                        <div className="flex justify-left gap-3 text-xs mt-4">
-                          {item.bedroom && (
-                            <div className="flex flex-row items-center gap-1">
-                              <FaBed />
-                              <p>{item.bedroom}</p>
-                            </div>
-                          )}
-                          {item.bath && (
-                            <div className="flex flex-row items-center gap-1">
-                              <FaBath />
-                              <p>{item.bath}</p>
-                            </div>
-                          )}
-                          {item.area && (
-                            <div className="flex flex-row items-center gap-1">
-                              <FaChartArea />
-                              <p>{item.area} sqft</p>
-                            </div>
-                          )}
-                        </div>
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-              </div>
-            </Card>
-          ))}
-        </Carousel>
+                  </CardHeader>
+                </div>
+              </Card>
+            ))}
+          </Carousel>
+        )}
       </div>
     </div>
   );
