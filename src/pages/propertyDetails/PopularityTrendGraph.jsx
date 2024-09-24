@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { formatDateToMonthYear } from "../../utlils/dateToMonthYear";
 import displayFirstName from "../../utlils/displayFirstName";
+import { PieChart, Pie, Cell } from "recharts";
 
 export default function PopularityTrendGraph({
   popularityTrendData,
@@ -33,6 +34,35 @@ export default function PopularityTrendGraph({
   const itemHeight = 30;
   const paddingHeight = 80;
   const chartHeight = data.length * itemHeight + paddingHeight;
+
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
   return (
     <div>
       <div className="hidden md:block">
@@ -108,30 +138,57 @@ export default function PopularityTrendGraph({
         </div>
       </div>
       <div className="p-2 block md:hidden">
-        <div>
-          <p>Trends</p>
-          <p>Trends-Most Searched Locations in</p>
-          <p>Percentage of Total Searches by Location</p>
+        <div className="py-4">
+          <p className="font-montserrat text-[#0071BC] text-2xl font-bold">
+            Trends
+          </p>
+          <p className="py-4 font-montserrat text-lg">
+            Percentage of Total Searches by Location
+          </p>
         </div>
-        <div className="flex items-center gap-2 overflow-x-auto">
+        <div className="py-4 flex items-center gap-2 overflow-x-auto hide-scrollbar">
           {months.map((item) => (
             <Button
               key={item}
               onClick={function () {
                 setSelectedMonth(item);
               }}
-              className="rounded-3xl bg-gray-100 text-black"
+              className="rounded-3xl bg-gray-100 text-black hover:bg-gray-300 active:text-white"
             >
               {formatDateToMonthYear(item)}
             </Button>
           ))}
         </div>
-        <div className="text-center">
-          {data.map((item) => (
-            <p className="rounded-md bg-gray-100 p-2 w-full" key={item.id}>
-              {item.title}
-            </p>
-          ))}
+        <div className="p-4 rounded-md border">
+          <div className="flex justify-center items-center h-full">
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data.map((item) => ({
+                  name: item.search_percentage.toFixed(1),
+                  value: item.search_percentage,
+                }))}
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={150}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {data.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </div>
+          <div className="flex flex-col text-center gap-4">
+            {data.map((item) => (
+              <p className="rounded-md bg-gray-100 p-2 w-full" key={item.id}>
+                {item.title}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </div>
