@@ -11,15 +11,37 @@ import {
 } from "../../components/ui/popover";
 import { Button } from "../../components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
+import { useLocation } from "react-router-dom";
 
 const HeaderProperty = () => {
   const simpleContext = useContext(appContext);
+  const location = useLocation();
   const [propertyState, setPropertyState] = useState({
     selectedPropertyType:
       simpleContext.appState.propertyState.selectedPropertyType,
     selectedSubProperty:
       simpleContext.appState.propertyState.selectedSubProperty,
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const selectPropertyTypeFromUrl = params.get("propertyType");
+
+    if (selectPropertyTypeFromUrl) {
+      setPropertyState((prevState) => ({
+        ...prevState,
+        selectedPropertyType: selectPropertyTypeFromUrl,
+      }));
+      simpleContext.setAppState((s) => ({
+        ...s,
+        propertyState: {
+          ...s.propertyState,
+          selectedPropertyType: selectPropertyTypeFromUrl,
+        },
+      }));
+    }
+  }, []);
+
   useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,

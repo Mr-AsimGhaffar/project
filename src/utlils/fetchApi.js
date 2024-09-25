@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const PRICE_PREDICT_API_URL = import.meta.env.VITE_PREDCIT_API_URL;
+const RECOMMENDATION_API_URL = import.meta.env.VITE_RECOMMENDATION_API_URL;
 
 const headers = {
   "Content-Type": "application/json",
@@ -318,8 +319,32 @@ async function fetchPricePredictor({
     const jsonData = await response.json();
     return jsonData.predicted_price;
   } catch (error) {
-    const errorMessage = error.message || "Failed to fetch price prediction";
-    console.error("Error fetching price prediction", errorMessage);
+    const errorMessage =
+      error.message || "Failed to fetch featured properties.";
+    console.error("Error fetching featured properties:", errorMessage);
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+    });
+    throw error;
+  }
+}
+
+async function fetchRecommendationProperties(id) {
+  try {
+    const response = await axios.get(
+      `${RECOMMENDATION_API_URL}/recommend_properties?property_id=${id}`,
+      {
+        headers,
+      }
+    );
+    return response.data.recommended_properties;
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      return [];
+    }
+    const errorMessage = error.message || "Failed to search city data.";
+    console.error("Error searching city data:", errorMessage);
     toast.error(errorMessage, {
       position: "top-center",
       autoClose: 5000,
@@ -338,4 +363,5 @@ export {
   fetchPropertyRecommendations,
   fetchLocationTreeData,
   fetchPricePredictor,
+  fetchRecommendationProperties,
 };

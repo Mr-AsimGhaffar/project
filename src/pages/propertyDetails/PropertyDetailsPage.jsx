@@ -20,6 +20,7 @@ import TopPropertyPropertyDetail from "../../components/topProperties/TopPropert
 import { appContext } from "../../contexts/Context";
 import Spinner from "../../components/spinner/Spinner";
 import { MdRealEstateAgent } from "react-icons/md";
+import RecommendedProperties from "../../components/Recommendations/RecommendedProperties";
 
 const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const simpleContext = useContext(appContext);
@@ -34,6 +35,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   const locationRef = useRef(null);
   const similarPropertyRef = useRef(null);
   const topPropertyPropertyDetailRef = useRef(null);
+  const recommendedPropertiesRef = useRef(null);
   const priceIndexRef = useRef(null);
   const trendsRef = useRef(null);
   const [data, setData] = useState([]);
@@ -76,6 +78,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
       const trendsPosition = trendsRef.current.offsetTop;
       const similarPosition = similarPropertyRef.current.offsetTop;
       const topPosition = topPropertyPropertyDetailRef.current.offsetTop;
+      const recommendPosition = recommendedPropertiesRef.current.offsetTop;
       const currentScrollPosition = window.scrollY + 10;
       if (
         currentScrollPosition >= overviewPosition &&
@@ -102,8 +105,13 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         currentScrollPosition < topPosition
       ) {
         setActiveButton("Similar");
-      } else if (currentScrollPosition >= topPosition) {
+      } else if (
+        currentScrollPosition >= topPosition &&
+        currentScrollPosition < recommendPosition
+      ) {
         setActiveButton("Top");
+      } else if (currentScrollPosition >= topPosition) {
+        setActiveButton("Recommend");
       }
     };
 
@@ -355,6 +363,20 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
               >
                 <span>Top Properties</span>
               </Button>
+              <Button
+                variant="ghost"
+                className={`w-full${
+                  activeButton === "Recommend"
+                    ? "bg-white bg-accent rounded-3xl border-2"
+                    : "bg-transparent text-white rounded-3xl border-2 border-none"
+                }`}
+                onClick={() => {
+                  scrollToSection(recommendedPropertiesRef, "Recommend");
+                  setActiveButton("Recommend");
+                }}
+              >
+                <span>Recommended Properties</span>
+              </Button>
             </div>
           </div>
         </div>
@@ -569,6 +591,13 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         </div>
         <div ref={topPropertyPropertyDetailRef}>
           <TopPropertyPropertyDetail conversionFunction={conversionFunction} />
+        </div>
+        <div ref={recommendedPropertiesRef}>
+          <RecommendedProperties
+            RecommendedPropertiesId={property.id}
+            RecommendedPropertiesLocation={property.location}
+            conversionFunction={conversionFunction}
+          />
         </div>
       </div>
     </div>

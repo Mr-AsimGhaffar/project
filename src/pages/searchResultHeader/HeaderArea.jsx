@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { appContext } from "@/contexts/Context";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { IoIosArrowDown } from "react-icons/io";
 import {
@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../../components/ui/popover";
+import { useLocation } from "react-router-dom";
 
 const marlaToSquareFeet = (marla) => {
   return marla * 225;
@@ -25,6 +26,7 @@ const squareFeetToMarla = (marla) => {
 const AreaTag = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
+  const location = useLocation();
   const [selectedAreaMin, setSelectedAreaMin] = useState(
     squareFeetToMarla(simpleContext.appState.selectedAreaMin)
   );
@@ -33,6 +35,27 @@ const AreaTag = () => {
   );
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const minAreaFromUrl = params.get("area_min");
+    const maxAreaFromUrl = params.get("area_max");
+
+    if (minAreaFromUrl) {
+      setSelectedAreaMin(squareFeetToMarla(minAreaFromUrl));
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMin: minAreaFromUrl,
+      }));
+    }
+    if (maxAreaFromUrl) {
+      setSelectedAreaMax(squareFeetToMarla(maxAreaFromUrl));
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMax: maxAreaFromUrl,
+      }));
+    }
+  }, []);
 
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area === "Any" ? null : area;
