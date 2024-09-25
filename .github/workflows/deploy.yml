@@ -16,7 +16,7 @@ jobs:
       # Build Docker image in GitHub Actions
       - name: Build Docker Image
         run: |
-          docker build -t my-app-image:latest .
+          docker build -t my-app-image:latest  -f ./DockerFile .
 
       # Save the Docker image as a tar file
       - name: Save Docker Image as Tar File
