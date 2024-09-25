@@ -45,7 +45,6 @@ const HeaderCity = ({ abortController, setIsSelectOpen }) => {
         onValueChange={handleCityChange}
         onOpenChange={handleOpenChange}
         value={simpleContext.appState.selectedCity}
-        className="touch-auto"
       >
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="Select a city" />
