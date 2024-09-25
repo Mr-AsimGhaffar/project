@@ -56,5 +56,7 @@ jobs:
           cd $REPO_NAME &&
           docker load -i ~/my-app-image.tar &&
           docker compose -f ./docker-compose.yml down &&
+          docker container prune -f &&  # Optional: Remove all stopped containers
+          docker rm -f frontend_container || true &&  # Ensure old container is removed if it exists
           docker compose -f ./docker-compose.yml up -d --build
           "
