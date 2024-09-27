@@ -15,14 +15,14 @@ import { ThemeProvider } from "./components/theme/themeProvider";
 import PropertyRecommendations from "./pages/propertyRecommendations/PropertyRecommendations";
 
 function App() {
-  const [appState, setAppState] = useState({
+  const initialState = {
     cardData: [],
     pageData: {},
     selectedAmountMin: "",
     selectedAmountMax: "",
     selectedAreaMin: "",
     selectedAreaMax: null,
-    selectBeds: "",
+    selectBeds: "All",
     propertyState: {
       selectedPropertyType: "Home",
       selectedSubProperty: "",
@@ -41,7 +41,14 @@ function App() {
     selectedCity: "islamabad",
     topBestProperty: [],
     is_agency: "",
-  });
+  };
+  const [appState, setAppState] = useState(initialState);
+
+  // Function to reset appState to its initial values
+  const resetAppState = () => {
+    setAppState(initialState);
+  };
+
   const setSelectedCity = (city) => {
     setAppState((prevState) => ({
       ...prevState,
@@ -55,7 +62,7 @@ function App() {
     conversionType === "price" ? priceConversion : countConversion;
 
   const contextValue = useMemo(
-    () => ({ appState, setAppState, setSelectedCity }),
+    () => ({ appState, setAppState, setSelectedCity, resetAppState }),
     [appState]
   );
   const handleDashboardClick = useCallback(() => {

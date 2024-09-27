@@ -21,6 +21,12 @@ export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
   const [date, setDate] = React.useState(null);
   const location = useLocation();
 
+  // React.useEffect(() => {
+  //   if (!simpleContext.appState.startDate && !simpleContext.appState.endDate) {
+  //     setDate(null);
+  //   }
+  // }, [simpleContext.appState]);
+
   React.useEffect(() => {
     const params = new URLSearchParams(location.search);
     const startDateFromUrl = params.get("start_date");
@@ -41,6 +47,11 @@ export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      startDate: newDate?.from,
+      endDate: newDate?.to,
+    }));
     if (newDate) {
       onChange(newDate.from, newDate.to);
     } else {

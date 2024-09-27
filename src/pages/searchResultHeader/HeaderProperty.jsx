@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 
 const HeaderProperty = () => {
   const simpleContext = useContext(appContext);
+
   const location = useLocation();
   const [propertyState, setPropertyState] = useState({
     selectedPropertyType:
@@ -21,6 +22,13 @@ const HeaderProperty = () => {
     selectedSubProperty:
       simpleContext.appState.propertyState.selectedSubProperty,
   });
+
+  useEffect(() => {
+    setPropertyState(simpleContext.appState.propertyState);
+  }, [
+    simpleContext.appState.propertyState.selectedPropertyType,
+    simpleContext.appState.propertyState.selectedSubProperty,
+  ]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

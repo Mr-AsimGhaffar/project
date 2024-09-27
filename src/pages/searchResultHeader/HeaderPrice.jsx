@@ -24,6 +24,14 @@ const HeaderPrice = () => {
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
 
   useEffect(() => {
+    setSelectedAmountMin(simpleContext.appState.selectedAmountMin);
+    setSelectedAmountMax(simpleContext.appState.selectedAmountMax);
+  }, [
+    simpleContext.appState.selectedAmountMin,
+    simpleContext.appState.selectedAmountMax,
+  ]);
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const minPriceFromUrl = params.get("price_min");
     const maxPriceFromUrl = params.get("price_max");
@@ -96,6 +104,12 @@ const HeaderPrice = () => {
     setSelectedAmountMax(null);
     setSelectedMinButton(null);
     setSelectedMaxButton(null);
+    // Sync with global appState
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMin: "",
+      selectedAmountMax: "",
+    }));
   };
 
   const buttonStyles = (isSelected) =>
