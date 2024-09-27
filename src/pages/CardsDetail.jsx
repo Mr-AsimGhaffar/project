@@ -46,11 +46,11 @@ import firstLetterUpperCase from "../utlils/firstLetterUpperCase";
 import HeaderCity from "./searchResultHeader/HeaderCity";
 import formatDate from "../utlils/formatDate";
 import useQueryParams from "../hooks/useQueryParams";
+import { Button } from "../components/ui/button";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const queryParams = useQueryParams();
   const abortController = new AbortController();
-  const [isRequestInProgress, setIsRequestInProgress] = useState(false);
   const simpleContext = useContext(appContext);
   const [expandedCards, setExpandedCards] = useState({});
   const [searchTerm, setSearchTerm] = useState(
@@ -72,6 +72,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const mounted = useRef(false);
   const navigate = useNavigate();
+  const { resetAppState } = useContext(appContext);
 
   const {
     cardData,
@@ -187,8 +188,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     start_date,
     end_date
   ) => {
-    if (isRequestInProgress) return; // Prevent new requests while one is in progress
-    setIsRequestInProgress(true);
     const {
       selectedAmountMin,
       selectedAmountMax,
@@ -312,8 +311,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     } catch (error) {
       console.error("Error fetching data:", error);
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
-    } finally {
-      setIsRequestInProgress(false);
     }
   };
   useEffect(() => {
@@ -342,8 +339,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     sort_by = sortBy || "added",
     sort_order = sortOrder || "DESC"
   ) => {
-    if (isRequestInProgress) return; // Prevent new requests while one is in progress
-    setIsRequestInProgress(true);
     const {
       selectedAmountMin,
       selectedAmountMax,
@@ -359,8 +354,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         position: "top-center",
         autoClose: 2000,
       });
-      setIsRequestInProgress(false);
-      return;
     }
 
     if (
@@ -477,8 +470,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     } catch (error) {
       console.error("Error fetching data:", error);
       simpleContext.setAppState((s) => ({ ...s, loading: false }));
-    } finally {
-      setIsRequestInProgress(false);
     }
   };
 
@@ -674,6 +665,16 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setSuggestions([]);
   };
 
+  const handleReset = () => {
+    resetAppState();
+    setStartDate(null);
+    setEndDate(null);
+    setSortBy(null);
+    setSortByDate("added");
+    setSortOrder(null);
+    setSortOrderDate("DESC");
+  };
+
   const displayText =
     propertyState.selectedSubProperty || propertyState.selectedPropertyType;
   const capitalizedText = firstLetterUpperCase(displayText);
@@ -808,13 +809,21 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <HeaderProperty />
           </div>
           <div>
-            <DatePickerWithRange onChange={handleDateChange} />
+            <DatePickerWithRange
+              onChange={handleDateChange}
+              handleReset={handleReset}
+            />
           </div>
           <div>
             <HeaderArea />
           </div>
           <div>
             <HeaderOwnerDetail />
+          </div>
+          <div>
+            <Button className="rounded-3xl border-2" onClick={handleReset}>
+              Reset
+            </Button>
           </div>
         </div>
 

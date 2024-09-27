@@ -14,6 +14,11 @@ const HeaderOwnerDetail = () => {
   const location = useLocation();
   const { is_agency } = simpleContext.appState;
 
+  // Sync local state with appState
+  // useEffect(() => {
+  //   is_agency(simpleContext.appState.is_agency);
+  // }, [simpleContext.appState.is_agency]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const selectAgencyFromUrl = params.get("agency");
@@ -36,7 +41,11 @@ const HeaderOwnerDetail = () => {
     is_agency === "" ? "all" : is_agency === "true" ? "true" : "false";
   return (
     <div>
-      <Select defaultValue={selectedValue} onValueChange={handleSelectAgent}>
+      <Select
+        defaultValue={selectedValue}
+        value={selectedValue}
+        onValueChange={handleSelectAgent}
+      >
         <SelectTrigger className="rounded-3xl border-2">
           <SelectValue placeholder="Owner Detail" />
         </SelectTrigger>

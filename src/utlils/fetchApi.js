@@ -91,6 +91,8 @@ async function fetchPropertyDetails(id) {
   }
 }
 
+let currentController = null;
+
 async function searchCityData(
   city,
   queries = [],
@@ -102,8 +104,15 @@ async function searchCityData(
   start_date,
   end_date
 ) {
-  const controller = getAbortController("searchCityData");
   const page_size = 12;
+
+  // Abort the previous request if it exists
+  if (currentController) {
+    currentController.abort();
+  }
+
+  // Create a new AbortController for the current request
+  currentController = new AbortController();
 
   try {
     const {
@@ -141,12 +150,14 @@ async function searchCityData(
 
     const response = await axios.get(url, {
       headers,
-      signal: controller.signal,
+      signal: currentController.signal,
     });
 
     return response.data.data;
   } catch (error) {
-    if (error.name !== "AbortError") {
+    if (error.name === "CanceledError") {
+      console.log("Request canceled:", error.message);
+    } else {
       const errorMessage = error.message || "Failed to search city data.";
       console.error("Error searching city data:", errorMessage);
       toast.error(errorMessage, {
@@ -155,6 +166,9 @@ async function searchCityData(
       });
       throw error;
     }
+  } finally {
+    // Reset the controller after the request completes
+    currentController = null;
   }
 }
 

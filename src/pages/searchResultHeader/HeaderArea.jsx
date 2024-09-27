@@ -36,6 +36,19 @@ const AreaTag = () => {
   const [selectedMinButton, setSelectedMinButton] = useState(null);
   const [selectedMaxButton, setSelectedMaxButton] = useState(null);
 
+  // Sync local state with appState on mount
+  useEffect(() => {
+    setSelectedAreaMin(
+      squareFeetToMarla(simpleContext.appState.selectedAreaMin)
+    );
+    setSelectedAreaMax(
+      squareFeetToMarla(simpleContext.appState.selectedAreaMax)
+    );
+  }, [
+    simpleContext.appState.selectedAreaMin,
+    simpleContext.appState.selectedAreaMax,
+  ]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const minAreaFromUrl = params.get("area_min");
@@ -102,6 +115,7 @@ const AreaTag = () => {
     setSelectedAreaMax(null);
     setSelectedMinButton(null);
     setSelectedMaxButton(null);
+    // Sync with global appState
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAreaMin: null,

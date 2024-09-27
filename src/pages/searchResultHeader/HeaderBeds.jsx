@@ -17,6 +17,11 @@ const HeaderBeds = () => {
     simpleContext.appState.selectBeds
   );
 
+  // Sync the component's local state with global appState on reset or update
+  useEffect(() => {
+    setSelectBeds(simpleContext.appState.selectBeds);
+  }, [simpleContext.appState.selectBeds]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const selectBedsFromUrl = params.get("beds");
