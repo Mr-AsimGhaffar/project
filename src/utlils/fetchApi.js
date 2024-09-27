@@ -330,21 +330,31 @@ async function fetchPricePredictor({
   }
 }
 
-async function fetchRecommendationProperties(id) {
+async function fetchRecommendationProperties(id = null, params = {}) {
   try {
-    const response = await axios.get(
-      `${RECOMMENDATION_API_URL}/recommend_properties?property_id=${id}`,
-      {
-        headers,
-      }
-    );
+    const { price, bath, bedroom, area, location_id, type, city_id } = params;
+    let url = `${RECOMMENDATION_API_URL}/recommend_properties/`;
+    url += `?property_id=${id}`;
+    const response = await axios.get(url, {
+      headers,
+      data: {
+        price: price,
+        bath: bath,
+        bedroom: bedroom,
+        area: area,
+        location_id: location_id,
+        type: type,
+        city_id: city_id,
+      },
+    });
+
     return response.data.recommended_properties;
   } catch (error) {
     if (error.name !== "AbortError") {
       return [];
     }
-    const errorMessage = error.message || "Failed to search city data.";
-    console.error("Error searching city data:", errorMessage);
+    const errorMessage = error.message || "Failed to fetch properties.";
+    console.error("Error fetching properties:", errorMessage);
     toast.error(errorMessage, {
       position: "top-center",
       autoClose: 5000,

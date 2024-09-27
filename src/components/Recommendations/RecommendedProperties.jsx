@@ -35,17 +35,41 @@ const RecommendedProperties = ({
   const navigate = useNavigate();
   const [RecommendedData, SetrecommendedData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [propertyParams, setPropertyParams] = useState(null);
 
   const fetchRecommendationData = useCallback(async () => {
     try {
       const data = await fetchRecommendationProperties(RecommendedPropertiesId);
-      SetrecommendedData(data);
+      if (data.length === 0 && propertyParams) {
+        // Use parameters from a previous API call to fetch new recommendations
+        const fallbackData = await fetchRecommendationProperties(
+          null,
+          propertyParams
+        );
+        SetrecommendedData(fallbackData);
+      } else {
+        SetrecommendedData(data);
+
+        // Extract and store parameters from the first property in the response
+        if (data.length > 0) {
+          const firstProperty = data[0];
+          setPropertyParams({
+            price: firstProperty.price,
+            bath: firstProperty.bath,
+            bedroom: firstProperty.bedroom,
+            area: firstProperty.area,
+            location_id: firstProperty.location_id,
+            type: firstProperty.type,
+            city_id: firstProperty.city_id,
+          });
+        }
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
-  }, [RecommendedPropertiesId]);
+  }, [RecommendedPropertiesId, propertyParams]);
 
   useEffect(() => {
     fetchRecommendationData();
