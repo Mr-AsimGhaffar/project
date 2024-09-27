@@ -39,11 +39,6 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
 
   return (
     <main className="px-4 md:px-8 lg:px-20 xl:px-44">
-      <PropertyDetails
-        propertyListingData={propertyListingData}
-        conversionFunction={conversionFunction}
-        propertyCategory={propertyCategory}
-      />
       {loading ? (
         <div className="flex justify-center py-10 lg:py-20">
           <div className="flex justify-center items-center">
@@ -52,7 +47,12 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
         </div>
       ) : (
         <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 xl:gap-8">
+          <PropertyDetails
+            propertyListingData={propertyListingData}
+            conversionFunction={conversionFunction}
+            propertyCategory={propertyCategory}
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {displayedData
               .map((item, index) => ({
                 id: index,

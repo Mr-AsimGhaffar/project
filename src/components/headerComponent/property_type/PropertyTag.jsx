@@ -1,15 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Home from "./Home";
 import Plots from "./Plots";
 import Commercial from "./Commercial";
 import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { Button } from "../../ui/button";
+import { IoIosArrowDown } from "react-icons/io";
 
 const PropertyTag = () => {
   const [propertyState, setPropertyState] = useState({
@@ -47,15 +44,22 @@ const PropertyTag = () => {
 
   return (
     <div>
-      <Select>
-        <SelectTrigger>
-          <SelectValue placeholder="PROPERTY TYPE" />
-          <div>
-            {propertyState.selectedSubProperty ||
-              propertyState.selectedPropertyType}
-          </div>
-        </SelectTrigger>
-        <SelectContent>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white">
+            <div className="flex justify-between items-center w-full">
+              <p>PROPERTY TYPE</p>
+              <div>
+                {propertyState.selectedSubProperty ||
+                  propertyState.selectedPropertyType}
+              </div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-full">
           <div className="flex justify-between items-center p-5">
             <h1
               className={getPropertyTypeStyle("home")}
@@ -96,8 +100,8 @@ const PropertyTag = () => {
               />
             )}
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

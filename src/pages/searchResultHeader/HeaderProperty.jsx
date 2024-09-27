@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
 import Plots from "../../components/headerComponent/property_type/Plots";
 import Commercial from "../../components/headerComponent/property_type/Commercial";
 import Home from "../../components/headerComponent/property_type/Home";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
+import { Button } from "../../components/ui/button";
+import { IoIosArrowDown } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 
 const HeaderProperty = () => {
@@ -70,15 +71,25 @@ const HeaderProperty = () => {
 
   return (
     <div>
-      <Select>
-        <SelectTrigger className="rounded-3xl border-2">
-          <SelectValue placeholder="PROPERTY TYPE" />
-          <div>
-            {propertyState.selectedSubProperty ||
-              propertyState.selectedPropertyType}
-          </div>
-        </SelectTrigger>
-        <SelectContent className="w-[100%]">
+      <Popover className="touch-auto">
+        <PopoverTrigger
+          asChild
+          className="rounded-3xl border-2 w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white opacity-80"
+        >
+          <Button className="w-full">
+            <div className="flex justify-between items-center w-full">
+              <p>PROPERTY TYPE</p>
+              <div>
+                {propertyState.selectedSubProperty ||
+                  propertyState.selectedPropertyType}
+              </div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-full">
           <div className="flex justify-between items-center p-5">
             <h1
               className={getPropertyTypeStyle("home")}
@@ -119,8 +130,8 @@ const HeaderProperty = () => {
               />
             )}
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

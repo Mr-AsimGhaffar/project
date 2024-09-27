@@ -362,6 +362,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                         <Select
                           onOpenChange={handleOpenChange}
                           onValueChange={handleSelectCity}
+                          className="touch-auto"
                         >
                           <SelectTrigger className="rounded-md md:rounded-tr-none md:rounded-br-none">
                             <SelectValue placeholder="Islamabad" />

@@ -841,7 +841,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           </span>
         </p>
       </div>
-      <div className="grid md:grid-cols-3 grid-cols-1 gap-6 py-5">
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 py-5">
         {loading ? (
           Array.from({ length: 12 }).map((_, index) => (
             <div key={index} className="flex items-center justify-center">
@@ -867,96 +867,104 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
               }`}
             >
               <Link to={`/property/${item.id}`} state={{ id: item.id }}>
-                {item.cover_photo_url ? (
-                  <div className="relative">
-                    <img
-                      src={item.cover_photo_url}
-                      alt="photo"
-                      className="w-full h-52 object-cover rounded-t-md"
-                    />
-                    <div className="flex items-center absolute top-2 left-2 gap-2">
-                      <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
-                        {item.type.replace("_", " ")}
-                      </div>
-                      {item.agency && (
-                        <div className="p-2 rounded-full shadow-md text-xs bg-[#0071BC] text-white">
-                          <div>{item.agency}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <img
-                    src="/img/NoImage.png"
-                    alt="dummy"
-                    className="w-full h-52 object-fit rounded-t-md"
-                  />
-                )}
-                <CardHeader>
+                <div className="grid grid-cols-2 md:grid-cols-1">
                   <div>
-                    <div className="flex justify-between item-center">
-                      <CardTitle className="text-base font-semibold">
-                        {item.header}
-                      </CardTitle>
-                    </div>
-                    <div className="py-2">
-                      <CardDescription className="text-base font-semibold">
-                        {item.location.split(",").slice(0, 2)}
-                      </CardDescription>
-                    </div>
-                    <div className="py-2">
-                      <div>
-                        <CardDescription>
-                          Added: {formatTimeNow(item.added)}
-                        </CardDescription>
-                      </div>
-                    </div>
-                    <div className="py-2">
-                      <CardDescription>
-                        <div className="flex justify-left gap-3 text-xs">
-                          {item.bedroom && (
-                            <div className="flex flex-row items-center gap-1">
-                              <FaBed />
-                              <p>{item.bedroom}</p>
-                            </div>
-                          )}
-                          {item.bath && (
-                            <div className="flex flex-row items-center gap-1">
-                              <FaBath />
-                              <p>{item.bath}</p>
-                            </div>
-                          )}
-                          {item.area && (
-                            <div className="flex flex-row items-center gap-1">
-                              <BiSolidDirections />
-                              <p>{squareFeetToMarla(item.area)}</p>
+                    {item.cover_photo_url ? (
+                      <div className="relative">
+                        <img
+                          src={item.cover_photo_url}
+                          alt="photo"
+                          className="w-full h-52 object-cover rounded-t-md"
+                        />
+                        <div className="flex items-center absolute top-2 left-2 gap-2">
+                          <div className="p-1 md:p-2 rounded-sm md:rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                            {item.type.replace("_", " ")}
+                          </div>
+                          {item.agency && (
+                            <div className="p-2 rounded-sm md:rounded-full shadow-md text-xs bg-[#0071BC] text-white">
+                              <div>{item.agency}</div>
                             </div>
                           )}
                         </div>
-                      </CardDescription>
-                    </div>
-                    <div className="py-2">
-                      <CardDescription className="text-2xl font-bold">
-                        {conversionFunction(item.price)} PKR
-                      </CardDescription>
-                      <CardDescription
-                        className={`overflow-hidden ${
-                          expandedCards[item.id]
-                            ? "line-clamp-none"
-                            : "line-clamp-2"
-                        }`}
-                      >
-                        {item.description}
-                      </CardDescription>
-                    </div>
+                      </div>
+                    ) : (
+                      <img
+                        src="/img/NoImage.png"
+                        alt="dummy"
+                        className="w-full h-52 object-fit rounded-t-md"
+                      />
+                    )}
                   </div>
-                </CardHeader>
+                  <div>
+                    <CardHeader>
+                      <div>
+                        <div className="flex justify-between item-center hidden md:block">
+                          <CardTitle className="text-sm md:text-base font-semibold">
+                            {item.header}
+                          </CardTitle>
+                        </div>
+                        <div className="py-2">
+                          <CardDescription className="text-sm md:text-base font-semibold">
+                            {item.location.split(",").slice(0, 2)}
+                          </CardDescription>
+                        </div>
+                        <div className="py-2">
+                          <div>
+                            <CardDescription>
+                              Added: {formatTimeNow(item.added)}
+                            </CardDescription>
+                          </div>
+                        </div>
+                        <div className="py-2">
+                          <CardDescription>
+                            <div className="flex justify-left gap-1 md:gap-3 text-xs">
+                              {item.bedroom && (
+                                <div className="flex flex-row items-center gap-1">
+                                  <FaBed />
+                                  <p>{item.bedroom}</p>
+                                </div>
+                              )}
+                              {item.bath && (
+                                <div className="flex flex-row items-center gap-1">
+                                  <FaBath />
+                                  <p>{item.bath}</p>
+                                </div>
+                              )}
+                              {item.area && (
+                                <div className="flex flex-row items-center gap-1">
+                                  <BiSolidDirections />
+                                  <p>{squareFeetToMarla(item.area)}</p>
+                                </div>
+                              )}
+                            </div>
+                          </CardDescription>
+                        </div>
+                        <div className="py-2">
+                          <CardDescription className="text-lg md:text-2xl font-bold">
+                            PKR {conversionFunction(item.price)}
+                          </CardDescription>
+                          <div className="hidden md:block">
+                            <CardDescription
+                              className={`overflow-hidden ${
+                                expandedCards[item.id]
+                                  ? "line-clamp-none"
+                                  : "line-clamp-2"
+                              }`}
+                            >
+                              {item.description}
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </div>
+                </div>
               </Link>
               <CardDescription>
                 {item.description.length > 100 && (
                   <button
                     onClick={() => handleToggleExpand(item.id)}
-                    className="text-sm underline p-6 py-3"
+                    className="text-sm underline p-6 py-3 hidden md:block"
                   >
                     {expandedCards[item.id] ? "See less" : "See more"}
                   </button>

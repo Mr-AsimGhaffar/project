@@ -1,13 +1,9 @@
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { appContext } from "@/contexts/Context";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { IoIosArrowDown } from "react-icons/io";
 
 const BedsTag = () => {
   const [selectBeds, setSelectBeds] = useState("All");
@@ -50,13 +46,20 @@ const BedsTag = () => {
 
   return (
     <div>
-      <Select>
-        <SelectTrigger>
-          <SelectValue placeholder="BEDS" />
-          <div>{selectBeds}</div>
-        </SelectTrigger>
-        <SelectContent>
-          <div className="rounded-md shadow-lg p-4 w-64">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white">
+            <div className="w-full flex justify-between items-center">
+              <p>BEDS</p>
+              <div>{selectBeds}</div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
             <div className="grid grid-cols-1">
               <Button
                 variant="outline"
@@ -130,10 +133,24 @@ const BedsTag = () => {
               >
                 8
               </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSelectBeds("9")}
+                style={buttonStyles("9")}
+              >
+                9
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSelectBeds("10")}
+                style={buttonStyles("10")}
+              >
+                10+
+              </Button>
             </div>
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

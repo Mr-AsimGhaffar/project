@@ -1,17 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
+import { IoIosArrowDown } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 
 const HeaderPrice = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
   const location = useLocation();
   const [selectedAmountMax, setSelectedAmountMax] = useState(
@@ -102,16 +103,27 @@ const HeaderPrice = () => {
     isSelected ? "bg-gray-800 text-white" : "";
   return (
     <div>
-      <Select>
-        <SelectTrigger className="rounded-3xl border-2">
-          <SelectValue placeholder="PRICE" />
-
-          <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
-          <div>To</div>
-          <div>{selectedAmountMax === null ? "Any" : selectedAmountMax}</div>
-        </SelectTrigger>
-        <SelectContent>
-          <div className="rounded-md shadow-lg p-4 w-64">
+      <Popover
+        onOpenChange={(open) => setIsDropdownOpen(open)}
+        open={isDropdownOpen}
+      >
+        <PopoverTrigger asChild className="rounded-3xl border-2">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white opacity-80">
+            <div className="flex justify-between items-center w-full">
+              <p>PRICE</p>
+              <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
+              <div>To</div>
+              <div>
+                {selectedAmountMax === null ? "Any" : selectedAmountMax}
+              </div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
             <div className="flex justify-between items-center mb-4">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
             </div>
@@ -321,8 +333,8 @@ const HeaderPrice = () => {
               </Button>
             </div>
           </div>
-        </SelectContent>
-      </Select>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

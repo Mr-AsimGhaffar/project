@@ -53,7 +53,7 @@ export default function PriceIndexGraph({
   const percentage =
     ((lastIndex.avg_price - firstIndex.avg_price) / firstIndex.avg_price) * 100;
   return (
-    <div className="py-8">
+    <div>
       <div>
         <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
           Price Index
