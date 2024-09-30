@@ -32,6 +32,31 @@ const HeaderPrice = () => {
     simpleContext.appState.selectedAmountMax,
   ]);
 
+  const priceOptions = [
+    "0",
+    "500,000",
+    "1,000,000",
+    "2,000,000",
+    "3,500,000",
+    "5,000,000",
+    "6,500,000",
+    "8,000,000",
+    "10,000,000",
+    "12,500,000",
+    "15,000,000",
+    "17,500,000",
+    "20,000,000",
+    "25,000,000",
+    "30,000,000",
+    "40,000,000",
+    "50,000,000",
+    "75,000,000",
+    "100,000,000",
+    "250,000,000",
+    "500,000,000",
+    "1,000,000,000",
+  ];
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const minPriceFromUrl = params.get("price_min");
@@ -105,13 +130,24 @@ const HeaderPrice = () => {
     setSelectedAmountMax(null);
     setSelectedMinButton(null);
     setSelectedMaxButton(null);
-    // Sync with global appState
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMin: "",
-      selectedAmountMax: "",
-    }));
   };
+
+  // Filter Min and Max price options based on selection
+  const filteredMinOptions = priceOptions.filter((price) => {
+    if (selectedAmountMax === null) return true; // No Max selected, show all Min
+    return (
+      parseInt(price.replace(/,/g, "")) <=
+      parseInt(selectedAmountMax.replace(/,/g, ""))
+    );
+  });
+
+  const filteredMaxOptions = priceOptions.filter((price) => {
+    if (selectedAmountMin === null) return true; // No Min selected, show all Max
+    return (
+      parseInt(price.replace(/,/g, "")) >=
+      parseInt(selectedAmountMin.replace(/,/g, ""))
+    );
+  });
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 text-white" : "";
@@ -138,8 +174,17 @@ const HeaderPrice = () => {
         </PopoverTrigger>
         <PopoverContent>
           <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-2">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
+              <div>
+                <Button
+                  variant="outline"
+                  className="rounded-3xl text-xs"
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
@@ -169,182 +214,35 @@ const HeaderPrice = () => {
             </div>
             <div className="border-t border-gray-200 py-4">
               <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant="outline"
-                  className={`buttonStyles(selectedMinButton === 0)`}
-                  onClick={() => handleSelectMin(0, 0)}
-                >
-                  0
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 0)}
-                  onClick={() => handleSelectMax("Any", 0)}
-                >
-                  Any
-                </Button>
+                <div>
+                  {filteredMinOptions.map((price, index) => (
+                    <Button
+                      key={`min-${index}`}
+                      variant="outline"
+                      className={`${buttonStyles(
+                        selectedMinButton === index
+                      )} w-[100%] mb-2`}
+                      onClick={() => handleSelectMin(price, index)}
+                    >
+                      {price}
+                    </Button>
+                  ))}
+                </div>
+                <div>
+                  {filteredMaxOptions.map((price, index) => (
+                    <Button
+                      key={`max-${index}`}
+                      variant="outline"
+                      className={`${buttonStyles(
+                        selectedMaxButton === index
+                      )} w-[100%] mb-2`}
+                      onClick={() => handleSelectMax(price, index)}
+                    >
+                      {price}
+                    </Button>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 p-2">
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 1)}
-                  onClick={() => handleSelectMin("500,000", 1)}
-                >
-                  500,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 1)}
-                  onClick={() => handleSelectMax("1,000,000", 1)}
-                >
-                  1,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 2)}
-                  onClick={() => handleSelectMin("2,000,000", 2)}
-                >
-                  2,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 2)}
-                  onClick={() => handleSelectMax("3,500,000", 2)}
-                >
-                  3,500,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMin("5,000,000", 3)}
-                >
-                  5,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMax("6,500,000", 3)}
-                >
-                  6,500,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 4)}
-                  onClick={() => handleSelectMin("8,000,000", 4)}
-                >
-                  8,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 4)}
-                  onClick={() => handleSelectMax("10,000,000", 4)}
-                >
-                  10,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 5)}
-                  onClick={() => handleSelectMin("12,500,000", 5)}
-                >
-                  12,500,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 5)}
-                  onClick={() => handleSelectMax("15,000,000", 5)}
-                >
-                  15,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 6)}
-                  onClick={() => handleSelectMin("17,500,000", 6)}
-                >
-                  17,500,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 6)}
-                  onClick={() => handleSelectMax("20,000,000", 6)}
-                >
-                  20,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 7)}
-                  onClick={() => handleSelectMin("25,000,000", 7)}
-                >
-                  25,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 7)}
-                  onClick={() => handleSelectMax("30,000,000", 7)}
-                >
-                  30,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 8)}
-                  onClick={() => handleSelectMin("40,000,000", 8)}
-                >
-                  40,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 8)}
-                  onClick={() => handleSelectMax("50,000,000", 8)}
-                >
-                  50,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 9)}
-                  onClick={() => handleSelectMin("75,000,000", 9)}
-                >
-                  75,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 9)}
-                  onClick={() => handleSelectMax("100,000,000", 9)}
-                >
-                  100,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 10)}
-                  onClick={() => handleSelectMin("200,000,000", 10)}
-                >
-                  200,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 10)}
-                  onClick={() => handleSelectMax("500,000,000", 10)}
-                >
-                  500,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 11)}
-                  onClick={() => handleSelectMin("1,000,000,000", 11)}
-                >
-                  1,000,000,000
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 11)}
-                  onClick={() => handleSelectMax("5,000,000,000", 11)}
-                >
-                  5,000,000,000
-                </Button>
-              </div>
-            </div>
-            <div className="flex justify-between mt-4">
-              <Button variant="outline" onClick={handleReset}>
-                Reset
-              </Button>
             </div>
           </div>
         </PopoverContent>
