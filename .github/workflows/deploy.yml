@@ -54,7 +54,7 @@ jobs:
         run: |
           ssh -i ec2_private_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
           cd $REPO_NAME &&
-          docker load -i ~/frontend-image.tar &&
+          docker load -i ./frontend-image.tar &&
           docker compose -f ./docker-compose.yml down &&
           docker container prune -f &&  # Optional: Remove all stopped containers
           sudo docker image prune -f && sudo docker builder prune -f
