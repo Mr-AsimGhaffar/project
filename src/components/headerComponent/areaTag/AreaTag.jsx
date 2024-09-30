@@ -16,6 +16,8 @@ const AreaTag = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const simpleContext = useContext(appContext);
 
+  const areaOptions = ["2", "3", "5", "8", "10", "15", "20", "30", "40"];
+
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area === "Any" ? null : area;
     setSelectedAreaMax(newValue);
@@ -70,6 +72,29 @@ const AreaTag = () => {
     saveToLocalStorage("selectedAreaMax", null);
   };
 
+  // Filter Min and Max price options based on selection
+  const filteredMinOptions = areaOptions.filter((price) => {
+    if (selectedAreaMax === null) return true; // No Max selected, show all Min
+    // Ensure price and selectedAreaMax are strings before calling replace
+    return (
+      parseInt(price.replace(/,/g, "")) <=
+      (typeof selectedAreaMax === "string"
+        ? parseInt(selectedAreaMax.replace(/,/g, ""))
+        : selectedAreaMax)
+    );
+  });
+
+  const filteredMaxOptions = areaOptions.filter((price) => {
+    if (selectedAreaMin === null) return true; // No Min selected, show all Max
+    // Ensure price and selectedAreaMin are strings before calling replace
+    return (
+      parseInt(price.replace(/,/g, "")) >=
+      (typeof selectedAreaMin === "string"
+        ? parseInt(selectedAreaMin.replace(/,/g, ""))
+        : selectedAreaMin)
+    );
+  });
+
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 text-white" : "";
 
@@ -94,9 +119,22 @@ const AreaTag = () => {
         </PopoverTrigger>
         <PopoverContent>
           <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
-            <Button className="mb-4 w-[100%]" variant="secondary">
-              Area unit (Marla)
-            </Button>
+            <div className="flex justify-between mb-2">
+              <div>
+                <Button className="rounded-3xl text-xs" variant="secondary">
+                  Area unit (Marla)
+                </Button>
+              </div>
+              <div>
+                <Button
+                  variant="outline"
+                  className="rounded-3xl text-xs"
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <div className="text-xs font-semibold text-gray-500 mb-1">
@@ -125,96 +163,35 @@ const AreaTag = () => {
             </div>
             <div className="border-t border-gray-200 py-4">
               <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 1)}
-                  onClick={() => handleSelectMinButton("3", 1)}
-                >
-                  3
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 1)}
-                  onClick={() => handleSelectMaxButton("3", 1)}
-                >
-                  3
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 2)}
-                  onClick={() => handleSelectMinButton("5", 3)}
-                >
-                  5
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 2)}
-                  onClick={() => handleSelectMaxButton("5", 3)}
-                >
-                  5
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 3)}
-                  onClick={() => handleSelectMinButton("7", 3)}
-                >
-                  7
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 3)}
-                  onClick={() => handleSelectMaxButton("7", 3)}
-                >
-                  7
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 4)}
-                  onClick={() => handleSelectMinButton("8", 4)}
-                >
-                  8
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 4)}
-                  onClick={() => handleSelectMaxButton("8", 4)}
-                >
-                  8
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 5)}
-                  onClick={() => handleSelectMinButton("10", 5)}
-                >
-                  10
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 5)}
-                  onClick={() => handleSelectMaxButton("10", 5)}
-                >
-                  10
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMinButton === 6)}
-                  onClick={() => handleSelectMinButton("20", 6)}
-                >
-                  20
-                </Button>
-                <Button
-                  variant="outline"
-                  className={buttonStyles(selectedMaxButton === 6)}
-                  onClick={() => handleSelectMaxButton("20", 6)}
-                >
-                  20
-                </Button>
+                <div>
+                  {filteredMinOptions.map((area, index) => (
+                    <Button
+                      key={`min-${index}`}
+                      variant="outline"
+                      className={`${buttonStyles(
+                        selectedMinButton === index
+                      )} w-[100%] mb-2`}
+                      onClick={() => handleSelectMinButton(area, index)}
+                    >
+                      {area}
+                    </Button>
+                  ))}
+                </div>
+                <div>
+                  {filteredMaxOptions.map((area, index) => (
+                    <Button
+                      key={`max-${index}`}
+                      variant="outline"
+                      className={`${buttonStyles(
+                        selectedMaxButton === index
+                      )} w-[100%] mb-2`}
+                      onClick={() => handleSelectMaxButton(area, index)}
+                    >
+                      {area}
+                    </Button>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="flex justify-between mt-4">
-              <Button variant="outline" onClick={handleReset}>
-                Reset
-              </Button>
             </div>
           </div>
         </PopoverContent>
