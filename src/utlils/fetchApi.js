@@ -330,23 +330,36 @@ async function fetchPricePredictor({
   }
 }
 
-async function fetchRecommendationProperties(id = null, params = {}) {
+async function fetchRecommendationProperties(params = {}) {
   try {
-    const { price, bath, bedroom, area, location_id, type, city_id } = params;
+    const {
+      RecommendedPropertiesId,
+      price,
+      bath,
+      bedroom,
+      area,
+      location_id,
+      type,
+      city_id,
+    } = params;
     let url = `${RECOMMENDATION_API_URL}/recommend_properties/`;
-    url += `?property_id=${id}`;
-    const response = await axios.get(url, {
-      headers,
-      data: {
+    url += `?property_id=${RecommendedPropertiesId}`;
+    const response = await axios.post(
+      url,
+      {
+        property_id: RecommendedPropertiesId,
         price: price,
-        bath: bath,
-        bedroom: bedroom,
+        bath: bath || 0,
+        bedroom: bedroom || 0,
         area: area,
         location_id: location_id,
         type: type,
         city_id: city_id,
       },
-    });
+      {
+        headers,
+      }
+    );
 
     return response.data.recommended_properties;
   } catch (error) {

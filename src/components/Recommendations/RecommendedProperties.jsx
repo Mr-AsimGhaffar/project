@@ -29,47 +29,48 @@ const responsive = {
 
 const RecommendedProperties = ({
   RecommendedPropertiesId,
+  price,
+  bath,
+  bedroom,
+  area,
+  type,
+  city_id,
+  location_id,
   RecommendedPropertiesLocation,
   conversionFunction,
 }) => {
   const navigate = useNavigate();
   const [RecommendedData, SetrecommendedData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [propertyParams, setPropertyParams] = useState(null);
 
   const fetchRecommendationData = useCallback(async () => {
     try {
-      const data = await fetchRecommendationProperties(RecommendedPropertiesId);
-      if (data.length === 0 && propertyParams) {
-        // Use parameters from a previous API call to fetch new recommendations
-        const fallbackData = await fetchRecommendationProperties(
-          null,
-          propertyParams
-        );
-        SetrecommendedData(fallbackData);
-      } else {
-        SetrecommendedData(data);
-
-        // Extract and store parameters from the first property in the response
-        if (data.length > 0) {
-          const firstProperty = data[0];
-          setPropertyParams({
-            price: firstProperty.price,
-            bath: firstProperty.bath,
-            bedroom: firstProperty.bedroom,
-            area: firstProperty.area,
-            location_id: firstProperty.location_id,
-            type: firstProperty.type,
-            city_id: firstProperty.city_id,
-          });
-        }
-      }
+      const data = await fetchRecommendationProperties({
+        RecommendedPropertiesId,
+        price,
+        bath,
+        bedroom,
+        area,
+        type,
+        city_id,
+        location_id,
+      });
+      SetrecommendedData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
-  }, [RecommendedPropertiesId, propertyParams]);
+  }, [
+    RecommendedPropertiesId,
+    price,
+    bath,
+    bedroom,
+    area,
+    type,
+    city_id,
+    location_id,
+  ]);
 
   useEffect(() => {
     fetchRecommendationData();
@@ -168,6 +169,13 @@ const RecommendedProperties = ({
 
 RecommendedProperties.propTypes = {
   RecommendedPropertiesId: PropTypes.number.isRequired,
+  price: PropTypes.number.isRequired,
+  bath: PropTypes.number.isRequired,
+  bedroom: PropTypes.number.isRequired,
+  area: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  city_id: PropTypes.number.isRequired,
+  location_id: PropTypes.number.isRequired,
   RecommendedPropertiesLocation: PropTypes.string.isRequired,
   conversionFunction: PropTypes.func.isRequired,
 };
