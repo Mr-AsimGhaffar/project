@@ -18,6 +18,7 @@ jobs:
         env:
           EC2_ENV_FILE: ${{ secrets.CODE_ENV_FILE }}
         run: |
+          echo "$EC2_ENV_FILE" > .env
           docker build -t frontend-image:latest  -f ./DockerFile .
 
       # Save the Docker image as a tar file
