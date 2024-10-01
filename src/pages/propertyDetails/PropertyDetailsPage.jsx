@@ -595,6 +595,13 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         <div ref={recommendedPropertiesRef}>
           <RecommendedProperties
             RecommendedPropertiesId={property.id}
+            price={property.price}
+            bath={property.bath}
+            bedroom={property.bedroom}
+            area={property.area}
+            type={property.type}
+            city_id={property.city_id}
+            location_id={property.location_id}
             RecommendedPropertiesLocation={property.location}
             conversionFunction={conversionFunction}
           />
