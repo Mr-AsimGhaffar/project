@@ -47,6 +47,9 @@ import HeaderCity from "./searchResultHeader/HeaderCity";
 import formatDate from "../utlils/formatDate";
 import useQueryParams from "../hooks/useQueryParams";
 import { Button } from "../components/ui/button";
+import { isBedsDisabled } from "../utlils/disableBed";
+import { GrPowerReset } from "react-icons/gr";
+import { FiAlertTriangle } from "react-icons/fi";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const queryParams = useQueryParams();
@@ -56,14 +59,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const [searchTerm, setSearchTerm] = useState(
     simpleContext.appState.searchTerm
   );
-  const [sortBy, setSortBy] = useState(null);
-  const [sortByDate, setSortByDate] = useState(
-    queryParams.sortByDatePrice || "added"
-  );
-  const [sortOrder, setSortOrder] = useState(null);
-  const [sortOrderDate, setSortOrderDate] = useState(
-    queryParams.sortByAscDesc || "DESC"
-  );
+  const orderValues = ["ASC", "DESC", null];
+  const [sort, setSort] = useState({
+    added: "DESC",
+  });
   const [suggestions, setSuggestions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [startDate, setStartDate] = useState(null);
@@ -102,7 +101,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           ...s.propertyState,
           selectedPropertyType:
             queryParams.property_type || s.propertyState.selectedPropertyType,
-          selectedSubProperty: s.propertyState.selectedSubProperty, // Keep existing sub-property
+          selectedSubProperty:
+            queryParams.subPropertyType || s.propertyState.selectedSubProperty,
         },
         startDate: queryParams.firstDate || s.startDate,
         endDate: queryParams.lastDate || s.endDate,
@@ -111,12 +111,13 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         is_agency: queryParams.agency || s.is_agency,
       }));
     }
-    if (queryParams.sortByDatePrice) {
-      setSortBy(queryParams.sortByDatePrice);
-    }
-    if (queryParams.sortByAscDesc) {
-      setSortOrder(queryParams.sortByAscDesc);
-    }
+    const sortByDatePrice = queryParams.sortByDatePrice.split(",");
+    const sortByAscDesc = queryParams.sortByAscDesc.split(",");
+    const result = sortByDatePrice.reduce((obj, key, index) => {
+      obj[key] = sortByAscDesc[index];
+      return obj;
+    }, {});
+    setSort(result);
   }, []);
 
   const cleanValue = (value) => (value ? value.replace(/,/g, "") : "");
@@ -204,12 +205,18 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       toast.error("Please select a location from the suggestions.", {
         position: "top-center",
         autoClose: 2000,
+        style: {
+          fontSize: "14px",
+        },
+        progressStyle: {
+          background: "orange",
+        },
+        icon: <FiAlertTriangle style={{ color: "orange" }} />,
       });
       return;
     }
     try {
       simpleContext.setAppState((s) => ({ ...s, loading: true }));
-
       const filters = {
         price_min: cleanValue(selectedAmountMin),
         price_max: cleanValue(selectedAmountMax),
@@ -251,8 +258,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("area_max", filters.area_max);
       }
 
-      if (filters.property_type) {
-        queryString.set("propertyType", filters.property_type);
+      if (propertyState.selectedPropertyType) {
+        queryString.set("propertyType", propertyState.selectedPropertyType);
+      }
+
+      if (propertyState.selectedSubProperty) {
+        queryString.set("subPropertyType", propertyState.selectedSubProperty);
       }
 
       if (filters.bedrooms) {
@@ -272,8 +283,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("end_date", formattedEndDate);
       }
 
-      queryString.set("sort_by", sort_by);
-      queryString.set("sort_order", sort_order);
+      queryString.set("sort_by", Object.keys(sort).join(","));
+      queryString.set("sort_order", Object.values(sort).join(","));
 
       const data = await searchCityData(
         simpleContext.appState.selectedCity,
@@ -281,8 +292,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           (suggestion) => suggestion.id
         ),
         page_number,
-        sort_by,
-        sort_order,
+        Object.keys(sort).join(","),
+        Object.values(sort).join(","),
         filters,
         propertyCategory,
         start_date,
@@ -335,10 +346,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setEndDate(end ? new Date(end) : null);
   };
 
-  const handleSearch = async (
-    sort_by = sortBy || "added",
-    sort_order = sortOrder || "DESC"
-  ) => {
+  const handleSearch = async () => {
     const {
       selectedAmountMin,
       selectedAmountMax,
@@ -363,6 +371,13 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       toast.error("Please select a location from the suggestions.", {
         position: "top-center",
         autoClose: 2000,
+        style: {
+          fontSize: "14px",
+        },
+        progressStyle: {
+          background: "orange",
+        },
+        icon: <FiAlertTriangle style={{ color: "orange" }} />,
       });
       return;
     }
@@ -408,8 +423,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("area_max", filters.area_max);
       }
 
-      if (filters.property_type) {
-        queryString.set("propertyType", filters.property_type);
+      if (propertyState.selectedPropertyType) {
+        queryString.set("propertyType", propertyState.selectedPropertyType);
+      }
+
+      if (propertyState.selectedSubProperty) {
+        queryString.set("subPropertyType", propertyState.selectedSubProperty);
       }
 
       if (filters.bedrooms) {
@@ -430,8 +449,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("end_date", formattedEndDate);
       }
 
-      queryString.set("sort_by", sort_by);
-      queryString.set("sort_order", sort_order);
+      queryString.set("sort_by", Object.keys(sort).join(","));
+      queryString.set("sort_order", Object.values(sort).join(","));
 
       const data = await searchCityData(
         selectedCity,
@@ -439,8 +458,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           (suggestion) => suggestion.id
         ),
         1,
-        sort_by,
-        sort_order,
+        Object.keys(sort).join(","),
+        Object.values(sort).join(","),
         filters,
         propertyCategory,
         startDate ? startDate.toDateString() : "",
@@ -478,7 +497,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       mounted.current = true;
       return;
     }
-    handleSortChange();
+    handleSearch();
   }, [
     simpleContext.appState.selectedAmountMin,
     simpleContext.appState.selectedAmountMax,
@@ -507,8 +526,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.appState.selectedCity,
       simpleContext.appState.selectedSuggestions,
       page_number,
-      sortBy || "added",
-      sortOrder || "DESC",
+      Object.keys(sort).join(","),
+      Object.values(sort).join(","),
       propertyCategory,
       startDate ? startDate.toISOString() : "",
       endDate ? endDate.toISOString() : ""
@@ -576,76 +595,26 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   };
 
-  const handleSortChange = (newSortBy) => {
-    let newSortOrder = sortOrder;
-    let newSortOrderDate = sortOrderDate;
-    let newSortByValue = sortBy;
-    let newSortByDateValue = sortByDate;
+  const handleSortChange = (field) => {
+    setSort((prevSort) => {
+      const currentIndex = orderValues.indexOf(prevSort[field]);
+      const nextIndex = (currentIndex + 1) % orderValues.length;
 
-    if (newSortBy === "price") {
-      if (sortBy === "price") {
-        if (sortOrder === "ASC") {
-          newSortOrder = "DESC";
-        } else if (sortOrder === "DESC") {
-          newSortOrder = null;
-          newSortByValue = null;
-        } else {
-          newSortOrder = "ASC";
-        }
-      } else {
-        newSortByValue = "price";
-        newSortOrder = "ASC";
+      if (!orderValues[nextIndex]) {
+        delete prevSort[field];
+        return { ...prevSort };
       }
-    } else if (newSortBy === "added") {
-      if (sortByDate === "added") {
-        if (sortOrderDate === "ASC") {
-          newSortOrderDate = "DESC";
-        } else if (sortOrderDate === "DESC") {
-          newSortOrderDate = null;
-          newSortByDateValue = null;
-        } else {
-          newSortOrderDate = "ASC";
-        }
-      } else {
-        newSortByDateValue = "added";
-        newSortOrderDate = "ASC";
-      }
-    }
-
-    // Determine the sort and order strings to pass to handleSearch
-    const sort = [];
-    const order = [];
-
-    if (newSortByValue) {
-      sort.push(newSortByValue);
-      order.push(newSortOrder);
-    }
-    if (newSortByDateValue) {
-      sort.push(newSortByDateValue);
-      order.push(newSortOrderDate);
-    }
-
-    setSortBy(newSortByValue);
-    setSortOrder(newSortOrder);
-    setSortByDate(newSortByDateValue);
-    setSortOrderDate(newSortOrderDate);
-
-    handleSearch(sort.join(","), order.join(","));
+      return {
+        ...prevSort,
+        [field]: orderValues[nextIndex],
+      };
+    });
   };
 
   useEffect(() => {
-    const sort = [];
-    const order = [];
-
-    if (sortBy) {
-      sort.push(sortBy);
-      order.push(sortOrder);
-    }
-    if (sortByDate) {
-      sort.push(sortByDate);
-      order.push(sortOrderDate);
-    }
-  }, [sortBy, sortOrder, sortByDate, sortOrderDate]);
+    // Fetch data whenever sort state changes
+    handleSearch();
+  }, [sort]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -669,11 +638,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     resetAppState();
     setStartDate(null);
     setEndDate(null);
-    setSortBy(null);
-    setSortByDate("added");
-    setSortOrder(null);
-    setSortOrderDate("DESC");
+    setSort({ added: "DESC" });
   };
+
+  const bedsDisabled = isBedsDisabled(
+    simpleContext.appState.propertyState.selectedPropertyType
+  );
 
   const displayText =
     propertyState.selectedSubProperty || propertyState.selectedPropertyType;
@@ -803,7 +773,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <HeaderPrice />
           </div>
           <div>
-            <HeaderBeds />
+            <HeaderBeds disabled={bedsDisabled} />
           </div>
           <div>
             <HeaderProperty />
@@ -821,8 +791,15 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             <HeaderOwnerDetail />
           </div>
           <div>
-            <Button className="rounded-3xl border-2" onClick={handleReset}>
-              Reset
+            <Button
+              variant="outline"
+              className="rounded-3xl border-2"
+              onClick={handleReset}
+            >
+              <div className="flex items-center gap-2">
+                Reset
+                <GrPowerReset />
+              </div>
             </Button>
           </div>
         </div>
@@ -831,10 +808,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           <div>
             <HeaderFilter
               onSortChange={handleSortChange}
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              sortByDate={sortByDate}
-              sortOrderDate={sortOrderDate}
+              sort={sort}
               totalCount={totalCount}
             />
           </div>
@@ -887,7 +861,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                         />
                         <div className="flex items-center absolute top-2 left-2 gap-2">
                           <div className="p-1 md:p-2 rounded-sm md:rounded-full shadow-md text-xs bg-[#0071BC] text-white">
-                            {item.type.replace("_", " ")}
+                            {firstLetterUpperCase(item.type.replace("_", " "))}
                           </div>
                           {item.agency && (
                             <div className="p-2 rounded-sm md:rounded-full shadow-md text-xs bg-[#0071BC] text-white">
@@ -920,7 +894,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                         <div className="py-2">
                           <div>
                             <CardDescription>
-                              Added: {formatTimeNow(item.added)}
+                              Added:{" "}
+                              {formatTimeNow(item.added || item.created_at)}
                             </CardDescription>
                           </div>
                         </div>
@@ -985,7 +960,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       </div>
 
       <div className="py-4">
-        {cardData.length > 0 && cardData.length >= 12 && (
+        {simpleContext.appState.totalPages > 1 && (
           <Paging
             currentPage={simpleContext.appState.pageData.page_number}
             totalPages={simpleContext.appState.totalPages}

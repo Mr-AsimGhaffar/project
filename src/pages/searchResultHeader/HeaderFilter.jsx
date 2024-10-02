@@ -3,14 +3,7 @@ import PropTypes from "prop-types";
 import { BsArrowUp } from "react-icons/bs";
 import { BsArrowDown } from "react-icons/bs";
 
-const HeaderFilter = ({
-  onSortChange,
-  sortBy,
-  sortOrder,
-  sortByDate,
-  sortOrderDate,
-  totalCount,
-}) => {
+const HeaderFilter = ({ onSortChange, sort, totalCount }) => {
   const isDisabled = totalCount === 0;
   return (
     <div className="flex flex-col md:flex-row justify-end md:space-x-4 space-y-2 md:space-y-0 mb-2">
@@ -19,44 +12,31 @@ const HeaderFilter = ({
           e?.preventDefault();
           onSortChange("price");
         }}
-        className={`flex items-center ${sortBy === "price" ? "font-bold" : ""}`}
+        className="flex items-center font-bold"
         disabled={isDisabled}
       >
         Sort by Price
-        {sortBy === "price" && sortOrder === "ASC" && (
-          <BsArrowUp className="ml-1" />
-        )}
-        {sortBy === "price" && sortOrder === "DESC" && (
-          <BsArrowDown className="ml-1" />
-        )}
+        {sort["price"] === "ASC" && <BsArrowUp className="ml-1" />}
+        {sort["price"] === "DESC" && <BsArrowDown className="ml-1" />}
       </Button>
       <Button
         onClick={(e) => {
           e?.preventDefault();
           onSortChange("added");
         }}
-        className={`flex items-center ${
-          sortByDate === "added" ? "font-bold" : ""
-        }`}
+        className="flex items-center font-bold"
         disabled={isDisabled}
       >
         Sort by Date
-        {sortByDate === "added" && sortOrderDate === "ASC" && (
-          <BsArrowUp className="ml-1" />
-        )}
-        {sortByDate === "added" && sortOrderDate === "DESC" && (
-          <BsArrowDown className="ml-1" />
-        )}
+        {sort["added"] === "ASC" && <BsArrowUp className="ml-1" />}
+        {sort["added"] === "DESC" && <BsArrowDown className="ml-1" />}
       </Button>
     </div>
   );
 };
 HeaderFilter.propTypes = {
   onSortChange: PropTypes.func.isRequired,
-  sortBy: PropTypes.func.isRequired,
-  sortOrder: PropTypes.func.isRequired,
-  sortByDate: PropTypes.func.isRequired,
-  sortOrderDate: PropTypes.func.isRequired,
+  sort: PropTypes.object.isRequired,
   totalCount: PropTypes.number.isRequired,
 };
 export default HeaderFilter;

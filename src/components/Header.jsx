@@ -29,6 +29,8 @@ import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { RxCross2 } from "react-icons/rx";
 import LazyLoad from "react-lazyload";
+import { isBedsDisabled } from "../utlils/disableBed";
+import { FiAlertTriangle } from "react-icons/fi";
 
 const Header = ({ propertyCategory, setPropertyCategory }) => {
   const [data, setData] = useState([]);
@@ -93,6 +95,13 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       toast.error("Please select a location from the suggestions.", {
         position: "top-center",
         autoClose: 2000,
+        style: {
+          fontSize: "14px",
+        },
+        progressStyle: {
+          background: "orange",
+        },
+        icon: <FiAlertTriangle style={{ color: "orange" }} />,
       });
       return;
     }
@@ -113,6 +122,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
           propertyState.selectedSubProperty ||
           propertyState.selectedPropertyType,
       };
+
       const queryString = new URLSearchParams();
 
       if (simpleContext.appState.selectedCity) {
@@ -142,8 +152,12 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         queryString.set("area_max", filters.area_max);
       }
 
-      if (filters.property_type) {
-        queryString.set("propertyType", filters.property_type);
+      if (propertyState.selectedPropertyType) {
+        queryString.set("propertyType", propertyState.selectedPropertyType);
+      }
+
+      if (propertyState.selectedSubProperty) {
+        queryString.set("subPropertyType", propertyState.selectedSubProperty);
       }
 
       if (filters.bedrooms) {
@@ -153,6 +167,9 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       if (filters.is_posted_by_agency) {
         queryString.set("agency", filters.is_posted_by_agency.toString());
       }
+
+      queryString.set("sort_by", "added");
+      queryString.set("sort_order", "DESC");
 
       const data = await searchCityData(
         simpleContext.appState.selectedCity,
@@ -301,6 +318,11 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
     setIsSelectOpen(open);
     emptySearchString();
   };
+
+  const bedsDisabled = isBedsDisabled(
+    simpleContext.appState.propertyState.selectedPropertyType
+  );
+
   return (
     <div className="relative">
       <LazyLoad height={200} offset={100} once>
@@ -526,7 +548,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                             </div>
                             <div>
                               <p className="text-sm text-white">Bedrooms</p>
-                              <BedsTag />
+                              <BedsTag disabled={bedsDisabled} />
                             </div>
                           </div>
                         </div>

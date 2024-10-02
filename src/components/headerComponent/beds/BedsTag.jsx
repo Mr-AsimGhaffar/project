@@ -4,8 +4,9 @@ import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { useContext, useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { IoIosArrowDown } from "react-icons/io";
+import PropTypes from "prop-types";
 
-const BedsTag = () => {
+const BedsTag = ({ disabled }) => {
   const [selectBeds, setSelectBeds] = useState("All");
   const simpleContext = useContext(appContext);
   useEffect(() => {
@@ -48,7 +49,10 @@ const BedsTag = () => {
     <div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white">
+          <Button
+            className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white"
+            disabled={disabled}
+          >
             <div className="w-full flex justify-between items-center">
               <p>BEDS</p>
               <div>{selectBeds}</div>
@@ -153,6 +157,10 @@ const BedsTag = () => {
       </Popover>
     </div>
   );
+};
+
+BedsTag.propTypes = {
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default BedsTag;

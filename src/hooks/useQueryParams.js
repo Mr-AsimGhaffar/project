@@ -27,6 +27,7 @@ const useQueryParams = () => {
     areaMax: params.get("area_max") || "",
     beds: params.get("beds") || "",
     property_type: params.get("propertyType") || "",
+    subPropertyType: params.get("subPropertyType") || "",
     agency: params.get("agency") || "",
     firstDate: params.get("start_date")
       ? new Date(params.get("start_date"))

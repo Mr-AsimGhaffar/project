@@ -15,7 +15,6 @@ import { useLocation } from "react-router-dom";
 
 const HeaderProperty = () => {
   const simpleContext = useContext(appContext);
-
   const location = useLocation();
   const [propertyState, setPropertyState] = useState({
     selectedPropertyType:
@@ -34,17 +33,31 @@ const HeaderProperty = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const selectPropertyTypeFromUrl = params.get("propertyType");
+    const selectSubPropertyTypeFromUrl = params.get("subPropertyType");
 
-    if (selectPropertyTypeFromUrl) {
+    if (
+      (selectPropertyTypeFromUrl &&
+        selectPropertyTypeFromUrl !== propertyState.selectedPropertyType) ||
+      (selectSubPropertyTypeFromUrl &&
+        selectSubPropertyTypeFromUrl !== propertyState.selectedSubProperty)
+    ) {
       setPropertyState((prevState) => ({
         ...prevState,
-        selectedPropertyType: selectPropertyTypeFromUrl,
+        selectedPropertyType:
+          selectPropertyTypeFromUrl || prevState.selectedPropertyType,
+        selectedSubProperty:
+          selectSubPropertyTypeFromUrl || prevState.selectedSubProperty,
       }));
+
+      // Update app state in context
       simpleContext.setAppState((s) => ({
         ...s,
         propertyState: {
           ...s.propertyState,
-          selectedPropertyType: selectPropertyTypeFromUrl,
+          selectedPropertyType:
+            selectPropertyTypeFromUrl || s.propertyState.selectedPropertyType,
+          selectedSubProperty:
+            selectSubPropertyTypeFromUrl || s.propertyState.selectedSubProperty,
         },
       }));
     }
@@ -79,7 +92,7 @@ const HeaderProperty = () => {
 
   return (
     <div>
-      <Popover className="touch-auto">
+      <Popover>
         <PopoverTrigger
           asChild
           className="rounded-3xl border-2 w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white opacity-80"

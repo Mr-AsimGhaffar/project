@@ -97,8 +97,8 @@ async function searchCityData(
   city,
   queries = [],
   page_number = 1,
-  sort_by = "price",
-  sort_order = "ASC",
+  sort_by,
+  sort_order,
   filters = {},
   propertyCategory = "for_sale",
   start_date,
@@ -155,7 +155,7 @@ async function searchCityData(
 
     return response.data.data;
   } catch (error) {
-    if (error.name === "CanceledError") {
+    if (axios.isCancel(error)) {
       console.log("Request canceled:", error.message);
     } else {
       const errorMessage = error.message || "Failed to search city data.";
