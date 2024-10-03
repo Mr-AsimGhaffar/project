@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { GrPowerReset } from "react-icons/gr";
 
 const PriceTag = () => {
   const [selectedAmountMax, setSelectedAmountMax] = useState(null);
@@ -54,23 +55,43 @@ const PriceTag = () => {
 
   const handleSelectMax = (amount, buttonIndex) => {
     const newValue = amount === "Any" ? null : amount;
-    setSelectedAmountMax(newValue);
-    setSelectedMaxButton(buttonIndex);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMax: newValue ? newValue : null,
-    }));
-    saveToLocalStorage("selectedAmountMax", newValue);
+    if (selectedMaxButton === buttonIndex) {
+      setSelectedAmountMax(null);
+      setSelectedMaxButton(null);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMax: null,
+      }));
+      saveToLocalStorage("selectedAmountMax", null);
+    } else {
+      setSelectedAmountMax(newValue);
+      setSelectedMaxButton(buttonIndex);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMax: newValue ? newValue : null,
+      }));
+      saveToLocalStorage("selectedAmountMax", newValue);
+    }
   };
   const handleSelectMin = (amount, buttonIndex) => {
     const newValue = amount;
-    setSelectedAmountMin(newValue);
-    setSelectedMinButton(buttonIndex);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMin: newValue,
-    }));
-    saveToLocalStorage("selectedAmountMin", newValue);
+    if (selectedMinButton === buttonIndex) {
+      setSelectedAmountMin(null);
+      setSelectedMinButton(null);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMin: null,
+      }));
+      saveToLocalStorage("selectedAmountMin", null);
+    } else {
+      setSelectedAmountMin(newValue);
+      setSelectedMinButton(buttonIndex);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMin: newValue,
+      }));
+      saveToLocalStorage("selectedAmountMin", newValue);
+    }
   };
   const handleMinChange = (e) => {
     const newValue = e.target.value;
@@ -145,7 +166,10 @@ const PriceTag = () => {
                   className="rounded-3xl text-xs"
                   onClick={handleReset}
                 >
-                  Reset
+                  <div className="flex items-center gap-2">
+                    Reset
+                    <GrPowerReset />
+                  </div>
                 </Button>
               </div>
             </div>

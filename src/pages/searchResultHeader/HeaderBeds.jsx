@@ -9,8 +9,9 @@ import {
   PopoverTrigger,
 } from "../../components/ui/popover";
 import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const HeaderBeds = () => {
+const HeaderBeds = ({ disabled }) => {
   const simpleContext = useContext(appContext);
   const location = useLocation();
   const [selectBeds, setSelectBeds] = useState(
@@ -75,7 +76,10 @@ const HeaderBeds = () => {
     <div>
       <Popover className="touch-auto">
         <PopoverTrigger asChild className="rounded-3xl border-2">
-          <Button className="w-full bg-white text-[#434343] focus:bg-white active:bg-white hover:bg-white opacity-80">
+          <Button
+            className="w-full bg-white text-[#434343] focus:bg-white active:bg-white hover:bg-white opacity-80"
+            disabled={disabled}
+          >
             <div className="w-full flex justify-between items-center">
               <p>BEDS</p>
               <div>{selectBeds}</div>
@@ -180,5 +184,8 @@ const HeaderBeds = () => {
       </Popover>
     </div>
   );
+};
+HeaderBeds.propTypes = {
+  disabled: PropTypes.bool.isRequired,
 };
 export default HeaderBeds;

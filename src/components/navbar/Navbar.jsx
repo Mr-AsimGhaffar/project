@@ -112,7 +112,7 @@ const Navbar = ({
               <div className="flex justify-center items-center gap-1">
                 <div>
                   <img
-                    src="img/website_logo.svg"
+                    src="/img/website_logo.svg"
                     alt="logo"
                     className="h-8 md:h-10"
                   />
@@ -131,7 +131,7 @@ const Navbar = ({
                   <DropdownMenuTrigger asChild className="bg-white border-none">
                     <Button variant="outline" size="icon">
                       <img
-                        src="img/filter_svg.svg"
+                        src="/img/filter_svg.svg"
                         alt="filter"
                         width={16}
                         height={16}

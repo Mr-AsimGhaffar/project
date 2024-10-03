@@ -6,7 +6,7 @@ const Footer = () => {
           <div className="text-center lg:text-left">
             <div className="flex flex-col lg:flex-row items-center gap-4 py-5 lg:py-10">
               <div>
-                <img src="img/website_logo.svg" alt="logo" width={40} />
+                <img src="/img/website_logo.svg" alt="logo" width={40} />
               </div>
               <div>
                 <h1 className="font-bold text-3xl lg:text-5xl text-[#0071BC] font-robotoSlab tracking-widest">
@@ -25,7 +25,7 @@ const Footer = () => {
                 target="blank"
               >
                 <img
-                  src="img/linkedin.svg"
+                  src="/img/linkedin.svg"
                   alt="linkedin"
                   className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
                 />
@@ -42,7 +42,7 @@ const Footer = () => {
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
                   <img
-                    src="img/location.svg"
+                    src="/img/location.svg"
                     alt="location"
                     className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
                   />
@@ -57,7 +57,7 @@ const Footer = () => {
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
                   <img
-                    src="img/call.svg"
+                    src="/img/call.svg"
                     alt="call"
                     className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
                   />
@@ -71,7 +71,7 @@ const Footer = () => {
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-4 py-5">
                 <div>
                   <img
-                    src="img/email.svg"
+                    src="/img/email.svg"
                     alt="email"
                     className="dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180"
                   />

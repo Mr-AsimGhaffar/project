@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
 } from "../../components/ui/popover";
 import { useLocation } from "react-router-dom";
+import { GrPowerReset } from "react-icons/gr";
 
 const marlaToSquareFeet = (marla) => {
   return marla * 225;
@@ -74,24 +75,44 @@ const AreaTag = () => {
 
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area === "Any" ? null : area;
-    setSelectedAreaMax(newValue);
-    setSelectedMaxButton(buttonIndex);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAreaMax: newValue ? marlaToSquareFeet(newValue) : null,
-    }));
-    saveToLocalStorage("selectedAreaMax", newValue);
+    if (selectedMaxButton === buttonIndex) {
+      setSelectedAreaMax(null);
+      setSelectedMaxButton(null);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMax: null,
+      }));
+      saveToLocalStorage("selectedAreaMax", null);
+    } else {
+      setSelectedAreaMax(newValue);
+      setSelectedMaxButton(buttonIndex);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMax: newValue ? marlaToSquareFeet(newValue) : null,
+      }));
+      saveToLocalStorage("selectedAreaMax", newValue);
+    }
   };
 
   const handleSelectMinButton = (area, buttonIndex) => {
     const newValue = area;
-    setSelectedAreaMin(newValue);
-    setSelectedMinButton(buttonIndex);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAreaMin: marlaToSquareFeet(newValue),
-    }));
-    saveToLocalStorage("selectedAreaMin", newValue);
+    if (selectedMinButton === buttonIndex) {
+      setSelectedAreaMin(null);
+      setSelectedMinButton(null);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMin: null,
+      }));
+      saveToLocalStorage("selectedAreaMin", null);
+    } else {
+      setSelectedAreaMin(newValue);
+      setSelectedMinButton(buttonIndex);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMin: marlaToSquareFeet(newValue),
+      }));
+      saveToLocalStorage("selectedAreaMin", newValue);
+    }
   };
   const handleMinChangeArea = (e) => {
     const newValue = e.target.value;
@@ -174,7 +195,7 @@ const AreaTag = () => {
         </PopoverTrigger>
         <PopoverContent>
           <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
-            <div className="flex justify-between mb-2">
+            <div className="flex justify-between gap-2 mb-2">
               <div>
                 <Button className="rounded-3xl text-xs" variant="secondary">
                   Area unit (Marla)
@@ -186,7 +207,10 @@ const AreaTag = () => {
                   className="rounded-3xl text-xs"
                   onClick={handleReset}
                 >
-                  Reset
+                  <div className="flex items-center gap-2">
+                    Reset
+                    <GrPowerReset />
+                  </div>
                 </Button>
               </div>
             </div>
