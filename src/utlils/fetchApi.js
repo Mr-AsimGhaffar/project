@@ -39,7 +39,7 @@ async function fetchFeaturedProperties(propertyCategory = "for_sale") {
       const errorMessage =
         error.message || "Failed to fetch featured properties.";
       console.error("Error fetching featured properties:", errorMessage);
-      toast.error(errorMessage, {
+      toast.error(errorMessage === "canceled", {
         position: "top-center",
         autoClose: 5000,
       });
@@ -189,7 +189,7 @@ async function fetchAvailableCities() {
   }
 }
 
-export async function fetchPropertyCount(propertyCategory = "for_sale") {
+async function fetchPropertyCount(propertyCategory = "for_sale") {
   const controller = getAbortController("fetchPropertyCount");
   try {
     const response = await axios.get(
@@ -207,7 +207,7 @@ export async function fetchPropertyCount(propertyCategory = "for_sale") {
       // Handle other errors
       const errorMessage = error.message || "Failed to fetch count properties.";
       console.error("Error fetching count properties:", errorMessage);
-      toast.error(errorMessage, {
+      toast.error(errorMessage === "canceled", {
         position: "top-center",
         autoClose: 5000,
       });
@@ -395,6 +395,7 @@ export {
   fetchSimilarProperties,
   fetchPropertyDetails,
   searchCityData,
+  fetchPropertyCount,
   fetchAvailableCities,
   fetchSearchSuggestions,
   fetchPropertyRecommendations,
