@@ -29,6 +29,13 @@ const responsive = {
 
 const RecommendedProperties = ({
   RecommendedPropertiesId,
+  price,
+  bath,
+  bedroom,
+  area,
+  type,
+  city_id,
+  location_id,
   RecommendedPropertiesLocation,
   conversionFunction,
 }) => {
@@ -38,14 +45,32 @@ const RecommendedProperties = ({
 
   const fetchRecommendationData = useCallback(async () => {
     try {
-      const data = await fetchRecommendationProperties(RecommendedPropertiesId);
+      const data = await fetchRecommendationProperties({
+        RecommendedPropertiesId,
+        price,
+        bath,
+        bedroom,
+        area,
+        type,
+        city_id,
+        location_id,
+      });
       SetrecommendedData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
-  }, [RecommendedPropertiesId]);
+  }, [
+    RecommendedPropertiesId,
+    price,
+    bath,
+    bedroom,
+    area,
+    type,
+    city_id,
+    location_id,
+  ]);
 
   useEffect(() => {
     fetchRecommendationData();
@@ -144,6 +169,13 @@ const RecommendedProperties = ({
 
 RecommendedProperties.propTypes = {
   RecommendedPropertiesId: PropTypes.number.isRequired,
+  price: PropTypes.number.isRequired,
+  bath: PropTypes.number.isRequired,
+  bedroom: PropTypes.number.isRequired,
+  area: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  city_id: PropTypes.number.isRequired,
+  location_id: PropTypes.number.isRequired,
   RecommendedPropertiesLocation: PropTypes.string.isRequired,
   conversionFunction: PropTypes.func.isRequired,
 };
