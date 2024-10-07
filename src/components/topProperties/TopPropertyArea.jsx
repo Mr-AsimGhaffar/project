@@ -60,7 +60,7 @@ const TopPropertyArea = ({ conversionFunction }) => {
           topBestProperty.map((item) => (
             <Card
               key={item.id}
-              className={`relative ${
+              className={`relative dark:bg-black ${
                 expandedCards[item.id] ? "h-auto" : "h-auto"
               }`}
             >

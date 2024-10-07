@@ -67,7 +67,7 @@ export default function PopularityTrendGraph({
     <div>
       <div className="hidden md:block">
         <div>
-          <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
+          <p className="font-montserrat text-[#0071BC] dark:text-white text-2xl font-bold p-2">
             Trends - Most Searched Locations in {displayFirstName(location)}
           </p>
         </div>

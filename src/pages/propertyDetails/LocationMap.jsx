@@ -19,7 +19,7 @@ export default function LocationMap({ locationData }) {
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
+        <p className="font-montserrat text-[#0071BC] dark:text-white text-2xl font-bold p-2">
           Location & Nearby
         </p>
       </div>

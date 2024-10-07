@@ -142,7 +142,7 @@ const PriceTag = () => {
     <div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
             <div className="flex justify-between items-center w-full">
               <p>PRICE</p>
               <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
@@ -156,14 +156,14 @@ const PriceTag = () => {
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent className="dark:bg-black">
           <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
             <div className="flex justify-between items-center mb-2">
               <div className="text-sm font-semibold">PRICE (PKR)</div>
               <div>
                 <Button
                   variant="outline"
-                  className="rounded-3xl text-xs"
+                  className="rounded-3xl text-xs dark:bg-black"
                   onClick={handleReset}
                 >
                   <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ const PriceTag = () => {
                 <Input
                   type="number"
                   inputMode="numeric"
-                  className="text-center"
+                  className="text-center dark:bg-black"
                   placeholder="0"
                   value={selectedAmountMin || ""}
                   onChange={handleMinChange}
@@ -195,7 +195,7 @@ const PriceTag = () => {
                 <Input
                   type="number"
                   inputMode="numeric"
-                  className="text-center"
+                  className="text-center dark:bg-black"
                   placeholder="Any"
                   value={selectedAmountMax || ""}
                   onChange={handleMaxChange}
@@ -212,7 +212,7 @@ const PriceTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMinButton === index
-                      )} w-[100%] mb-2`}
+                      )} w-[100%] mb-2 dark:bg-black`}
                       onClick={() => handleSelectMin(price, index)}
                     >
                       {price}
@@ -226,7 +226,7 @@ const PriceTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMaxButton === index
-                      )} w-[100%] mb-2`}
+                      )} w-[100%] mb-2 dark:bg-black`}
                       onClick={() => handleSelectMax(price, index)}
                     >
                       {price}

@@ -105,6 +105,7 @@ const Paging = ({ onPageChange }) => {
               href="#"
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
+              className="dark:bg-black"
             />
           </PaginationItem>
           {showGoToFirst && (
@@ -132,6 +133,7 @@ const Paging = ({ onPageChange }) => {
               href="#"
               onClick={() => onPageChange(Number(currentPage) + 1)}
               disabled={currentPage === totalPages}
+              className="dark:bg-black"
             />
           </PaginationItem>
         </PaginationContent>

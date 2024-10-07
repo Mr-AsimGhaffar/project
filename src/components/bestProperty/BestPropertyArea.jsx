@@ -52,13 +52,13 @@ const BestPropertyArea = ({ setBestAreaMin, setBestAreaMax }) => {
   return (
     <div>
       <Select>
-        <SelectTrigger>
+        <SelectTrigger className="dark:bg-black">
           <SelectValue placeholder="AREA" />
           <div>{areaMin}</div>
           <div>To</div>
           <div>{areaMax}</div>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="dark:bg-black">
           <div className="rounded-md shadow-lg p-4 w-64">
             <Button className="mb-4 w-[100%]" variant="secondary">
               Area unit (Marla)
@@ -70,7 +70,7 @@ const BestPropertyArea = ({ setBestAreaMin, setBestAreaMax }) => {
                 </div>
                 <Input
                   type="number"
-                  className="text-center"
+                  className="text-center dark:bg-black"
                   placeholder="0"
                   value={areaMin || ""}
                   onChange={handleMinChangeArea}
@@ -82,7 +82,7 @@ const BestPropertyArea = ({ setBestAreaMin, setBestAreaMax }) => {
                 </div>
                 <Input
                   type="number"
-                  className="text-center"
+                  className="text-center dark:bg-black"
                   placeholder="Any"
                   value={areaMax || ""}
                   onChange={handleMaxChangeArea}
@@ -93,14 +93,18 @@ const BestPropertyArea = ({ setBestAreaMin, setBestAreaMax }) => {
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMinButton === 0)}
+                  className={`${buttonStyles(
+                    areaMinButton === 0
+                  )} dark:bg-black`}
                   onClick={() => handleSelectMinButton(0, 0)}
                 >
                   0
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMaxButton === 0)}
+                  className={`${buttonStyles(
+                    areaMaxButton === 0
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMaxButton("Any", 0)}
                 >
                   Any
@@ -109,42 +113,54 @@ const BestPropertyArea = ({ setBestAreaMin, setBestAreaMax }) => {
               <div className="grid grid-cols-2 gap-4 p-2">
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMinButton === 1)}
+                  className={`${buttonStyles(
+                    areaMinButton === 1
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMinButton("2", 1)}
                 >
                   2
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMaxButton === 1)}
+                  className={`${buttonStyles(
+                    areaMaxButton === 1
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMaxButton("2", 1)}
                 >
                   2
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMinButton === 2)}
+                  className={`${buttonStyles(
+                    areaMinButton === 2
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMinButton("3", 2)}
                 >
                   3
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMaxButton === 2)}
+                  className={`${buttonStyles(
+                    areaMaxButton === 2
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMaxButton("3", 2)}
                 >
                   3
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMinButton === 3)}
+                  className={`${buttonStyles(
+                    areaMinButton === 3
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMinButton("5", 3)}
                 >
                   5
                 </Button>
                 <Button
                   variant="outline"
-                  className={buttonStyles(areaMaxButton === 3)}
+                  className={`${buttonStyles(
+                    areaMaxButton === 3
+                  )}dark:bg-black`}
                   onClick={() => handleSelectMaxButton("5", 3)}
                 >
                   5
@@ -152,7 +168,11 @@ const BestPropertyArea = ({ setBestAreaMin, setBestAreaMax }) => {
               </div>
             </div>
             <div className="flex justify-between mt-4">
-              <Button variant="outline" onClick={handleReset}>
+              <Button
+                variant="outline"
+                onClick={handleReset}
+                className="dark:bg-black"
+              >
                 Reset
               </Button>
             </div>

@@ -650,7 +650,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const capitalizedText = firstLetterUpperCase(displayText);
 
   return (
-    <main className="px-4 md:px-20 lg:px-44 py-5">
+    <main className="px-4 md:px-20 lg:px-44 py-5 dark:bg-[#0c0c0c]">
       <div>
         <div className="text-lg font-bold">
           <span>{formatPrice(totalCount)} Results</span>{" "}
@@ -736,7 +736,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
                 onKeyDown={handleKeyDown}
                 type="text"
                 placeholder="Search Here..."
-                className="rounded-3xl border-2 pr-12"
+                className="rounded-3xl border-2 pr-12 dark:bg-black"
                 style={{
                   pointerEvents: isSelectOpen ? "none" : "auto",
                 }}
@@ -753,12 +753,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             </div>
             <div className="absolute z-10 text-black overscroll-auto max-h-80 overflow-y-scroll">
               {suggestions.length > 0 && (
-                <ul className="bg-white border border-gray-300 w-full rounded-3xl">
+                <ul className="bg-white dark:bg-black dark:text-white border border-gray-300 w-full rounded-3xl">
                   {suggestions.map((suggestion, index) => (
                     <li
                       key={index}
-                      className={`p-2 cursor-pointer hover:bg-gray-200 text-sm ${
-                        index === selectedIndex ? "bg-gray-200" : ""
+                      className={`p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 text-sm ${
+                        index === selectedIndex
+                          ? "bg-gray-200 dark:bg-gray-900"
+                          : ""
                       }`}
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
@@ -793,7 +795,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           <div>
             <Button
               variant="outline"
-              className="rounded-3xl border-2"
+              className="rounded-3xl border-2 dark:bg-black"
               onClick={handleReset}
             >
               <div className="flex items-center gap-2">
@@ -845,7 +847,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
           cardData.map((item) => (
             <Card
               key={item.id}
-              className={`relative ${
+              className={`relative dark:bg-black ${
                 expandedCards[item.id] ? "h-auto" : "h-auto"
               }`}
             >

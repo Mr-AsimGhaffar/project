@@ -50,7 +50,7 @@ const BedsTag = ({ disabled }) => {
       <Popover>
         <PopoverTrigger asChild>
           <Button
-            className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white"
+            className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white"
             disabled={disabled}
           >
             <div className="w-full flex justify-between items-center">

@@ -73,14 +73,14 @@ export default function SimilarProperty({
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl p-2 font-bold">
+        <p className="font-montserrat text-[#0071BC] dark:text-white text-2xl p-2 font-bold">
           Similar Houses around <span>{displayFirstName(location)}</span>
         </p>
       </div>
       <div className="p-3 cursor-pointer">
         <Carousel responsive={responsive}>
           {data.map((item) => (
-            <Card key={item.id} className="m-4">
+            <Card key={item.id} className="m-4 dark:bg-black">
               <div onClick={() => handleClick(item)}>
                 {item.cover_photo_url ? (
                   <img

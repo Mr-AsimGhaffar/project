@@ -46,7 +46,7 @@ const PropertyTag = () => {
     <div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
             <div className="flex justify-between items-center w-full">
               <p>PROPERTY TYPE</p>
               <div>
@@ -59,7 +59,7 @@ const PropertyTag = () => {
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full">
+        <PopoverContent className="w-full dark:bg-black">
           <div className="flex justify-between items-center p-5">
             <h1
               className={getPropertyTypeStyle("home")}

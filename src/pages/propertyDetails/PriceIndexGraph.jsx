@@ -55,7 +55,7 @@ export default function PriceIndexGraph({
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl font-bold p-2">
+        <p className="font-montserrat text-[#0071BC] dark:text-white text-2xl font-bold p-2">
           Price Index
         </p>
       </div>
@@ -81,13 +81,13 @@ export default function PriceIndexGraph({
               )}
               )
             </p>
-            <p className="text-[#0071BC] font-bold">
+            <p className="text-[#0071BC] dark:text-gray-400 font-bold">
               PKR {formatPrice(areaTrendData.index.avg_price)}
             </p>
           </div>
           <div className="py-2">
             <p>Predicted Price</p>
-            <p className="text-[#0071BC] font-bold">
+            <p className="text-[#0071BC] dark:text-gray-400 font-bold">
               PKR {predictData ? formatPrice(predictData) : "Loading..."}
             </p>
             <hr />
@@ -101,7 +101,7 @@ export default function PriceIndexGraph({
               )
             </p>
 
-            <p className="text-[#0071BC] text-2xl font-bold">
+            <p className="text-[#0071BC] dark:text-gray-400 text-2xl font-bold">
               PKR {formatPrice(firstIndex.avg_price - lastIndex.avg_price)} (
               {Math.abs(percentage).toFixed(2)}%)
             </p>

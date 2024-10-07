@@ -30,7 +30,7 @@ const TopPropertyPropertyDetail = ({ conversionFunction }) => {
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl p-2 font-bold">
+        <p className="font-montserrat text-[#0071BC] dark:text-white text-2xl p-2 font-bold">
           Top Properties in{" "}
           <span>{displayFirstName(topBestProperty[0]?.location)}</span>
         </p>
@@ -56,7 +56,7 @@ const TopPropertyPropertyDetail = ({ conversionFunction }) => {
           topBestProperty.map((item) => (
             <Card
               key={item.id}
-              className={`relative ${
+              className={`relative dark:bg-black ${
                 expandedCards[item.id] ? "h-auto" : "h-auto"
               }`}
               onClick={handleToggle}

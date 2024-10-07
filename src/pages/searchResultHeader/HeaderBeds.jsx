@@ -77,7 +77,7 @@ const HeaderBeds = ({ disabled }) => {
       <Popover className="touch-auto">
         <PopoverTrigger asChild className="rounded-3xl border-2">
           <Button
-            className="w-full bg-white text-[#434343] focus:bg-white active:bg-white hover:bg-white opacity-80"
+            className="w-full bg-white text-[#434343] focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80"
             disabled={disabled}
           >
             <div className="w-full flex justify-between items-center">
