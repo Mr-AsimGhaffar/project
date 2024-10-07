@@ -38,7 +38,7 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
   const displayedData = viewAll ? sortedKeys : sortedKeys.slice(0, 4);
 
   return (
-    <main className="px-4 md:px-8 lg:px-20 xl:px-44">
+    <main className="px-4 md:px-8 lg:px-20 xl:px-44 dark:bg-black">
       {loading ? (
         <div className="flex justify-center py-10 lg:py-20">
           <div className="flex justify-center items-center">
@@ -64,7 +64,7 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
                   key={item.id}
                   className="font-montserrat font-semibold leading-10 text-center opacity-80"
                 >
-                  <Card className="py-4 lg:py-6">
+                  <Card className="py-4 lg:py-6 dark:bg-black">
                     <CardHeader>
                       <div>
                         <CardTitle className="text-xl lg:text-2xl">
@@ -85,7 +85,7 @@ const PropertyListing = ({ conversionFunction, propertyCategory }) => {
           </div>
           <div className="flex justify-center py-10 lg:py-20">
             <Button
-              className="font-inter text-xl lg:text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black p-4 lg:p-8"
+              className="font-inter text-xl lg:text-2xl font-semibold leading-10 tracking-widest opacity-60 border-2 border-black dark:border-gray-800 p-4 lg:p-8"
               variant="ghost"
               onClick={toggleView}
             >

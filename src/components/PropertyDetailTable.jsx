@@ -119,9 +119,9 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
     }
   }
   return (
-    <div>
+    <div className="dark:bg-[#0c0c0c]">
       <div className="py-20">
-        <h1 className="font-montserrat font-bold text-xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
+        <h1 className="font-montserrat font-bold text-xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] dark:text-white text-center">
           Best Property In Town
         </h1>
       </div>
@@ -144,7 +144,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
       </div>
       <section className="font-montserrat md:px-20 lg:px-44 drop-shadow-2xl">
         <div>
-          <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-4">
+          <div className="bg-white dark:bg-black relative shadow-md sm:rounded-lg overflow-hidden p-4">
             <div className="overflow-x-auto">
               {loading ? (
                 <div className="flex justify-center items-center h-64">
@@ -152,7 +152,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
                 </div>
               ) : (
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-[#0071BC] uppercase bg-gray-50 dark:bg-gray-700">
+                  <thead className="text-xs text-[#0071BC] dark:text-gray-400 uppercase bg-gray-50 dark:bg-[#0c0c0c]">
                     <tr>
                       <th scope="col" className="px-4 py-3">
                         Property Detail
@@ -190,6 +190,8 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
                           <Link
                             to={`/property/${item.id}`}
                             state={{ id: item.id }}
+                            target="_blank"
+                            rel="noopener noreferrer"
                           >
                             <th
                               scope="row"
@@ -237,7 +239,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-black dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Previous</span>
                     <svg
@@ -261,8 +263,8 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
                       onClick={() => handlePageChange(page)}
                       className={`flex items-center justify-center text-sm py-2 px-3 leading-tight ${
                         currentPage === page
-                          ? "bg-[#bdd2ff] dark:bg-gray-700 text-white"
-                          : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                          ? "bg-[#bdd2ff] dark:bg-gray-900 text-white"
+                          : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-black dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                       }`}
                     >
                       {page}
@@ -273,7 +275,7 @@ const PropertyDetailTable = ({ conversionFunction, propertyCategory }) => {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-black dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Next</span>
                     <svg

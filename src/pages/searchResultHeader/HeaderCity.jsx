@@ -59,12 +59,16 @@ const HeaderCity = ({ abortController, setIsSelectOpen }) => {
         onOpenChange={handleOpenChange}
         value={simpleContext.appState.selectedCity || ""}
       >
-        <SelectTrigger className="rounded-3xl border-2">
+        <SelectTrigger className="rounded-3xl border-2 dark:bg-black">
           <SelectValue placeholder="Select a city" />
         </SelectTrigger>
         <SelectContent>
           {cityOptions.map((city) => (
-            <SelectItem key={city} value={city}>
+            <SelectItem
+              key={city}
+              value={city}
+              className="cursor-pointer dark:bg-black dark:hover:bg-gray-900"
+            >
               {city}
             </SelectItem>
           ))}

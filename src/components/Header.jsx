@@ -384,15 +384,14 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                         <Select
                           onOpenChange={handleOpenChange}
                           onValueChange={handleSelectCity}
-                          className="touch-auto"
                         >
-                          <SelectTrigger className="rounded-md md:rounded-tr-none md:rounded-br-none">
+                          <SelectTrigger className="rounded-md md:rounded-tr-none md:rounded-br-none dark:bg-black">
                             <SelectValue placeholder="Islamabad" />
                           </SelectTrigger>
                           <SelectContent>
                             {data.map((item) => (
                               <SelectItem
-                                className="cursor-pointer"
+                                className="cursor-pointer dark:bg-black dark:hover:bg-gray-900"
                                 key={item}
                                 value={item}
                               >
@@ -409,19 +408,21 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                           onKeyDown={handleKeyDown}
                           onClick={isVisible || toggleVisibility}
                           placeholder="Location"
-                          className="rounded-md md:rounded-none"
+                          className="rounded-md md:rounded-none dark:bg-black"
                           style={{
                             pointerEvents: isSelectOpen ? "none" : "auto",
                           }}
                         />
                         <div className="absolute z-10 w-full text-black overscroll-auto max-h-80 overflow-y-scroll">
                           {suggestions.length > 0 && (
-                            <ul className="bg-white border border-gray-200 w-full">
+                            <ul className="bg-white dark:bg-black dark:text-white dark:border-black border border-gray-200 w-full">
                               {suggestions.map((suggestion, index) => (
                                 <li
                                   key={index}
-                                  className={`p-2 cursor-pointer hover:bg-gray-200 text-sm ${
-                                    index === selectedIndex ? "bg-gray-200" : ""
+                                  className={`p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 text-sm ${
+                                    index === selectedIndex
+                                      ? "bg-gray-200 dark:bg-gray-900"
+                                      : ""
                                   }`}
                                   onClick={() =>
                                     handleSuggestionClick(suggestion)
@@ -441,7 +442,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                                 .length > 1 && !isVisibleSuggestions ? (
                                 <>
                                   <div>
-                                    <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs text-black rounded-full shadow-md hover:bg-gray-300 transition-colors duration-300">
+                                    <div className="flex items-center gap-2 truncate relative bg-gray-200 p-2 cursor-pointer text-xs rounded-full shadow-md hover:bg-gray-300 transition-colors duration-300">
                                       <span>
                                         {
                                           simpleContext.appState.selectedSuggestions[0].name.split(
@@ -516,7 +517,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                             pointerEvents: isSelectOpen ? "none" : "auto",
                           }}
                           onClick={handleSearch}
-                          className="w-full rounded-md flex items-center justify-center md:rounded-tl-none md:rounded-bl-none bg-white text-black hover:bg-gray-100"
+                          className="w-full rounded-md flex items-center justify-center md:rounded-tl-none md:rounded-bl-none bg-white text-black dark:bg-black dark:text-white hover:bg-gray-100"
                         >
                           <CiSearch className="h-5 w-5 mr-2" />
                         </Button>

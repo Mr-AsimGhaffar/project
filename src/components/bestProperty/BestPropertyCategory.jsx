@@ -33,11 +33,11 @@ const BestPropertyCategory = ({ setpropertyType }) => {
   return (
     <div>
       <Select>
-        <SelectTrigger>
+        <SelectTrigger className="dark:bg-black">
           <SelectValue placeholder="PROPERTY TYPE" />
           <div>{selectedSubProperty || propertyState}</div>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="dark:bg-black">
           <div className="flex justify-between items-center p-5">
             <h1
               className={getPropertyTypeStyle("home")}

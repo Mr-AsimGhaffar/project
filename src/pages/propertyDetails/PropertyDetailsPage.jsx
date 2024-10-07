@@ -195,7 +195,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   };
 
   return (
-    <div className="px-4 md:px-20 lg:px-44 py-5">
+    <div className="px-4 md:px-20 lg:px-44 py-5 dark:bg-[#0c0c0c]">
       <div>
         <div>
           <p className="font-montserrat md:text-xl text-lg font-bold">
@@ -225,7 +225,9 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
           )}
           <div className="absolute left-5 bottom-8 shadow-lg">
             <a href={property.url} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline">View more details</Button>
+              <Button variant="outline" className="dark:bg-black">
+                View more details
+              </Button>
             </a>
           </div>
           <div className="absolute right-5 bottom-8">
@@ -382,7 +384,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
         </div>
         <div ref={overviewRef} className="w-[100%]">
           <div>
-            <p className="font-montserrat text-2xl text-[#0071BC] font-bold p-2 bg-gray-50 dark:bg-transparent">
+            <p className="font-montserrat text-2xl text-[#0071BC] dark:text-white font-bold p-2 bg-gray-50 dark:bg-transparent">
               Overview
             </p>
           </div>
@@ -486,7 +488,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                     <Button
                       onClick={openAgencyLink}
                       variant="outline"
-                      className="text-[#0071BC] border-[#0071BC] hover:text-[#0071BC]"
+                      className="text-[#0071BC] border-[#0071BC] hover:text-[#0071BC] dark:bg-black dark:text-white dark:border-gray-800"
                     >
                       Agency Profile
                     </Button>
@@ -516,7 +518,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             </div>
             <br />
             <div className="text-right">
-              <button onClick={toggleExpanded} className="text-green-500">
+              <button
+                onClick={toggleExpanded}
+                className="text-green-500 dark:text-gray-400"
+              >
                 {isExpanded ? "Read Less" : "Read More"}
               </button>
             </div>
@@ -551,7 +556,10 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
                 </Table>
                 {property.features.length > initialRowCount && (
                   <div className="mt-2 text-right">
-                    <button className="text-green-500" onClick={toggleShowRows}>
+                    <button
+                      className="text-green-500 dark:text-gray-400"
+                      onClick={toggleShowRows}
+                    >
                       {showAllRows ? "View Less" : "View More"}
                     </button>
                   </div>

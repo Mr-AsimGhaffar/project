@@ -56,10 +56,10 @@ export default function FeaturedProperty({
   };
 
   return (
-    <div className="px-4 md:px-20 lg:px-44 bg-[#0071BC] bg-opacity-10">
+    <div className="px-4 md:px-20 lg:px-44 bg-[#0071BC] dark:bg-[#0c0c0c] bg-opacity-10">
       <div className="flex justify-center items-center p-10 lg:p-20">
         <div>
-          <h1 className="font-montserrat font-bold text-xl sm:text-3xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] text-center">
+          <h1 className="font-montserrat font-bold text-xl sm:text-3xl lg:text-4xl leading-10 tracking-[0.2em] text-[#0071BC] dark:text-white text-center">
             FEATURED PROPERTIES
           </h1>
         </div>
@@ -74,7 +74,7 @@ export default function FeaturedProperty({
         <div className="p-3 cursor-pointer">
           <Carousel responsive={responsive}>
             {featuredData.map((item) => (
-              <Card key={item.id} className="m-4">
+              <Card key={item.id} className="m-4 dark:bg-black">
                 <div onClick={() => handleClick(item)}>
                   {item.cover_photo_url ? (
                     <img
@@ -99,14 +99,14 @@ export default function FeaturedProperty({
                         </CardTitle>
                       </div>
                       <div className="py-2 font-bold">
-                        <CardDescription>
+                        <CardDescription className="dark:text-white">
                           PKR {conversionFunction(item.price)}
                         </CardDescription>
-                        <CardDescription className="truncate">
+                        <CardDescription className="truncate dark:text-white">
                           {item.header}
                         </CardDescription>
                         <CardDescription>
-                          <div className="flex justify-left gap-3 text-xs mt-4">
+                          <div className="flex justify-left gap-3 text-xs mt-4 dark:text-white">
                             {item.bedroom && (
                               <div className="flex flex-row items-center gap-1">
                                 <FaBed />

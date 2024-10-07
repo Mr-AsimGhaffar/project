@@ -46,10 +46,10 @@ const HeaderOwnerDetail = () => {
         value={selectedValue}
         onValueChange={handleSelectAgent}
       >
-        <SelectTrigger className="rounded-3xl border-2">
+        <SelectTrigger className="rounded-3xl border-2 dark:bg-black">
           <SelectValue placeholder="Owner Detail" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="dark:bg-black">
           <SelectItem value="all">All</SelectItem>
           <SelectItem value="true">Agency</SelectItem>
           <SelectItem value="false">Owner</SelectItem>

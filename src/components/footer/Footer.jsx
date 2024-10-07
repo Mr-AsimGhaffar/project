@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer>
+    <footer className="dark:bg-black">
       <div className="px-4 md:px-44">
         <div className="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-40 py-10 lg:py-20">
           <div className="text-center lg:text-left">
@@ -34,7 +34,7 @@ const Footer = () => {
           </div>
           <div className="text-center lg:text-left">
             <div>
-              <h1 className="font-montserrat font-bold text-lg tracking-widest text-[#0071BC] py-6 lg:py-12">
+              <h1 className="font-montserrat font-bold text-lg tracking-widest text-[#0071BC] dark:text-white py-6 lg:py-12">
                 GET IN TOUCH
               </h1>
             </div>
@@ -84,16 +84,20 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="text-center lg:text-left font-montserrat font-bold text-lg tracking-widest text-[#0071BC]">
+          <div className="text-center lg:text-left font-montserrat font-bold text-lg tracking-widest text-[#0071BC] dark:text-white">
             <div>
               <h1 className="py-6 lg:py-12">Explore</h1>
             </div>
             <div>
               <div>
-                <h1 className="border-b-2 border-[#0071BC] py-5">Buy</h1>
+                <h1 className="border-b-2 border-[#0071BC] dark:border-gray-800 py-5">
+                  Buy
+                </h1>
               </div>
               <div>
-                <h1 className="border-b-2 border-[#0071BC] py-5">Rent</h1>
+                <h1 className="border-b-2 border-[#0071BC] dark:border-gray-800 py-5">
+                  Rent
+                </h1>
               </div>
             </div>
           </div>

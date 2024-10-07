@@ -181,7 +181,7 @@ const AreaTag = () => {
         open={isDropdownOpen}
       >
         <PopoverTrigger asChild className="rounded-3xl border-2">
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white opacity-80">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80">
             <div className="flex justify-between items-center w-full">
               <p>AREA</p>
               <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>
@@ -193,7 +193,7 @@ const AreaTag = () => {
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent className="dark:bg-black">
           <div className="rounded-md shadow-lg p-4 w-64 h-96 overflow-auto">
             <div className="flex justify-between gap-2 mb-2">
               <div>
@@ -204,7 +204,7 @@ const AreaTag = () => {
               <div>
                 <Button
                   variant="outline"
-                  className="rounded-3xl text-xs"
+                  className="rounded-3xl text-xs dark:bg-black"
                   onClick={handleReset}
                 >
                   <div className="flex items-center gap-2">
@@ -221,7 +221,7 @@ const AreaTag = () => {
                 </div>
                 <Input
                   type="number"
-                  className="text-center"
+                  className="text-center dark:bg-black"
                   placeholder="0"
                   value={selectedAreaMin || ""}
                   onChange={handleMinChangeArea}
@@ -233,7 +233,7 @@ const AreaTag = () => {
                 </div>
                 <Input
                   type="number"
-                  className="text-center"
+                  className="text-center dark:bg-black"
                   placeholder="Any"
                   value={selectedAreaMax || ""}
                   onChange={handleMaxChangeArea}
@@ -249,7 +249,7 @@ const AreaTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMinButton === index
-                      )} w-[100%] mb-2`}
+                      )} w-[100%] mb-2 dark:bg-black`}
                       onClick={() => handleSelectMinButton(area, index)}
                     >
                       {area}
@@ -263,7 +263,7 @@ const AreaTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMaxButton === index
-                      )} w-[100%] mb-2`}
+                      )} w-[100%] mb-2 dark:bg-black`}
                       onClick={() => handleSelectMaxButton(area, index)}
                     >
                       {area}

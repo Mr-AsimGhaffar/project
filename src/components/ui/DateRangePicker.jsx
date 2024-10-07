@@ -74,7 +74,7 @@ export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
             className={cn(
               "flex items-center justify-start text-left font-normal rounded-3xl border-2",
               !date && "text-muted-foreground",
-              "w-full sm:w-auto"
+              "w-full sm:w-auto dark:bg-black"
             )}
             style={{
               pointerEvents: isSelectOpen ? "none" : "auto",
@@ -95,7 +95,10 @@ export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-full sm:w-auto p-0" align="start">
+        <PopoverContent
+          className="w-full sm:w-auto p-0 dark:bg-black"
+          align="start"
+        >
           <div className="md:h-auto overflow-y-auto h-52">
             <Calendar
               initialFocus
@@ -107,7 +110,11 @@ export function DatePickerWithRange({ onChange, className, isSelectOpen }) {
             />
           </div>
           <div className="flex justify-end p-2">
-            <Button variant="outline" onClick={handleClear}>
+            <Button
+              variant="outline"
+              onClick={handleClear}
+              className="dark:bg-black"
+            >
               Clear
             </Button>
           </div>

@@ -88,7 +88,7 @@ const RecommendedProperties = ({
   return (
     <div>
       <div>
-        <p className="font-montserrat text-[#0071BC] text-2xl p-2 font-bold">
+        <p className="font-montserrat text-[#0071BC] dark:text-white text-2xl p-2 font-bold">
           Recommended Properties around{" "}
           <span>{displayFirstName(RecommendedPropertiesLocation)}</span>
         </p>
@@ -101,7 +101,7 @@ const RecommendedProperties = ({
         ) : (
           <Carousel responsive={responsive}>
             {RecommendedData.map((item) => (
-              <Card key={item.id} className="m-4">
+              <Card key={item.id} className="m-4 dark:bg-black">
                 <div onClick={() => handleClick(item)}>
                   {item.cover_photo_url ? (
                     <img
