@@ -4,13 +4,15 @@ import PropTypes from "prop-types";
 
 const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
   const buttonStyles = (subProperty) =>
-    selectedSubProperty === subProperty ? "bg-gray-800 text-white" : "";
+    selectedSubProperty === subProperty
+      ? "bg-gray-800 dark:bg-gray-800 text-white"
+      : "";
   return (
     <div>
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Residential Plot")}`}
+            className={`w-40 ${buttonStyles("Residential Plot")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Residential Plot")}
           >
@@ -19,7 +21,7 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
         </div>
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Commercial Plot")}`}
+            className={`w-40 ${buttonStyles("Commercial Plot")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Commercial Plot")}
           >
@@ -30,9 +32,7 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles(
-              "Agricultural Land"
-            )}`}
+            className={`w-40 ${buttonStyles("Agricultural Land")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Agricultural Land")}
           >
@@ -41,7 +41,7 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
         </div>
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Industrial Land")}`}
+            className={`w-40 ${buttonStyles("Industrial Land")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Industrial Land")}
           >
@@ -52,7 +52,7 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Plot File")}`}
+            className={`w-40 ${buttonStyles("Plot File")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Plot File")}
           >
@@ -61,7 +61,7 @@ const Plots = ({ selectedSubProperty, onSubPropertySelect }) => {
         </div>
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Plot Form")}`}
+            className={`w-40 ${buttonStyles("Plot Form")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Plot Form")}
           >

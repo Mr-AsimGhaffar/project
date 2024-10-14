@@ -95,22 +95,26 @@ const PriceTag = () => {
   };
   const handleMinChange = (e) => {
     const newValue = e.target.value;
-    setSelectedAmountMin(newValue);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMin: newValue,
-    }));
-    saveToLocalStorage("selectedAmountMin", newValue);
+    if (newValue === "" || Number(newValue) >= 0) {
+      setSelectedAmountMin(newValue);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMin: newValue,
+      }));
+      saveToLocalStorage("selectedAmountMin", newValue);
+    }
   };
 
   const handleMaxChange = (e) => {
     const newValue = e.target.value;
-    setSelectedAmountMax(newValue);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMax: newValue,
-    }));
-    saveToLocalStorage("selectedAmountMax", newValue);
+    if (newValue === "" || Number(newValue) >= 0) {
+      setSelectedAmountMax(newValue);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAmountMax: newValue,
+      }));
+      saveToLocalStorage("selectedAmountMax", newValue);
+    }
   };
   const handleReset = () => {
     setSelectedAmountMin(null);
@@ -137,7 +141,7 @@ const PriceTag = () => {
   });
 
   const buttonStyles = (isSelected) =>
-    isSelected ? "bg-gray-800 text-white" : "";
+    isSelected ? "bg-gray-800 dark:bg-black text-white" : "";
   return (
     <div>
       <Popover>
@@ -212,7 +216,7 @@ const PriceTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMinButton === index
-                      )} w-[100%] mb-2 dark:bg-black`}
+                      )} w-[100%] mb-2`}
                       onClick={() => handleSelectMin(price, index)}
                     >
                       {price}
@@ -226,7 +230,7 @@ const PriceTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMaxButton === index
-                      )} w-[100%] mb-2 dark:bg-black`}
+                      )} w-[100%] mb-2`}
                       onClick={() => handleSelectMax(price, index)}
                     >
                       {price}

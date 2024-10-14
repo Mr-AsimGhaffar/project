@@ -324,7 +324,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   );
 
   return (
-    <div className="relative">
+    <div className="relative py-18">
       <LazyLoad height={200} offset={100} once>
         <img
           src="img/bg_image.jpeg"
@@ -333,7 +333,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         />
       </LazyLoad>
 
-      <div className="lg:absolute top-20 left-0 right-0 mx-auto max-w-5xl">
+      <div className="lg:absolute top-32 left-0 right-0 mx-auto max-w-5xl">
         <div className="flex justify-between items-center">
           <div>
             <LazyLoad height={200} offset={100} once>

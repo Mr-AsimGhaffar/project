@@ -91,7 +91,7 @@ async function fetchPropertyDetails(id) {
   }
 }
 
-let currentController = null;
+let searchCityDataController = null;
 
 async function searchCityData(
   city,
@@ -107,12 +107,13 @@ async function searchCityData(
   const page_size = 12;
 
   // Abort the previous request if it exists
-  if (currentController) {
-    currentController.abort();
+  if (searchCityDataController) {
+    searchCityDataController.abort();
   }
 
   // Create a new AbortController for the current request
-  currentController = new AbortController();
+  const controller = new AbortController();
+  searchCityDataController = controller;
 
   try {
     const {
@@ -150,7 +151,7 @@ async function searchCityData(
 
     const response = await axios.get(url, {
       headers,
-      signal: currentController.signal,
+      signal: controller.signal,
     });
 
     return response.data.data;
@@ -168,7 +169,9 @@ async function searchCityData(
     }
   } finally {
     // Reset the controller after the request completes
-    currentController = null;
+    if (controller === searchCityDataController) {
+      searchCityDataController = null; // Reset the controller only if it matches the current one
+    }
   }
 }
 
@@ -240,6 +243,8 @@ async function fetchSearchSuggestions(city, query) {
   }
 }
 
+let fetchPropertyRecommendationsController = null;
+
 async function fetchPropertyRecommendations({
   city = "",
   queries = [],
@@ -249,6 +254,15 @@ async function fetchPropertyRecommendations({
   area_max,
   page_number = 1,
 }) {
+  // Abort the previous request if it exists
+  if (fetchPropertyRecommendationsController) {
+    fetchPropertyRecommendationsController.abort();
+  }
+
+  // Create a new AbortController for the current request
+  const controller = new AbortController();
+  fetchPropertyRecommendationsController = controller;
+
   try {
     const formattedPropertyType =
       typeof property_type === "string"
@@ -263,18 +277,27 @@ async function fetchPropertyRecommendations({
       }&page_number=${page_number}&property_type=${formattedPropertyType}`,
       {
         headers,
+        signal: controller.signal,
       }
     );
     return response.data.data;
   } catch (error) {
-    if (error.name !== "AbortError") {
-      const errorMessage = error.message || "Failed to search city data.";
-      console.error("Error searching city data:", errorMessage);
+    if (axios.isCancel(error)) {
+      console.log("Request canceled:", error.message);
+    } else {
+      const errorMessage =
+        error.message || "Failed to fetch recommended properties.";
+      console.error("Error fetching recommended properties:", errorMessage);
       toast.error(errorMessage, {
         position: "top-center",
         autoClose: 5000,
       });
       throw error;
+    }
+  } finally {
+    // Reset the controller after the request completes
+    if (controller === fetchPropertyRecommendationsController) {
+      fetchPropertyRecommendationsController = null; // Reset the controller only if it matches the current one
     }
   }
 }

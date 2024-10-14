@@ -195,7 +195,7 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
   };
 
   return (
-    <div className="px-4 md:px-20 lg:px-44 py-5 dark:bg-[#0c0c0c]">
+    <div className="px-4 md:px-20 lg:px-44 py-20 dark:bg-[#0c0c0c]">
       <div>
         <div>
           <p className="font-montserrat md:text-xl text-lg font-bold">
