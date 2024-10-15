@@ -95,7 +95,7 @@ const HeaderProperty = () => {
       <Popover>
         <PopoverTrigger
           asChild
-          className="rounded-3xl border-2 w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80"
+          className="rounded-3xl border-2 w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white"
         >
           <Button className="w-full">
             <div className="flex justify-between items-center w-full">

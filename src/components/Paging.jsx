@@ -146,7 +146,7 @@ const Paging = ({ onPageChange }) => {
 };
 Paging.propTypes = {
   onPageChange: PropTypes.func.isRequired,
-  totalCount: PropTypes.number.isRequired,
+  totalCount: PropTypes.number,
 };
 
 export default Paging;

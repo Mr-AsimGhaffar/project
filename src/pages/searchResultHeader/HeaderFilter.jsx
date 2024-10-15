@@ -37,6 +37,6 @@ const HeaderFilter = ({ onSortChange, sort, totalCount }) => {
 HeaderFilter.propTypes = {
   onSortChange: PropTypes.func.isRequired,
   sort: PropTypes.object.isRequired,
-  totalCount: PropTypes.number.isRequired,
+  totalCount: PropTypes.number,
 };
 export default HeaderFilter;

@@ -202,7 +202,7 @@ const AreaTag = () => {
         open={isDropdownOpen}
       >
         <PopoverTrigger asChild className="rounded-3xl border-2">
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
             <div className="flex justify-between items-center w-full">
               <p>AREA</p>
               <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>

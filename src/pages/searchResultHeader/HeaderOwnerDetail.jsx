@@ -1,23 +1,18 @@
 import { useContext, useEffect } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
 import { appContext } from "../../contexts/Context";
 import { useLocation } from "react-router-dom";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
+import { Button } from "../../components/ui/button";
+import { IoIosArrowDown } from "react-icons/io";
 
 const HeaderOwnerDetail = () => {
   const simpleContext = useContext(appContext);
   const location = useLocation();
   const { is_agency } = simpleContext.appState;
-
-  // Sync local state with appState
-  // useEffect(() => {
-  //   is_agency(simpleContext.appState.is_agency);
-  // }, [simpleContext.appState.is_agency]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -38,23 +33,41 @@ const HeaderOwnerDetail = () => {
     }));
   };
   const selectedValue =
-    is_agency === "" ? "all" : is_agency === "true" ? "true" : "false";
+    is_agency === "" ? "All" : is_agency === "true" ? "Agency" : "Owner";
   return (
     <div>
-      <Select
-        defaultValue={selectedValue}
-        value={selectedValue}
-        onValueChange={handleSelectAgent}
-      >
-        <SelectTrigger className="rounded-3xl border-2 dark:bg-black">
-          <SelectValue placeholder="Owner Detail" />
-        </SelectTrigger>
-        <SelectContent className="dark:bg-black">
-          <SelectItem value="all">All</SelectItem>
-          <SelectItem value="true">Agency</SelectItem>
-          <SelectItem value="false">Owner</SelectItem>
-        </SelectContent>
-      </Select>
+      <Popover>
+        <PopoverTrigger asChild className="rounded-3xl border-2">
+          <Button className="w-full flex justify-start bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
+            <div className="flex justify-between items-center w-full">
+              <div>{selectedValue || "Owner Detail"}</div>
+              <div>
+                <IoIosArrowDown />
+              </div>
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="dark:bg-black">
+          <div
+            className="cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-900 dark:bg-black"
+            onClick={() => handleSelectAgent("all")}
+          >
+            All
+          </div>
+          <div
+            className="cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-900 dark:bg-black"
+            onClick={() => handleSelectAgent("true")}
+          >
+            Agency
+          </div>
+          <div
+            className="cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-gray-900 dark:bg-black"
+            onClick={() => handleSelectAgent("false")}
+          >
+            Owner
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };

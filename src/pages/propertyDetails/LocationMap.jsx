@@ -51,5 +51,5 @@ export default function LocationMap({ locationData }) {
 }
 
 LocationMap.propTypes = {
-  locationData: PropTypes.array.isRequired,
+  locationData: PropTypes.object.isRequired,
 };

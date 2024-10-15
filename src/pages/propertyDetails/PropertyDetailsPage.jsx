@@ -392,91 +392,86 @@ const PropertyDetailsPage = ({ conversionFunction, propertyCategory }) => {
             <p className="font-montserrat font-bold">Details</p>
             <div className="grid grid-cols-1 md:grid-cols-2 items-center">
               <div>
-                <Table>
-                  <div className="flex flex-col md:flex-row justify-start font-inter gap-10 text-sm">
-                    <div>
-                      <TableBody>
-                        {Object.keys(property)
-                          .filter((key) =>
-                            ["type", "price", "location", "bath"].includes(key)
-                          )
-                          .map((item, rowIndex) => (
-                            <TableRow key={item} className="border-none">
-                              <TableCell
-                                className={`${
-                                  rowIndex % 2 === 0
-                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
-                                    : ""
-                                }`}
-                              >
-                                {capitalizeFirstLetter(item)}
-                              </TableCell>
-                              <TableCell
-                                className={`w-[100%] ${
-                                  rowIndex % 2 === 0
-                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
-                                    : ""
-                                }`}
-                              >
-                                {property[item]
-                                  ? item === "price"
-                                    ? conversionFunction(property[item])
-                                    : item === "type"
-                                    ? property[item].replace("_", " ")
-                                    : item === "location"
-                                    ? property[item]
-                                        .split(",")
-                                        .slice(0, 2)
-                                        .join(",") + "..."
-                                    : property[item]
-                                  : "-"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </div>
-                    <div>
-                      <TableBody>
-                        {Object.keys(property)
-                          .filter((key) =>
-                            ["area", "purpose", "bedroom", "added"].includes(
-                              key
-                            )
-                          )
-                          .map((item, rowIndex) => (
-                            <TableRow key={item} className="border-none">
-                              <TableCell
-                                className={`${
-                                  rowIndex % 2 === 0
-                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
-                                    : ""
-                                }`}
-                              >
-                                {capitalizeFirstLetter(item)}
-                              </TableCell>
-                              <TableCell
-                                className={`w-[100%] ${
-                                  rowIndex % 2 === 0
-                                    ? "bg-gray-100 dark:bg-black text-black dark:text-white"
-                                    : ""
-                                }`}
-                              >
-                                {property[item]
-                                  ? item === "added"
-                                    ? formatTimeNow(property[item])
-                                    : item === "area"
-                                    ? squareFeetToMarla(property[item])
-                                    : item === "purpose"
-                                    ? property[item].replace("_", " ")
-                                    : property[item]
-                                  : "-"}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </div>
-                  </div>
-                </Table>
+                <div className=" font-inter  text-sm">
+                  <Table className="flex flex-col md:flex-row justify-start gap-10">
+                    <TableBody>
+                      {Object.keys(property)
+                        .filter((key) =>
+                          ["type", "price", "location", "bath"].includes(key)
+                        )
+                        .map((item, rowIndex) => (
+                          <TableRow key={item} className="border-none">
+                            <TableCell
+                              className={`${
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 dark:bg-black text-black dark:text-white"
+                                  : ""
+                              }`}
+                            >
+                              {capitalizeFirstLetter(item)}
+                            </TableCell>
+                            <TableCell
+                              className={`w-[100%] ${
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 dark:bg-black text-black dark:text-white"
+                                  : ""
+                              }`}
+                            >
+                              {property[item]
+                                ? item === "price"
+                                  ? conversionFunction(property[item])
+                                  : item === "type"
+                                  ? property[item].replace("_", " ")
+                                  : item === "location"
+                                  ? property[item]
+                                      .split(",")
+                                      .slice(0, 2)
+                                      .join(",") + "..."
+                                  : property[item]
+                                : "-"}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+
+                    <TableBody>
+                      {Object.keys(property)
+                        .filter((key) =>
+                          ["area", "purpose", "bedroom", "added"].includes(key)
+                        )
+                        .map((item, rowIndex) => (
+                          <TableRow key={item} className="border-none">
+                            <TableCell
+                              className={`${
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 dark:bg-black text-black dark:text-white"
+                                  : ""
+                              }`}
+                            >
+                              {capitalizeFirstLetter(item)}
+                            </TableCell>
+                            <TableCell
+                              className={`w-[100%] ${
+                                rowIndex % 2 === 0
+                                  ? "bg-gray-100 dark:bg-black text-black dark:text-white"
+                                  : ""
+                              }`}
+                            >
+                              {property[item]
+                                ? item === "added"
+                                  ? formatTimeNow(property[item])
+                                  : item === "area"
+                                  ? squareFeetToMarla(property[item])
+                                  : item === "purpose"
+                                  ? property[item].replace("_", " ")
+                                  : property[item]
+                                : "-"}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
               {property.agency && (
                 <div className="font-monsterrat text-xl font-bold">

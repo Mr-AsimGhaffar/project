@@ -199,7 +199,7 @@ const HeaderPrice = () => {
         open={isDropdownOpen}
       >
         <PopoverTrigger asChild className="rounded-3xl border-2">
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
             <div className="flex justify-between items-center w-full">
               <p>PRICE</p>
               <div>{selectedAmountMin === null ? "0" : selectedAmountMin}</div>
