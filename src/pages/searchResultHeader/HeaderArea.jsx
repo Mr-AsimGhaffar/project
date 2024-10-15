@@ -115,26 +115,43 @@ const AreaTag = () => {
     }
   };
   const handleMinChangeArea = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAreaMin(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMin: marlaToSquareFeet(newValue),
-      }));
-      saveToLocalStorage("selectedAreaMin", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = areaOptions.indexOf(newValue);
+
+    setSelectedAreaMin(newValue);
+    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMin: marlaToSquareFeet(newValue),
+    }));
+    saveToLocalStorage("selectedAreaMin", newValue);
   };
   const handleMaxChangeArea = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAreaMax(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMax: marlaToSquareFeet(newValue),
-      }));
-      saveToLocalStorage("selectedAreaMax", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = areaOptions.indexOf(newValue);
+
+    setSelectedAreaMax(newValue);
+    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
+
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMax: marlaToSquareFeet(newValue),
+    }));
+    saveToLocalStorage("selectedAreaMax", newValue);
   };
 
   const handleReset = () => {

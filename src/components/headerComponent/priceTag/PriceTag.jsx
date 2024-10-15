@@ -55,6 +55,7 @@ const PriceTag = () => {
 
   const handleSelectMax = (amount, buttonIndex) => {
     const newValue = amount === "Any" ? null : amount;
+    setSelectedAmountMax(newValue);
     if (selectedMaxButton === buttonIndex) {
       setSelectedAmountMax(null);
       setSelectedMaxButton(null);
@@ -75,6 +76,7 @@ const PriceTag = () => {
   };
   const handleSelectMin = (amount, buttonIndex) => {
     const newValue = amount;
+    setSelectedAmountMin(newValue);
     if (selectedMinButton === buttonIndex) {
       setSelectedAmountMin(null);
       setSelectedMinButton(null);
@@ -94,27 +96,42 @@ const PriceTag = () => {
     }
   };
   const handleMinChange = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAmountMin(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAmountMin: newValue,
-      }));
-      saveToLocalStorage("selectedAmountMin", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = priceOptions.indexOf(newValue);
+    setSelectedAmountMin(newValue);
+    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMin: newValue,
+    }));
+    saveToLocalStorage("selectedAmountMin", newValue);
   };
 
   const handleMaxChange = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAmountMax(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAmountMax: newValue,
-      }));
-      saveToLocalStorage("selectedAmountMax", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = priceOptions.indexOf(newValue);
+
+    setSelectedAmountMax(newValue);
+    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMax: newValue,
+    }));
+    saveToLocalStorage("selectedAmountMax", newValue);
   };
   const handleReset = () => {
     setSelectedAmountMin(null);
@@ -125,7 +142,7 @@ const PriceTag = () => {
 
   // Filter Min and Max price options based on selection
   const filteredMinOptions = priceOptions.filter((price) => {
-    if (selectedAmountMax === null) return true; // No Max selected, show all Min
+    if (!selectedAmountMax) return true; // No Max selected, show all Min
     return (
       parseInt(price.replace(/,/g, "")) <=
       parseInt(selectedAmountMax.replace(/,/g, ""))
@@ -133,7 +150,7 @@ const PriceTag = () => {
   });
 
   const filteredMaxOptions = priceOptions.filter((price) => {
-    if (selectedAmountMin === null) return true; // No Min selected, show all Max
+    if (!selectedAmountMin) return true; // No Min selected, show all Max
     return (
       parseInt(price.replace(/,/g, "")) >=
       parseInt(selectedAmountMin.replace(/,/g, ""))
@@ -183,8 +200,7 @@ const PriceTag = () => {
                   MIN:
                 </div>
                 <Input
-                  type="number"
-                  inputMode="numeric"
+                  type="text"
                   className="text-center dark:bg-black"
                   placeholder="0"
                   value={selectedAmountMin || ""}
@@ -197,8 +213,7 @@ const PriceTag = () => {
                   MAX:
                 </div>
                 <Input
-                  type="number"
-                  inputMode="numeric"
+                  type="text"
                   className="text-center dark:bg-black"
                   placeholder="Any"
                   value={selectedAmountMax || ""}
