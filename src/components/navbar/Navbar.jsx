@@ -70,7 +70,7 @@ const Navbar = ({
 
   return (
     <div>
-      <nav className="dark:bg-black shadow-md">
+      <nav className="dark:bg-black shadow-lg fixed w-full z-10 bg-white">
         <div className="px-4 md:px-44">
           <div className="flex items-center justify-between h-16">
             <div className="w-[20%] hidden lg:flex items-center gap-4 opacity-80">

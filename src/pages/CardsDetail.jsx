@@ -50,6 +50,7 @@ import { Button } from "../components/ui/button";
 import { isBedsDisabled } from "../utlils/disableBed";
 import { GrPowerReset } from "react-icons/gr";
 import { FiAlertTriangle } from "react-icons/fi";
+import { debounce } from "lodash";
 
 const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const queryParams = useQueryParams();
@@ -492,12 +493,14 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   };
 
+  const debouncedSearch = debounce(handleSearch, 300);
+
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
       return;
     }
-    handleSearch();
+    debouncedSearch();
   }, [
     simpleContext.appState.selectedAmountMin,
     simpleContext.appState.selectedAmountMax,
@@ -650,7 +653,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
   const capitalizedText = firstLetterUpperCase(displayText);
 
   return (
-    <main className="px-4 md:px-20 lg:px-44 py-5 dark:bg-[#0c0c0c]">
+    <main className="px-4 md:px-20 lg:px-44 py-20 dark:bg-[#0c0c0c]">
       <div>
         <div className="text-lg font-bold">
           <span>{formatPrice(totalCount)} Results</span>{" "}

@@ -116,21 +116,25 @@ const AreaTag = () => {
   };
   const handleMinChangeArea = (e) => {
     const newValue = e.target.value;
-    setSelectedAreaMin(newValue);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAreaMin: marlaToSquareFeet(newValue),
-    }));
-    saveToLocalStorage("selectedAreaMin", newValue);
+    if (newValue === "" || Number(newValue) >= 0) {
+      setSelectedAreaMin(newValue);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMin: marlaToSquareFeet(newValue),
+      }));
+      saveToLocalStorage("selectedAreaMin", newValue);
+    }
   };
   const handleMaxChangeArea = (e) => {
     const newValue = e.target.value;
-    setSelectedAreaMax(newValue);
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAreaMax: marlaToSquareFeet(newValue),
-    }));
-    saveToLocalStorage("selectedAreaMax", newValue);
+    if (newValue === "" || Number(newValue) >= 0) {
+      setSelectedAreaMax(newValue);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMax: marlaToSquareFeet(newValue),
+      }));
+      saveToLocalStorage("selectedAreaMax", newValue);
+    }
   };
 
   const handleReset = () => {
@@ -172,7 +176,7 @@ const AreaTag = () => {
   });
 
   const buttonStyles = (isSelected) =>
-    isSelected ? "bg-gray-800 text-white" : "";
+    isSelected ? "bg-gray-800 dark:bg-gray-800 text-white" : "";
 
   return (
     <div>
@@ -249,7 +253,7 @@ const AreaTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMinButton === index
-                      )} w-[100%] mb-2 dark:bg-black`}
+                      )} w-[100%] mb-2`}
                       onClick={() => handleSelectMinButton(area, index)}
                     >
                       {area}
@@ -263,7 +267,7 @@ const AreaTag = () => {
                       variant="outline"
                       className={`${buttonStyles(
                         selectedMaxButton === index
-                      )} w-[100%] mb-2 dark:bg-black`}
+                      )} w-[100%] mb-2`}
                       onClick={() => handleSelectMaxButton(area, index)}
                     >
                       {area}

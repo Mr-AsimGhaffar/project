@@ -24,11 +24,13 @@ const HeaderProperty = () => {
   });
 
   useEffect(() => {
-    setPropertyState(simpleContext.appState.propertyState);
-  }, [
-    simpleContext.appState.propertyState.selectedPropertyType,
-    simpleContext.appState.propertyState.selectedSubProperty,
-  ]);
+    setPropertyState({
+      selectedPropertyType:
+        simpleContext.appState.propertyState.selectedPropertyType,
+      selectedSubProperty:
+        simpleContext.appState.propertyState.selectedSubProperty,
+    });
+  }, [simpleContext.appState.propertyState]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

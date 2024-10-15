@@ -3,14 +3,16 @@ import PropTypes from "prop-types";
 
 const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
   const buttonStyles = (subProperty) =>
-    selectedSubProperty === subProperty ? "bg-gray-800 text-white" : "";
+    selectedSubProperty === subProperty
+      ? "bg-gray-800 dark:bg-gray-800 text-white"
+      : "";
 
   return (
     <div>
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40  dark:bg-black ${buttonStyles("House")}`}
+            className={`w-40 ${buttonStyles("House")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("House")}
           >
@@ -19,7 +21,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
         </div>
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Flat")}`}
+            className={`w-40 ${buttonStyles("Flat")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Flat")}
           >
@@ -30,7 +32,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Upper Portion")}`}
+            className={`w-40 ${buttonStyles("Upper Portion")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Upper Portion")}
           >
@@ -39,7 +41,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
         </div>
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Lower Portion")}`}
+            className={`w-40 ${buttonStyles("Lower Portion")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Lower Portion")}
           >
@@ -50,7 +52,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Farm House")}`}
+            className={`w-40 ${buttonStyles("Farm House")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Farm House")}
           >
@@ -59,7 +61,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
         </div>
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Room")}`}
+            className={`w-40 ${buttonStyles("Room")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Room")}
           >
@@ -70,7 +72,7 @@ const Home = ({ selectedSubProperty, onSubPropertySelect }) => {
       <div className="flex gap-2 p-1">
         <div>
           <Button
-            className={`w-40 dark:bg-black ${buttonStyles("Penthouse")}`}
+            className={`w-40 ${buttonStyles("Penthouse")}`}
             variant="outline"
             onClick={() => onSubPropertySelect("Penthouse")}
           >

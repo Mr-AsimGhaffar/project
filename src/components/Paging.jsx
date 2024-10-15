@@ -103,7 +103,7 @@ const Paging = ({ onPageChange }) => {
             <PaginationPrevious
               isActive
               href="#"
-              onClick={() => onPageChange(currentPage - 1)}
+              onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="dark:bg-black"
             />
@@ -131,7 +131,10 @@ const Paging = ({ onPageChange }) => {
             <PaginationNext
               isActive
               href="#"
-              onClick={() => onPageChange(Number(currentPage) + 1)}
+              onClick={() =>
+                currentPage < totalPages &&
+                onPageChange(Number(currentPage) + 1)
+              }
               disabled={currentPage === totalPages}
               className="dark:bg-black"
             />
