@@ -24,7 +24,7 @@ function App() {
     selectedAreaMax: null,
     selectBeds: "All",
     propertyState: {
-      selectedPropertyType: "Home",
+      selectedPropertyType: "home",
       selectedSubProperty: "",
     },
     isApiCall: false,
