@@ -1,15 +1,10 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { useTheme } from "../theme/themeProvider";
 import Spinner from "../spinner/Spinner";
 import { Link, useLocation } from "react-router-dom";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const Navbar = ({
   handleDashboardClick,
@@ -127,8 +122,8 @@ const Navbar = ({
 
             <div className="w-[20%] hidden lg:flex items-center gap-4 opacity-80 justify-end">
               <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild className="bg-white border-none">
+                <Popover>
+                  <PopoverTrigger asChild className="bg-white border-none">
                     <Button variant="outline" size="icon">
                       <img
                         src="/img/filter_svg.svg"
@@ -138,18 +133,18 @@ const Navbar = ({
                       />
                       <span className="sr-only">Toggle theme</span>
                     </Button>
-                  </DropdownMenuTrigger>
+                  </PopoverTrigger>
 
-                  <DropdownMenuContent
+                  <PopoverContent
                     align="end"
                     className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
                   >
-                    <DropdownMenuItem
+                    <Button
                       onClick={handleDropdownClick}
-                      className="flex items-center justify-between"
+                      className="w-full flex items-center justify-between bg-black dark:text-white"
                     >
                       <div>{isBlackTheme ? "Light Theme" : "Black Theme"}</div>
-                      <div>
+                      <div className="flex items-center">
                         <input
                           type="checkbox"
                           checked={isBlackTheme}
@@ -157,17 +152,17 @@ const Navbar = ({
                           className="appearance-none border w-4 h-4 rounded-sm checked:bg-[#0071BC] checked:border-[#0071BC] focus:outline-none"
                         />
                       </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
+                    </Button>
+                    <Button
                       onClick={handleConversionTypeClick}
-                      className="flex items-center justify-between"
+                      className="w-full flex items-center justify-between bg-black dark:text-white"
                     >
                       <div>
                         {conversionType === "count"
                           ? "Currency Value in Million"
                           : "Currency Value in Lacs"}
                       </div>
-                      <div>
+                      <div className="flex items-center">
                         <input
                           type="checkbox"
                           checked={conversionType === "count"}
@@ -175,9 +170,9 @@ const Navbar = ({
                           className="appearance-none border w-4 h-4 rounded-sm checked:bg-[#0071BC] checked:border-[#0071BC] focus:outline-none"
                         />
                       </div>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    </Button>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
             <div className="lg:hidden">
@@ -238,50 +233,57 @@ const Navbar = ({
                 </Link>
               </div>
               <div className="text-center">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild className="bg-white">
+                <Popover>
+                  <PopoverTrigger asChild className="bg-white border-none">
                     <Button variant="outline" size="icon">
-                      <img src="img/filter_svg.svg" alt="filter" />
+                      <img
+                        src="/img/filter_svg.svg"
+                        alt="filter"
+                        width={16}
+                        height={16}
+                      />
                       <span className="sr-only">Toggle theme</span>
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
+                  </PopoverTrigger>
+
+                  <PopoverContent
                     align="end"
                     className="w-64 mt-2 p-4 bg-[#000000] border-none text-[#FFFFFF] font-inter font-normal text-base"
                   >
-                    <DropdownMenuItem
+                    <Button
                       onClick={handleDropdownClick}
-                      className="flex items-center justify-between"
+                      className="w-full flex items-center justify-between bg-black dark:text-white"
                     >
                       <div>{isBlackTheme ? "Light Theme" : "Black Theme"}</div>
-                      <div>
+                      <div className="flex items-center">
                         <input
                           type="checkbox"
                           checked={isBlackTheme}
                           onChange={handleThemeToggle}
-                          className="form-checkbox text-green-600"
+                          className="appearance-none border w-4 h-4 rounded-sm checked:bg-[#0071BC] checked:border-[#0071BC] focus:outline-none"
                         />
                       </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
+                    </Button>
+                    <Button
                       onClick={handleConversionTypeClick}
-                      className="flex items-center justify-between"
+                      className="w-full flex items-center justify-between bg-black dark:text-white"
                     >
                       <div>
                         {conversionType === "count"
                           ? "Currency Value in Million"
                           : "Currency Value in Lacs"}
                       </div>
-                      <div>
+                      <div className="flex items-center">
                         <input
                           type="checkbox"
                           checked={conversionType === "count"}
                           onChange={handleConversionType}
+                          className="appearance-none border w-4 h-4 rounded-sm checked:bg-[#0071BC] checked:border-[#0071BC] focus:outline-none"
                         />
                       </div>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    </Button>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </div>

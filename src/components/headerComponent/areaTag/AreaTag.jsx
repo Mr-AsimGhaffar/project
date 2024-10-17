@@ -21,6 +21,7 @@ const AreaTag = () => {
 
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area === "Any" ? null : area;
+    setSelectedAreaMax(newValue);
     if (selectedMaxButton === buttonIndex) {
       setSelectedAreaMax(null);
       setSelectedMaxButton(null);
@@ -42,6 +43,7 @@ const AreaTag = () => {
 
   const handleSelectMinButton = (area, buttonIndex) => {
     const newValue = area;
+    setSelectedAreaMin(newValue);
     if (selectedMinButton === buttonIndex) {
       setSelectedAreaMin(null);
       setSelectedMinButton(null);
@@ -61,26 +63,44 @@ const AreaTag = () => {
     }
   };
   const handleMinChangeArea = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAreaMin(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMin: marlaToSquareFeet(newValue),
-      }));
-      saveToLocalStorage("selectedAreaMin", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = areaOptions.indexOf(newValue);
+
+    setSelectedAreaMin(newValue);
+    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMin: marlaToSquareFeet(newValue),
+    }));
+    saveToLocalStorage("selectedAreaMin", newValue);
   };
   const handleMaxChangeArea = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAreaMax(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMax: marlaToSquareFeet(newValue),
-      }));
-      saveToLocalStorage("selectedAreaMax", newValue);
-    }
+    let newValue = e.target.value;
+
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = areaOptions.indexOf(newValue);
+
+    setSelectedAreaMax(newValue);
+    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
+
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMax: marlaToSquareFeet(newValue),
+    }));
+    saveToLocalStorage("selectedAreaMax", newValue);
   };
 
   const handleReset = () => {
@@ -99,7 +119,7 @@ const AreaTag = () => {
 
   // Filter Min and Max price options based on selection
   const filteredMinOptions = areaOptions.filter((price) => {
-    if (selectedAreaMax === null) return true; // No Max selected, show all Min
+    if (!selectedAreaMax) return true; // No Max selected, show all Min
     // Ensure price and selectedAreaMax are strings before calling replace
     return (
       parseInt(price.replace(/,/g, "")) <=
@@ -110,7 +130,7 @@ const AreaTag = () => {
   });
 
   const filteredMaxOptions = areaOptions.filter((price) => {
-    if (selectedAreaMin === null) return true; // No Min selected, show all Max
+    if (!selectedAreaMin) return true; // No Min selected, show all Max
     // Ensure price and selectedAreaMin are strings before calling replace
     return (
       parseInt(price.replace(/,/g, "")) >=
@@ -169,7 +189,7 @@ const AreaTag = () => {
                   MIN:
                 </div>
                 <Input
-                  type="number"
+                  type="text"
                   className="text-center dark:bg-black"
                   placeholder="0"
                   value={selectedAreaMin || ""}
@@ -181,7 +201,7 @@ const AreaTag = () => {
                   MAX:
                 </div>
                 <Input
-                  type="number"
+                  type="text"
                   className="text-center dark:bg-black"
                   placeholder="Any"
                   value={selectedAreaMax || ""}

@@ -20,8 +20,6 @@ Input.displayName = "Input";
 export { Input };
 
 Input.propTypes = {
-  className: PropTypes.string, // Add className to propTypes
-};
-Input.propTypes = {
-  type: PropTypes.string, // Add className to propTypes
+  className: PropTypes.string,
+  type: PropTypes.string,
 };

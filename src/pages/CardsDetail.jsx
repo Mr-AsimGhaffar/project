@@ -333,7 +333,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       ...s,
       searchTerm: searchTerm,
     }));
-  }, [searchTerm, simpleContext]);
+  }, [searchTerm]);
 
   const handleToggleExpand = (id) => {
     setExpandedCards((prev) => ({
@@ -493,7 +493,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   };
 
-  const debouncedSearch = debounce(handleSearch, 300);
+  const debouncedSearch = debounce(handleSearch, 500);
 
   useEffect(() => {
     if (!mounted.current) {
@@ -514,6 +514,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     simpleContext.appState.selectedSuggestions,
     propertyCategory,
     simpleContext.appState.is_agency,
+    sort,
   ]);
 
   useEffect(() => {
@@ -613,11 +614,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       };
     });
   };
-
-  useEffect(() => {
-    // Fetch data whenever sort state changes
-    handleSearch();
-  }, [sort]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

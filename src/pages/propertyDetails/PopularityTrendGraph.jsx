@@ -196,6 +196,6 @@ export default function PopularityTrendGraph({
 }
 
 PopularityTrendGraph.propTypes = {
-  popularityTrendData: PropTypes.array.isRequired,
+  popularityTrendData: PropTypes.object.isRequired,
   location: PropTypes.string.isRequired,
 };

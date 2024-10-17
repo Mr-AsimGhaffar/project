@@ -7,13 +7,6 @@ import { appContext } from "@/contexts/Context";
 import { Button } from "./ui/button";
 import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
 import { Card, CardHeader } from "./ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import PriceTag from "./headerComponent/priceTag/PriceTag";
 import AreaTag from "./headerComponent/areaTag/AreaTag";
 import BedsTag from "./headerComponent/beds/BedsTag";
@@ -31,6 +24,8 @@ import { RxCross2 } from "react-icons/rx";
 import LazyLoad from "react-lazyload";
 import { isBedsDisabled } from "../utlils/disableBed";
 import { FiAlertTriangle } from "react-icons/fi";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Header = ({ propertyCategory, setPropertyCategory }) => {
   const [data, setData] = useState([]);
@@ -277,9 +272,15 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    handleSearch();
+    handleSearch(e);
   };
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
+  const toggleOpen = () => {
+    !isVisible && toggleVisibility();
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -381,32 +382,39 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-8 gap-y-4 font-montserrat font-medium text-lg py-2">
                       <div className="col-span-1 md:col-span-2">
-                        <Select
-                          onOpenChange={handleOpenChange}
-                          onValueChange={handleSelectCity}
-                        >
-                          <SelectTrigger className="rounded-md md:rounded-tr-none md:rounded-br-none dark:bg-black">
-                            <SelectValue placeholder="Islamabad" />
-                          </SelectTrigger>
-                          <SelectContent>
+                        <Popover onOpenChange={handleOpenChange}>
+                          <PopoverTrigger asChild>
+                            <Button className="w-full flex justify-start text-left rounded-md md:rounded-tr-none md:rounded-br-none bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
+                              <div className="flex justify-between items-center w-full">
+                                <div>
+                                  {simpleContext.appState.selectedCity ||
+                                    "Islamabad"}
+                                </div>
+                                <div>
+                                  <IoIosArrowDown />
+                                </div>
+                              </div>
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="dark:bg-black">
                             {data.map((item) => (
-                              <SelectItem
-                                className="cursor-pointer dark:bg-black dark:hover:bg-gray-900"
+                              <div
                                 key={item}
-                                value={item}
+                                onClick={() => handleSelectCity(item)}
+                                className="cursor-pointer dark:bg-black dark:hover:bg-gray-900 p-2 hover:bg-gray-100"
                               >
                                 {item}
-                              </SelectItem>
+                              </div>
                             ))}
-                          </SelectContent>
-                        </Select>
+                          </PopoverContent>
+                        </Popover>
                       </div>
                       <div className="col-span-1 md:col-span-5 relative">
                         <Input
                           value={searchTerm}
                           onChange={handleChange}
                           onKeyDown={handleKeyDown}
-                          onClick={isVisible || toggleVisibility}
+                          onClick={toggleOpen}
                           placeholder="Location"
                           className="rounded-md md:rounded-none dark:bg-black"
                           style={{
@@ -553,24 +561,23 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
                             </div>
                           </div>
                         </div>
-
-                        <div className="flex justify-end">
-                          <Button
-                            variant="primary"
-                            onClick={toggleVisibility}
-                            className="text-base text-white font-montserrat font-bold"
-                          >
-                            {isVisible ? "Less" : "More"}
-                            {isVisible ? (
-                              <FaAngleUp className="ml-2" />
-                            ) : (
-                              <FaAngleDown className="ml-2" />
-                            )}
-                          </Button>
-                        </div>
                       </div>
                     </div>
                   </form>
+                  <div className="flex justify-end">
+                    <Button
+                      variant="primary"
+                      onClick={toggleVisibility}
+                      className="text-base text-white font-montserrat font-bold"
+                    >
+                      {isVisible ? "Less" : "More"}
+                      {isVisible ? (
+                        <FaAngleUp className="ml-2" />
+                      ) : (
+                        <FaAngleDown className="ml-2" />
+                      )}
+                    </Button>
+                  </div>
                   {simpleContext.appState.loading && <Spinner />}
                 </div>
               </div>

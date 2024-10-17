@@ -140,7 +140,7 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 SelectTrigger.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.string,
+  children: PropTypes.object,
 };
 SelectScrollUpButton.propTypes = {
   className: PropTypes.string,
@@ -150,7 +150,7 @@ SelectScrollDownButton.propTypes = {
 };
 SelectContent.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.string,
+  children: PropTypes.array,
   position: PropTypes.string,
 };
 SelectItem.propTypes = {

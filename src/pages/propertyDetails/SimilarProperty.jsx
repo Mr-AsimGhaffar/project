@@ -149,5 +149,5 @@ SimilarProperty.propTypes = {
   location: PropTypes.string.isRequired,
   similarPropertyId: PropTypes.number.isRequired,
   conversionFunction: PropTypes.func.isRequired,
-  propertyCategory: PropTypes.string.isRequired,
+  propertyCategory: PropTypes.string,
 };

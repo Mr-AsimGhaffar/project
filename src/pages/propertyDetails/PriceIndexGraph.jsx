@@ -181,5 +181,5 @@ PriceIndexGraph.propTypes = {
   location: PropTypes.string.isRequired,
   area: PropTypes.number.isRequired,
   purpose: PropTypes.string.isRequired,
-  areaTrendData: PropTypes.array.isRequired,
+  areaTrendData: PropTypes.object.isRequired,
 };

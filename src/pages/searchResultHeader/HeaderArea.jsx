@@ -115,26 +115,43 @@ const AreaTag = () => {
     }
   };
   const handleMinChangeArea = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAreaMin(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMin: marlaToSquareFeet(newValue),
-      }));
-      saveToLocalStorage("selectedAreaMin", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = areaOptions.indexOf(newValue);
+
+    setSelectedAreaMin(newValue);
+    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMin: marlaToSquareFeet(newValue),
+    }));
+    saveToLocalStorage("selectedAreaMin", newValue);
   };
   const handleMaxChangeArea = (e) => {
-    const newValue = e.target.value;
-    if (newValue === "" || Number(newValue) >= 0) {
-      setSelectedAreaMax(newValue);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMax: marlaToSquareFeet(newValue),
-      }));
-      saveToLocalStorage("selectedAreaMax", newValue);
-    }
+    let newValue = e.target.value;
+    const isDigitsOnly = (str) => /^[\d,]+$/.test(str);
+    if (!isDigitsOnly(newValue)) return;
+
+    newValue = newValue.replace(/,/g, "");
+    let parsedValue = parseInt(newValue, 10);
+    if (isNaN(parsedValue)) return;
+    newValue = parsedValue.toLocaleString();
+    const buttonIndex = areaOptions.indexOf(newValue);
+
+    setSelectedAreaMax(newValue);
+    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
+
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMax: marlaToSquareFeet(newValue),
+    }));
+    saveToLocalStorage("selectedAreaMax", newValue);
   };
 
   const handleReset = () => {
@@ -185,7 +202,7 @@ const AreaTag = () => {
         open={isDropdownOpen}
       >
         <PopoverTrigger asChild className="rounded-3xl border-2">
-          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80">
+          <Button className="w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white">
             <div className="flex justify-between items-center w-full">
               <p>AREA</p>
               <div>{selectedAreaMin === null ? "0" : selectedAreaMin}</div>

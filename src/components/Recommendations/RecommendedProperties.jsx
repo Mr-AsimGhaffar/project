@@ -170,8 +170,8 @@ const RecommendedProperties = ({
 RecommendedProperties.propTypes = {
   RecommendedPropertiesId: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
-  bath: PropTypes.number.isRequired,
-  bedroom: PropTypes.number.isRequired,
+  bath: PropTypes.number,
+  bedroom: PropTypes.number,
   area: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   city_id: PropTypes.number.isRequired,

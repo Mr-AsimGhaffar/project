@@ -24,13 +24,11 @@ const HeaderProperty = () => {
   });
 
   useEffect(() => {
-    setPropertyState({
-      selectedPropertyType:
-        simpleContext.appState.propertyState.selectedPropertyType,
-      selectedSubProperty:
-        simpleContext.appState.propertyState.selectedSubProperty,
-    });
-  }, [simpleContext.appState.propertyState]);
+    setPropertyState(simpleContext.appState.propertyState);
+  }, [
+    simpleContext.appState.propertyState.selectedPropertyType,
+    simpleContext.appState.propertyState.selectedSubProperty,
+  ]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -97,7 +95,7 @@ const HeaderProperty = () => {
       <Popover>
         <PopoverTrigger
           asChild
-          className="rounded-3xl border-2 w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white opacity-80"
+          className="rounded-3xl border-2 w-full bg-white text-black focus:bg-white active:bg-white hover:bg-white dark:bg-black dark:text-white"
         >
           <Button className="w-full">
             <div className="flex justify-between items-center w-full">
