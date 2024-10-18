@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { appContext } from "@/contexts/Context";
 import { useContext, useEffect, useState } from "react";
-import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+} from "@/utlils/SaveLocalStorage";
 import { IoIosArrowDown } from "react-icons/io";
 import {
   Popover,
@@ -34,13 +37,37 @@ const AreaTag = () => {
   const [selectedAreaMax, setSelectedAreaMax] = useState(
     squareFeetToMarla(simpleContext.appState.selectedAreaMax)
   );
-  const [selectedMinButton, setSelectedMinButton] = useState(null);
-  const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+
+  const { selectedAreaMinButton, selectedAreaMaxButton } =
+    simpleContext.appState;
+
+  // useEffect(() => {
+  //   simpleContext.setAppState((s) => ({
+  //     ...s,
+  //     selectedAreaMinButton: selectedAreaMinButton,
+  //     selectedAreaMaxButton: selectedAreaMaxButton,
+  //   }));
+  // }, [selectedAreaMinButton, selectedAreaMaxButton]);
 
   const areaOptions = ["2", "3", "5", "8", "10", "15", "20", "30", "40"];
 
   // Sync local state with appState on mount
   useEffect(() => {
+    const savedMinButton = getFromLocalStorage("selectedAreaMinButton");
+    const savedMaxButton = getFromLocalStorage("selectedAreaMaxButton");
+
+    if (savedMinButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMinButton: savedMinButton,
+      }));
+    }
+    if (savedMaxButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMaxButton: savedMaxButton,
+      }));
+    }
     setSelectedAreaMin(
       squareFeetToMarla(simpleContext.appState.selectedAreaMin)
     );
@@ -75,43 +102,47 @@ const AreaTag = () => {
 
   const handleSelectMaxButton = (area, buttonIndex) => {
     const newValue = area === "Any" ? null : area;
-    if (selectedMaxButton === buttonIndex) {
+    if (selectedAreaMaxButton === buttonIndex) {
       setSelectedAreaMax(null);
-      setSelectedMaxButton(null);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAreaMax: null,
+        selectedAreaMaxButton: null,
       }));
       saveToLocalStorage("selectedAreaMax", null);
+      saveToLocalStorage("selectedAreaMaxButton", null);
     } else {
       setSelectedAreaMax(newValue);
-      setSelectedMaxButton(buttonIndex);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAreaMax: newValue ? marlaToSquareFeet(newValue) : null,
+        selectedAreaMaxButton: buttonIndex,
       }));
       saveToLocalStorage("selectedAreaMax", newValue);
+      saveToLocalStorage("selectedAreaMaxButton", buttonIndex);
     }
   };
 
   const handleSelectMinButton = (area, buttonIndex) => {
     const newValue = area;
-    if (selectedMinButton === buttonIndex) {
+    if (selectedAreaMinButton === buttonIndex) {
       setSelectedAreaMin(null);
-      setSelectedMinButton(null);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAreaMin: null,
+        selectedAreaMinButton: null,
       }));
       saveToLocalStorage("selectedAreaMin", null);
+      saveToLocalStorage("selectedAreaMinButton", null);
     } else {
       setSelectedAreaMin(newValue);
-      setSelectedMinButton(buttonIndex);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAreaMin: marlaToSquareFeet(newValue),
+        selectedAreaMinButton: buttonIndex,
       }));
       saveToLocalStorage("selectedAreaMin", newValue);
+      saveToLocalStorage("selectedAreaMinButton", buttonIndex);
     }
   };
   const handleMinChangeArea = (e) => {
@@ -126,10 +157,10 @@ const AreaTag = () => {
     const buttonIndex = areaOptions.indexOf(newValue);
 
     setSelectedAreaMin(newValue);
-    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAreaMin: marlaToSquareFeet(newValue),
+      selectedAreaMinButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAreaMin", newValue);
   };
@@ -145,11 +176,11 @@ const AreaTag = () => {
     const buttonIndex = areaOptions.indexOf(newValue);
 
     setSelectedAreaMax(newValue);
-    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
 
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAreaMax: marlaToSquareFeet(newValue),
+      selectedAreaMaxButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAreaMax", newValue);
   };
@@ -157,16 +188,17 @@ const AreaTag = () => {
   const handleReset = () => {
     setSelectedAreaMin(null);
     setSelectedAreaMax(null);
-    setSelectedMinButton(null);
-    setSelectedMaxButton(null);
-    // Sync with global appState
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAreaMin: null,
       selectedAreaMax: null,
+      selectedAreaMinButton: null,
+      selectedAreaMaxButton: null,
     }));
     saveToLocalStorage("selectedAreaMin", null);
     saveToLocalStorage("selectedAreaMax", null);
+    saveToLocalStorage("selectedAreaMinButton", null);
+    saveToLocalStorage("selectedAreaMaxButton", null);
   };
 
   // Filter Min and Max price options based on selection
@@ -191,6 +223,20 @@ const AreaTag = () => {
         : selectedAreaMin)
     );
   });
+
+  useEffect(() => {
+    if (selectedAreaMax && filteredMaxOptions.length) {
+      const newIndex = filteredMaxOptions.indexOf(selectedAreaMax);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedAreaMaxButton: newIndex !== -1 ? newIndex : null,
+      }));
+      saveToLocalStorage(
+        "selectedAreaMaxButton",
+        newIndex !== -1 ? newIndex : null
+      );
+    }
+  }, [filteredMaxOptions, selectedAreaMax]);
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 dark:bg-gray-800 text-white" : "";
@@ -269,7 +315,7 @@ const AreaTag = () => {
                       key={`min-${index}`}
                       variant="outline"
                       className={`${buttonStyles(
-                        selectedMinButton === index
+                        selectedAreaMinButton === index
                       )} w-[100%] mb-2`}
                       onClick={() => handleSelectMinButton(area, index)}
                     >
@@ -283,7 +329,7 @@ const AreaTag = () => {
                       key={`max-${index}`}
                       variant="outline"
                       className={`${buttonStyles(
-                        selectedMaxButton === index
+                        selectedAreaMaxButton === index
                       )} w-[100%] mb-2`}
                       onClick={() => handleSelectMaxButton(area, index)}
                     >

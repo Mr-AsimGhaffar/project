@@ -60,7 +60,15 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       selectedAreaMin: "",
       selectedAreaMax: null,
       selectedCity: "islamabad",
+      selectedPriceMinButton: null,
+      selectedPriceMaxButton: null,
+      selectedAreaMinButton: null,
+      selectedAreaMaxButton: null,
     }));
+    saveToLocalStorage("selectedPriceMinButton", null);
+    saveToLocalStorage("selectedPriceMaxButton", null);
+    saveToLocalStorage("selectedAreaMinButton", null);
+    saveToLocalStorage("selectedAreaMaxButton", null);
   }, []);
 
   useEffect(() => {

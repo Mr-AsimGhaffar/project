@@ -41,6 +41,10 @@ function App() {
     selectedCity: "islamabad",
     topBestProperty: [],
     is_agency: "",
+    selectedPriceMinButton: null,
+    selectedPriceMaxButton: null,
+    selectedAreaMinButton: null,
+    selectedAreaMaxButton: null,
   };
   const [appState, setAppState] = useState(initialState);
 

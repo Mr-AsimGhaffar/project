@@ -99,15 +99,15 @@ const Paging = ({ onPageChange }) => {
     <div>
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              isActive
-              href="#"
-              onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="dark:bg-black"
-            />
-          </PaginationItem>
+          {currentPage > 1 && (
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={() => onPageChange(currentPage - 1)}
+                className="dark:bg-black"
+              />
+            </PaginationItem>
+          )}
           {showGoToFirst && (
             <div className="flex items-center">
               <div>
@@ -127,18 +127,15 @@ const Paging = ({ onPageChange }) => {
             </div>
           )}
           {pages}
-          <PaginationItem>
-            <PaginationNext
-              isActive
-              href="#"
-              onClick={() =>
-                currentPage < totalPages &&
-                onPageChange(Number(currentPage) + 1)
-              }
-              disabled={currentPage === totalPages}
-              className="dark:bg-black"
-            />
-          </PaginationItem>
+          {currentPage < totalPages && (
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={() => onPageChange(currentPage + 1)}
+                className="dark:bg-black"
+              />
+            </PaginationItem>
+          )}
         </PaginationContent>
       </Pagination>
     </div>

@@ -2,7 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+} from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { GrPowerReset } from "react-icons/gr";
@@ -10,9 +13,9 @@ import { GrPowerReset } from "react-icons/gr";
 const PriceTag = () => {
   const [selectedAmountMax, setSelectedAmountMax] = useState(null);
   const [selectedAmountMin, setSelectedAmountMin] = useState(null);
-  const [selectedMinButton, setSelectedMinButton] = useState(null);
-  const [selectedMaxButton, setSelectedMaxButton] = useState(null);
   const simpleContext = useContext(appContext);
+  const { selectedPriceMinButton, selectedPriceMaxButton } =
+    simpleContext.appState;
 
   const priceOptions = [
     "0",
@@ -40,6 +43,24 @@ const PriceTag = () => {
   ];
 
   useEffect(() => {
+    const savedMinButton = getFromLocalStorage("selectedPriceMinButton");
+    const savedMaxButton = getFromLocalStorage("selectedPriceMaxButton");
+
+    if (savedMinButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMinButton: savedMinButton,
+      }));
+    }
+    if (savedMaxButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMaxButton: savedMaxButton,
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMax: selectedAmountMax,
@@ -56,43 +77,47 @@ const PriceTag = () => {
   const handleSelectMax = (amount, buttonIndex) => {
     const newValue = amount === "Any" ? null : amount;
     setSelectedAmountMax(newValue);
-    if (selectedMaxButton === buttonIndex) {
+    if (selectedPriceMaxButton === buttonIndex) {
       setSelectedAmountMax(null);
-      setSelectedMaxButton(null);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMax: null,
+        selectedPriceMaxButton: null,
       }));
       saveToLocalStorage("selectedAmountMax", null);
+      saveToLocalStorage("selectedPriceMaxButton", null);
     } else {
       setSelectedAmountMax(newValue);
-      setSelectedMaxButton(buttonIndex);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMax: newValue ? newValue : null,
+        selectedPriceMaxButton: buttonIndex,
       }));
       saveToLocalStorage("selectedAmountMax", newValue);
+      saveToLocalStorage("selectedPriceMaxButton", buttonIndex);
     }
   };
   const handleSelectMin = (amount, buttonIndex) => {
     const newValue = amount;
     setSelectedAmountMin(newValue);
-    if (selectedMinButton === buttonIndex) {
+    if (selectedPriceMinButton === buttonIndex) {
       setSelectedAmountMin(null);
-      setSelectedMinButton(null);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMin: null,
+        selectedPriceMinButton: null,
       }));
       saveToLocalStorage("selectedAmountMin", null);
+      saveToLocalStorage("selectedPriceMinButton", null);
     } else {
       setSelectedAmountMin(newValue);
-      setSelectedMinButton(buttonIndex);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMin: newValue,
+        selectedPriceMinButton: buttonIndex,
       }));
       saveToLocalStorage("selectedAmountMin", newValue);
+      saveToLocalStorage("selectedPriceMinButton", buttonIndex);
     }
   };
   const handleMinChange = (e) => {
@@ -106,10 +131,10 @@ const PriceTag = () => {
     newValue = parsedValue.toLocaleString();
     const buttonIndex = priceOptions.indexOf(newValue);
     setSelectedAmountMin(newValue);
-    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMin: newValue,
+      selectedPriceMinButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMin", newValue);
   };
@@ -126,18 +151,23 @@ const PriceTag = () => {
     const buttonIndex = priceOptions.indexOf(newValue);
 
     setSelectedAmountMax(newValue);
-    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMax: newValue,
+      selectedPriceMaxButton: buttonIndex === -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
   };
   const handleReset = () => {
     setSelectedAmountMin(null);
     setSelectedAmountMax(null);
-    setSelectedMinButton(null);
-    setSelectedMaxButton(null);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedPriceMinButton: null,
+      selectedPriceMaxButton: null,
+    }));
+    saveToLocalStorage("selectedPriceMinButton", null);
+    saveToLocalStorage("selectedPriceMaxButton", null);
   };
 
   // Filter Min and Max price options based on selection
@@ -156,6 +186,21 @@ const PriceTag = () => {
       parseInt(selectedAmountMin.replace(/,/g, ""))
     );
   });
+
+  // Update selectedPriceMaxButton index when filteredMaxOptions change
+  useEffect(() => {
+    if (selectedAmountMax && filteredMaxOptions.length) {
+      const newIndex = filteredMaxOptions.indexOf(selectedAmountMax);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMaxButton: newIndex !== -1 ? newIndex : null,
+      }));
+      saveToLocalStorage(
+        "selectedPriceMaxButton",
+        newIndex !== -1 ? newIndex : null
+      );
+    }
+  }, [filteredMaxOptions, selectedAmountMax]);
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 dark:bg-black text-white" : "";
@@ -230,7 +275,7 @@ const PriceTag = () => {
                       key={`min-${index}`}
                       variant="outline"
                       className={`${buttonStyles(
-                        selectedMinButton === index
+                        selectedPriceMinButton === index
                       )} w-[100%] mb-2`}
                       onClick={() => handleSelectMin(price, index)}
                     >
@@ -244,7 +289,7 @@ const PriceTag = () => {
                       key={`max-${index}`}
                       variant="outline"
                       className={`${buttonStyles(
-                        selectedMaxButton === index
+                        selectedPriceMaxButton === index
                       )} w-[100%] mb-2`}
                       onClick={() => handleSelectMax(price, index)}
                     >
