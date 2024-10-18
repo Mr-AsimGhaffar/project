@@ -1,7 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { saveToLocalStorage } from "@/utlils/SaveLocalStorage";
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+} from "@/utlils/SaveLocalStorage";
 import { appContext } from "@/contexts/Context";
 import {
   Popover,
@@ -22,10 +25,27 @@ const HeaderPrice = () => {
   const [selectedAmountMin, setSelectedAmountMin] = useState(
     simpleContext.appState.selectedAmountMin
   );
-  const [selectedMinButton, setSelectedMinButton] = useState(null);
-  const [selectedMaxButton, setSelectedMaxButton] = useState(null);
+
+  const { selectedPriceMinButton, selectedPriceMaxButton } =
+    simpleContext.appState;
 
   useEffect(() => {
+    const savedMinButton = getFromLocalStorage("selectedPriceMinButton");
+    const savedMaxButton = getFromLocalStorage("selectedPriceMaxButton");
+
+    if (savedMinButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMinButton: savedMinButton,
+      }));
+    }
+    if (savedMaxButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMaxButton: savedMaxButton,
+      }));
+    }
+
     setSelectedAmountMin(simpleContext.appState.selectedAmountMin);
     setSelectedAmountMax(simpleContext.appState.selectedAmountMax);
   }, [
@@ -89,42 +109,46 @@ const HeaderPrice = () => {
 
   const handleSelectMax = (amount, buttonIndex) => {
     const newValue = amount === "Any" ? null : amount;
-    if (selectedMaxButton === buttonIndex) {
+    if (selectedPriceMaxButton === buttonIndex) {
       setSelectedAmountMax(null);
-      setSelectedMaxButton(null);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMax: null,
+        selectedPriceMaxButton: null,
       }));
       saveToLocalStorage("selectedAmountMax", null);
+      saveToLocalStorage("selectedPriceMaxButton", null);
     } else {
       setSelectedAmountMax(newValue);
-      setSelectedMaxButton(buttonIndex);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMax: newValue ? newValue : null,
+        selectedPriceMaxButton: buttonIndex,
       }));
       saveToLocalStorage("selectedAmountMax", newValue);
+      saveToLocalStorage("selectedPriceMaxButton", buttonIndex);
     }
   };
   const handleSelectMin = (amount, buttonIndex) => {
     const newValue = amount;
-    if (selectedMinButton === buttonIndex) {
+    if (selectedPriceMinButton === buttonIndex) {
       setSelectedAmountMin(null);
-      setSelectedMinButton(null);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMin: null,
+        selectedPriceMinButton: null,
       }));
       saveToLocalStorage("selectedAmountMin", null);
+      saveToLocalStorage("selectedPriceMinButton", null);
     } else {
       setSelectedAmountMin(newValue);
-      setSelectedMinButton(buttonIndex);
       simpleContext.setAppState((s) => ({
         ...s,
         selectedAmountMin: newValue,
+        selectedPriceMinButton: buttonIndex,
       }));
       saveToLocalStorage("selectedAmountMin", newValue);
+      saveToLocalStorage("selectedPriceMinButton", buttonIndex);
     }
   };
   const handleMinChange = (e) => {
@@ -139,10 +163,10 @@ const HeaderPrice = () => {
     const buttonIndex = priceOptions.indexOf(newValue);
 
     setSelectedAmountMin(newValue);
-    setSelectedMinButton(buttonIndex == -1 ? null : buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMin: newValue,
+      selectedPriceMinButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMin", newValue);
   };
@@ -159,18 +183,23 @@ const HeaderPrice = () => {
     const buttonIndex = priceOptions.indexOf(newValue);
 
     setSelectedAmountMax(newValue);
-    setSelectedMaxButton(buttonIndex == -1 ? null : buttonIndex);
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMax: newValue,
+      selectedPriceMaxButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
   };
   const handleReset = () => {
     setSelectedAmountMin(null);
     setSelectedAmountMax(null);
-    setSelectedMinButton(null);
-    setSelectedMaxButton(null);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedPriceMinButton: null,
+      selectedPriceMaxButton: null,
+    }));
+    saveToLocalStorage("selectedPriceMinButton", null);
+    saveToLocalStorage("selectedPriceMaxButton", null);
   };
 
   // Filter Min and Max price options based on selection
@@ -189,6 +218,20 @@ const HeaderPrice = () => {
       parseInt(selectedAmountMin.replace(/,/g, ""))
     );
   });
+
+  useEffect(() => {
+    if (selectedAmountMax && filteredMaxOptions.length) {
+      const newIndex = filteredMaxOptions.indexOf(selectedAmountMax);
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMaxButton: newIndex !== -1 ? newIndex : null,
+      }));
+      saveToLocalStorage(
+        "selectedPriceMaxButton",
+        newIndex !== -1 ? newIndex : null
+      );
+    }
+  }, [filteredMaxOptions, selectedAmountMax]);
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 dark:bg-gray-800 text-white" : "";
@@ -264,7 +307,7 @@ const HeaderPrice = () => {
                       key={`min-${index}`}
                       variant="outline"
                       className={`${buttonStyles(
-                        selectedMinButton === index
+                        selectedPriceMinButton === index
                       )} w-[100%] mb-2`}
                       onClick={() => handleSelectMin(price, index)}
                     >
@@ -278,7 +321,7 @@ const HeaderPrice = () => {
                       key={`max-${index}`}
                       variant="outline"
                       className={`${buttonStyles(
-                        selectedMaxButton === index
+                        selectedPriceMaxButton === index
                       )} w-[100%] mb-2`}
                       onClick={() => handleSelectMax(price, index)}
                     >

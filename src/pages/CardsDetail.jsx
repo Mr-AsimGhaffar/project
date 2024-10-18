@@ -525,6 +525,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     e.preventDefault();
     handleSearch();
   };
+
   const handlePageChange = (page_number) => {
     fetchCityData(
       simpleContext.appState.selectedCity,
@@ -638,6 +639,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setStartDate(null);
     setEndDate(null);
     setSort({ added: "DESC" });
+    saveToLocalStorage("selectedPriceMinButton", null);
+    saveToLocalStorage("selectedPriceMaxButton", null);
+    saveToLocalStorage("selectedAreaMinButton", null);
+    saveToLocalStorage("selectedAreaMaxButton", null);
   };
 
   const bedsDisabled = isBedsDisabled(
