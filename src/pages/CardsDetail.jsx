@@ -94,6 +94,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.setAppState((s) => ({
         ...s,
         selectedCity: queryParams.selectedCity || s.selectedCity,
+        pageNumber: queryParams.pageNumber
+          ? parseInt(queryParams.pageNumber)
+          : s.pageNumber,
         selectedSuggestions: suggestionsArray,
         selectedAmountMin: queryParams.priceMin || s.selectedAmountMin,
         selectedAmountMax: queryParams.priceMax || s.selectedAmountMax,
@@ -236,6 +239,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         queryString.set("city", simpleContext.appState.selectedCity);
       }
 
+      queryString.set("page_number", page_number);
+
       queryString.set(
         "location_ids",
         simpleContext.appState.selectedSuggestions
@@ -358,6 +363,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       is_agency,
     } = simpleContext.appState;
 
+    const pageNumber = simpleContext.appState.pageNumber || 1;
+
     if (!simpleContext.appState.selectedCity) {
       toast.error("Please select a city.", {
         position: "top-center",
@@ -400,6 +407,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       if (selectedCity) {
         queryString.set("city", selectedCity);
       }
+
+      queryString.set("page_number", pageNumber);
 
       queryString.set(
         "location_ids",
@@ -458,7 +467,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
-        1,
+        pageNumber,
         Object.keys(sort).join(","),
         Object.values(sort).join(","),
         filters,
@@ -466,7 +475,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         startDate ? startDate.toDateString() : "",
         endDate ? endDate.toDateString() : ""
       );
-      const { properties, total_count, page_size, page_number } = data ?? {
+      const {
+        properties,
+        total_count,
+        page_size,
+        page_number: responsePageNumber,
+      } = data ?? {
         properties: [],
         total_count: 0,
         page_size: 10,
@@ -475,10 +489,13 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: properties,
-        pageData: { total_count: Number(total_count), page_number },
+        pageData: {
+          total_count: Number(total_count),
+          page_number: responsePageNumber,
+        },
         isApiCall: true,
         totalPages: Math.ceil(Number(total_count) / Number(page_size)),
-        currentPage: page_number,
+        currentPage: responsePageNumber,
         loading: data == null,
       }));
       navigate(`/search-results?${queryString.toString()}`, {
@@ -537,6 +554,27 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       startDate ? startDate.toISOString() : "",
       endDate ? endDate.toISOString() : ""
     );
+  };
+
+  // useEffect(() => {
+  //   // Call handlePageChange for the current page when dependencies change
+  //   handlePageChange(simpleContext.appState.pageData.page_number);
+  // }, [sort, simpleContext.appState.pageData.page_number]);
+
+  const handleSortChange = (field) => {
+    setSort((prevSort) => {
+      const currentIndex = orderValues.indexOf(prevSort[field]);
+      const nextIndex = (currentIndex + 1) % orderValues.length;
+
+      if (!orderValues[nextIndex]) {
+        delete prevSort[field];
+        return { ...prevSort };
+      }
+      return {
+        ...prevSort,
+        [field]: orderValues[nextIndex],
+      };
+    });
   };
 
   const handleChange = async (e) => {
@@ -598,22 +636,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       handleSuggestionClick(suggestions[selectedIndex]);
       setSelectedIndex(-1); // Reset the selected index after selection
     }
-  };
-
-  const handleSortChange = (field) => {
-    setSort((prevSort) => {
-      const currentIndex = orderValues.indexOf(prevSort[field]);
-      const nextIndex = (currentIndex + 1) % orderValues.length;
-
-      if (!orderValues[nextIndex]) {
-        delete prevSort[field];
-        return { ...prevSort };
-      }
-      return {
-        ...prevSort,
-        [field]: orderValues[nextIndex],
-      };
-    });
   };
 
   useEffect(() => {
