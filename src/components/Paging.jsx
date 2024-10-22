@@ -11,7 +11,7 @@ import {
   PaginationPrevious,
 } from "./ui/pagination";
 
-const Paging = ({ onPageChange }) => {
+const Paging = ({ onPageChange, sort }) => {
   const simpleContext = useContext(appContext);
   const { appState } = simpleContext;
   const { currentPage, totalPages } = appState;
@@ -25,7 +25,7 @@ const Paging = ({ onPageChange }) => {
 
   useEffect(() => {
     renderPaginationLinks();
-  }, [currentPage, totalPages, isSmallScreen]);
+  }, [sort, currentPage, totalPages, isSmallScreen]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -143,6 +143,7 @@ const Paging = ({ onPageChange }) => {
 };
 Paging.propTypes = {
   onPageChange: PropTypes.func.isRequired,
+  sort: PropTypes.object.isRequired,
   totalCount: PropTypes.number,
 };
 

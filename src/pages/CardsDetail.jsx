@@ -837,6 +837,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             currentPage={simpleContext.appState.pageData.page_number}
             totalPages={simpleContext.appState.totalPages}
             onPageChange={handlePageChange}
+            sort={sort}
           />
         )}
       </div>
