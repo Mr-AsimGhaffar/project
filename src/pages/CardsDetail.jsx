@@ -94,6 +94,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.setAppState((s) => ({
         ...s,
         selectedCity: queryParams.selectedCity || s.selectedCity,
+        pageNumber: queryParams.pageNumber
+          ? parseInt(queryParams.pageNumber)
+          : s.pageNumber,
         selectedSuggestions: suggestionsArray,
         selectedAmountMin: queryParams.priceMin || s.selectedAmountMin,
         selectedAmountMax: queryParams.priceMax || s.selectedAmountMax,
@@ -180,151 +183,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   }, [selectedCity, selectedSuggestions, propertyCategory, propertyState]);
 
-  const fetchCityData = async (
-    city,
-    query,
-    page_number,
-    sort_by,
-    sort_order,
-    propertyCategory,
-    start_date,
-    end_date
-  ) => {
-    const {
-      selectedAmountMin,
-      selectedAmountMax,
-      selectBeds,
-      propertyState,
-      selectedAreaMin,
-      selectedAreaMax,
-      is_agency,
-    } = simpleContext.appState;
-    if (
-      simpleContext.appState.selectedSuggestions.length === 0 &&
-      searchTerm != ""
-    ) {
-      toast.error("Please select a location from the suggestions.", {
-        position: "top-center",
-        autoClose: 2000,
-        style: {
-          fontSize: "14px",
-        },
-        progressStyle: {
-          background: "orange",
-        },
-        icon: <FiAlertTriangle style={{ color: "orange" }} />,
-      });
-      return;
-    }
-    try {
-      simpleContext.setAppState((s) => ({ ...s, loading: true }));
-      const filters = {
-        price_min: cleanValue(selectedAmountMin),
-        price_max: cleanValue(selectedAmountMax),
-        bedrooms: selectBeds.trim(),
-        property_type:
-          propertyState.selectedSubProperty ||
-          propertyState.selectedPropertyType,
-        area_max: selectedAreaMax || "",
-        area_min: selectedAreaMin || "",
-        is_posted_by_agency: is_agency,
-      };
-
-      const queryString = new URLSearchParams();
-
-      if (simpleContext.appState.selectedCity) {
-        queryString.set("city", simpleContext.appState.selectedCity);
-      }
-
-      queryString.set(
-        "location_ids",
-        simpleContext.appState.selectedSuggestions
-          .map(({ id, name }) => `${id}:${name.split(",")[0]}`)
-          .join(",")
-      );
-
-      if (filters.price_min) {
-        queryString.set("price_min", filters.price_min);
-      }
-
-      if (filters.price_max) {
-        queryString.set("price_max", filters.price_max);
-      }
-
-      if (filters.area_min) {
-        queryString.set("area_min", filters.area_min);
-      }
-
-      if (filters.area_max) {
-        queryString.set("area_max", filters.area_max);
-      }
-
-      if (propertyState.selectedPropertyType) {
-        queryString.set("propertyType", propertyState.selectedPropertyType);
-      }
-
-      if (propertyState.selectedSubProperty) {
-        queryString.set("subPropertyType", propertyState.selectedSubProperty);
-      }
-
-      if (filters.bedrooms) {
-        queryString.set("beds", filters.bedrooms);
-      }
-
-      if (filters.is_posted_by_agency) {
-        queryString.set("agency", filters.is_posted_by_agency.toString());
-      }
-
-      const formattedStartDate = formatDate(startDate);
-      const formattedEndDate = formatDate(endDate);
-      if (formattedStartDate) {
-        queryString.set("startDate", formattedStartDate);
-      }
-      if (formattedEndDate) {
-        queryString.set("end_date", formattedEndDate);
-      }
-
-      queryString.set("sort_by", Object.keys(sort).join(","));
-      queryString.set("sort_order", Object.values(sort).join(","));
-
-      const data = await searchCityData(
-        simpleContext.appState.selectedCity,
-        simpleContext.appState.selectedSuggestions.map(
-          (suggestion) => suggestion.id
-        ),
-        page_number,
-        Object.keys(sort).join(","),
-        Object.values(sort).join(","),
-        filters,
-        propertyCategory,
-        start_date,
-        end_date
-      );
-      const { properties, total_count, page_size } = data ?? {
-        properties: [],
-        total_count: 0,
-        page_size: 10,
-      };
-      simpleContext.setAppState((s) => ({
-        ...s,
-        cardData: properties,
-        pageData: { total_count: Number(total_count), page_number },
-        isApiCall: true,
-        totalPages: Math.ceil(Number(total_count) / Number(page_size)),
-        currentPage: page_number,
-        loading: data == null,
-      }));
-      navigate(`/search-results?${queryString.toString()}`, {
-        state: {
-          cardData: properties,
-          totalCount: total_count,
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      simpleContext.setAppState((s) => ({ ...s, loading: false }));
-    }
-  };
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -347,7 +205,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setEndDate(end ? new Date(end) : null);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (
+    pageNumber = simpleContext.appState.pageNumber
+  ) => {
     const {
       selectedAmountMin,
       selectedAmountMax,
@@ -400,6 +260,8 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       if (selectedCity) {
         queryString.set("city", selectedCity);
       }
+
+      queryString.set("page_number", pageNumber);
 
       queryString.set(
         "location_ids",
@@ -458,7 +320,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
-        1,
+        pageNumber,
         Object.keys(sort).join(","),
         Object.values(sort).join(","),
         filters,
@@ -466,7 +328,12 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         startDate ? startDate.toDateString() : "",
         endDate ? endDate.toDateString() : ""
       );
-      const { properties, total_count, page_size, page_number } = data ?? {
+      const {
+        properties,
+        total_count,
+        page_size,
+        page_number: responsePageNumber,
+      } = data ?? {
         properties: [],
         total_count: 0,
         page_size: 10,
@@ -475,11 +342,15 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       simpleContext.setAppState((s) => ({
         ...s,
         cardData: properties,
-        pageData: { total_count: Number(total_count), page_number },
+        pageData: {
+          total_count: Number(total_count),
+          page_number: responsePageNumber,
+        },
         isApiCall: true,
         totalPages: Math.ceil(Number(total_count) / Number(page_size)),
-        currentPage: page_number,
+        currentPage: responsePageNumber,
         loading: data == null,
+        pageNumber: responsePageNumber,
       }));
       navigate(`/search-results?${queryString.toString()}`, {
         state: {
@@ -525,17 +396,29 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     e.preventDefault();
     handleSearch();
   };
-  const handlePageChange = (page_number) => {
-    fetchCityData(
-      simpleContext.appState.selectedCity,
-      simpleContext.appState.selectedSuggestions,
-      page_number,
-      Object.keys(sort).join(","),
-      Object.values(sort).join(","),
-      propertyCategory,
-      startDate ? startDate.toISOString() : "",
-      endDate ? endDate.toISOString() : ""
-    );
+
+  const handlePageChange = (newPageNumber) => {
+    simpleContext.setAppState((prevState) => ({
+      ...prevState,
+      pageNumber: newPageNumber,
+    }));
+    handleSearch(newPageNumber);
+  };
+
+  const handleSortChange = (field) => {
+    setSort((prevSort) => {
+      const currentIndex = orderValues.indexOf(prevSort[field]);
+      const nextIndex = (currentIndex + 1) % orderValues.length;
+
+      if (!orderValues[nextIndex]) {
+        delete prevSort[field];
+        return { ...prevSort };
+      }
+      return {
+        ...prevSort,
+        [field]: orderValues[nextIndex],
+      };
+    });
   };
 
   const handleChange = async (e) => {
@@ -599,22 +482,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   };
 
-  const handleSortChange = (field) => {
-    setSort((prevSort) => {
-      const currentIndex = orderValues.indexOf(prevSort[field]);
-      const nextIndex = (currentIndex + 1) % orderValues.length;
-
-      if (!orderValues[nextIndex]) {
-        delete prevSort[field];
-        return { ...prevSort };
-      }
-      return {
-        ...prevSort,
-        [field]: orderValues[nextIndex],
-      };
-    });
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       emptySearchString();
@@ -638,6 +505,10 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setStartDate(null);
     setEndDate(null);
     setSort({ added: "DESC" });
+    saveToLocalStorage("selectedPriceMinButton", null);
+    saveToLocalStorage("selectedPriceMaxButton", null);
+    saveToLocalStorage("selectedAreaMinButton", null);
+    saveToLocalStorage("selectedAreaMaxButton", null);
   };
 
   const bedsDisabled = isBedsDisabled(
@@ -966,6 +837,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
             currentPage={simpleContext.appState.pageData.page_number}
             totalPages={simpleContext.appState.totalPages}
             onPageChange={handlePageChange}
+            sort={sort}
           />
         )}
       </div>

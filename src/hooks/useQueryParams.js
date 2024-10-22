@@ -20,6 +20,7 @@ const useQueryParams = () => {
 
   const holdState = {
     selectedCity: params.get("city") || "",
+    pageNumber: params.get("page_number") || "",
     selectedSuggestions,
     priceMin: params.get("price_min") || "",
     priceMax: params.get("price_max") || "",

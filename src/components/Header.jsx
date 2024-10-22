@@ -60,7 +60,16 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       selectedAreaMin: "",
       selectedAreaMax: null,
       selectedCity: "islamabad",
+      selectedPriceMinButton: null,
+      selectedPriceMaxButton: null,
+      selectedAreaMinButton: null,
+      selectedAreaMaxButton: null,
+      pageNumber: 1,
     }));
+    saveToLocalStorage("selectedPriceMinButton", null);
+    saveToLocalStorage("selectedPriceMaxButton", null);
+    saveToLocalStorage("selectedAreaMinButton", null);
+    saveToLocalStorage("selectedAreaMaxButton", null);
   }, []);
 
   useEffect(() => {
@@ -83,6 +92,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       propertyState,
       is_agency,
     } = simpleContext.appState;
+    const pageNumber = simpleContext.appState.pageNumber || 1;
     if (
       simpleContext.appState.selectedSuggestions.length === 0 &&
       searchTerm != ""
@@ -123,6 +133,8 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       if (simpleContext.appState.selectedCity) {
         queryString.set("city", simpleContext.appState.selectedCity);
       }
+
+      queryString.set("page_number", pageNumber);
 
       queryString.set(
         "location_ids",
@@ -171,7 +183,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
         simpleContext.appState.selectedSuggestions.map(
           (suggestion) => suggestion.id
         ),
-        1,
+        pageNumber,
         "added",
         "DESC",
         filters,

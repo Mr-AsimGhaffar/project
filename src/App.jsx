@@ -35,12 +35,17 @@ function App() {
     searchTerm: "",
     totalPages: 1,
     currentPage: 1,
+    pageNumber: 1,
     startDate: "",
     endDate: "",
     selectedSuggestions: [],
     selectedCity: "islamabad",
     topBestProperty: [],
     is_agency: "",
+    selectedPriceMinButton: null,
+    selectedPriceMaxButton: null,
+    selectedAreaMinButton: null,
+    selectedAreaMaxButton: null,
   };
   const [appState, setAppState] = useState(initialState);
 
