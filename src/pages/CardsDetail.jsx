@@ -183,153 +183,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     }
   }, [selectedCity, selectedSuggestions, propertyCategory, propertyState]);
 
-  const fetchCityData = async (
-    city,
-    query,
-    page_number,
-    sort_by,
-    sort_order,
-    propertyCategory,
-    start_date,
-    end_date
-  ) => {
-    const {
-      selectedAmountMin,
-      selectedAmountMax,
-      selectBeds,
-      propertyState,
-      selectedAreaMin,
-      selectedAreaMax,
-      is_agency,
-    } = simpleContext.appState;
-    if (
-      simpleContext.appState.selectedSuggestions.length === 0 &&
-      searchTerm != ""
-    ) {
-      toast.error("Please select a location from the suggestions.", {
-        position: "top-center",
-        autoClose: 2000,
-        style: {
-          fontSize: "14px",
-        },
-        progressStyle: {
-          background: "orange",
-        },
-        icon: <FiAlertTriangle style={{ color: "orange" }} />,
-      });
-      return;
-    }
-    try {
-      simpleContext.setAppState((s) => ({ ...s, loading: true }));
-      const filters = {
-        price_min: cleanValue(selectedAmountMin),
-        price_max: cleanValue(selectedAmountMax),
-        bedrooms: selectBeds.trim(),
-        property_type:
-          propertyState.selectedSubProperty ||
-          propertyState.selectedPropertyType,
-        area_max: selectedAreaMax || "",
-        area_min: selectedAreaMin || "",
-        is_posted_by_agency: is_agency,
-      };
-
-      const queryString = new URLSearchParams();
-
-      if (simpleContext.appState.selectedCity) {
-        queryString.set("city", simpleContext.appState.selectedCity);
-      }
-
-      queryString.set("page_number", page_number);
-
-      queryString.set(
-        "location_ids",
-        simpleContext.appState.selectedSuggestions
-          .map(({ id, name }) => `${id}:${name.split(",")[0]}`)
-          .join(",")
-      );
-
-      if (filters.price_min) {
-        queryString.set("price_min", filters.price_min);
-      }
-
-      if (filters.price_max) {
-        queryString.set("price_max", filters.price_max);
-      }
-
-      if (filters.area_min) {
-        queryString.set("area_min", filters.area_min);
-      }
-
-      if (filters.area_max) {
-        queryString.set("area_max", filters.area_max);
-      }
-
-      if (propertyState.selectedPropertyType) {
-        queryString.set("propertyType", propertyState.selectedPropertyType);
-      }
-
-      if (propertyState.selectedSubProperty) {
-        queryString.set("subPropertyType", propertyState.selectedSubProperty);
-      }
-
-      if (filters.bedrooms) {
-        queryString.set("beds", filters.bedrooms);
-      }
-
-      if (filters.is_posted_by_agency) {
-        queryString.set("agency", filters.is_posted_by_agency.toString());
-      }
-
-      const formattedStartDate = formatDate(startDate);
-      const formattedEndDate = formatDate(endDate);
-      if (formattedStartDate) {
-        queryString.set("startDate", formattedStartDate);
-      }
-      if (formattedEndDate) {
-        queryString.set("end_date", formattedEndDate);
-      }
-
-      queryString.set("sort_by", Object.keys(sort).join(","));
-      queryString.set("sort_order", Object.values(sort).join(","));
-
-      const data = await searchCityData(
-        simpleContext.appState.selectedCity,
-        simpleContext.appState.selectedSuggestions.map(
-          (suggestion) => suggestion.id
-        ),
-        page_number,
-        Object.keys(sort).join(","),
-        Object.values(sort).join(","),
-        filters,
-        propertyCategory,
-        start_date,
-        end_date
-      );
-      const { properties, total_count, page_size } = data ?? {
-        properties: [],
-        total_count: 0,
-        page_size: 10,
-      };
-      simpleContext.setAppState((s) => ({
-        ...s,
-        cardData: properties,
-        pageData: { total_count: Number(total_count), page_number },
-        isApiCall: true,
-        totalPages: Math.ceil(Number(total_count) / Number(page_size)),
-        currentPage: page_number,
-        loading: data == null,
-      }));
-      navigate(`/search-results?${queryString.toString()}`, {
-        state: {
-          cardData: properties,
-          totalCount: total_count,
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      simpleContext.setAppState((s) => ({ ...s, loading: false }));
-    }
-  };
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -352,7 +205,9 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     setEndDate(end ? new Date(end) : null);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (
+    pageNumber = simpleContext.appState.pageNumber
+  ) => {
     const {
       selectedAmountMin,
       selectedAmountMax,
@@ -362,8 +217,6 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
       selectedAreaMax,
       is_agency,
     } = simpleContext.appState;
-
-    const pageNumber = simpleContext.appState.pageNumber || 1;
 
     if (!simpleContext.appState.selectedCity) {
       toast.error("Please select a city.", {
@@ -497,6 +350,7 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
         totalPages: Math.ceil(Number(total_count) / Number(page_size)),
         currentPage: responsePageNumber,
         loading: data == null,
+        pageNumber: responsePageNumber,
       }));
       navigate(`/search-results?${queryString.toString()}`, {
         state: {
@@ -543,23 +397,13 @@ const CardsDetail = ({ conversionFunction, propertyCategory }) => {
     handleSearch();
   };
 
-  const handlePageChange = (page_number) => {
-    fetchCityData(
-      simpleContext.appState.selectedCity,
-      simpleContext.appState.selectedSuggestions,
-      page_number,
-      Object.keys(sort).join(","),
-      Object.values(sort).join(","),
-      propertyCategory,
-      startDate ? startDate.toISOString() : "",
-      endDate ? endDate.toISOString() : ""
-    );
+  const handlePageChange = (newPageNumber) => {
+    simpleContext.setAppState((prevState) => ({
+      ...prevState,
+      pageNumber: newPageNumber,
+    }));
+    handleSearch(newPageNumber);
   };
-
-  // useEffect(() => {
-  //   // Call handlePageChange for the current page when dependencies change
-  //   handlePageChange(simpleContext.appState.pageData.page_number);
-  // }, [sort, simpleContext.appState.pageData.page_number]);
 
   const handleSortChange = (field) => {
     setSort((prevSort) => {

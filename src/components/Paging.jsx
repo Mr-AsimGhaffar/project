@@ -103,7 +103,7 @@ const Paging = ({ onPageChange }) => {
             <PaginationItem>
               <PaginationPrevious
                 href="#"
-                onClick={() => onPageChange(currentPage - 1)}
+                onClick={() => onPageChange(Number(currentPage) - 1)}
                 className="dark:bg-black"
               />
             </PaginationItem>
@@ -131,7 +131,7 @@ const Paging = ({ onPageChange }) => {
             <PaginationItem>
               <PaginationNext
                 href="#"
-                onClick={() => onPageChange(currentPage + 1)}
+                onClick={() => onPageChange(Number(currentPage) + 1)}
                 className="dark:bg-black"
               />
             </PaginationItem>
