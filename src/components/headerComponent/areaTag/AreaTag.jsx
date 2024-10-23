@@ -38,13 +38,13 @@ const AreaTag = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   simpleContext.setAppState((s) => ({
-  //     ...s,
-  //     selectedAreaMinButton: selectedAreaMinButton,
-  //     selectedAreaMaxButton: selectedAreaMaxButton,
-  //   }));
-  // }, [selectedAreaMinButton, selectedAreaMaxButton]);
+  useEffect(() => {
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAreaMinButton: selectedAreaMinButton,
+      selectedAreaMaxButton: selectedAreaMaxButton,
+    }));
+  }, [selectedAreaMinButton, selectedAreaMaxButton]);
 
   const areaOptions = ["2", "3", "5", "8", "10", "15", "20", "30", "40"];
 
@@ -113,6 +113,10 @@ const AreaTag = () => {
       selectedAreaMinButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAreaMin", newValue);
+    saveToLocalStorage(
+      "selectedAreaMinButton",
+      buttonIndex === -1 ? null : buttonIndex
+    );
   };
   const handleMaxChangeArea = (e) => {
     let newValue = e.target.value;
@@ -134,6 +138,10 @@ const AreaTag = () => {
       selectedAreaMaxButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAreaMax", newValue);
+    saveToLocalStorage(
+      "selectedAreaMaxButton",
+      buttonIndex === -1 ? null : buttonIndex
+    );
   };
 
   const handleReset = () => {
@@ -176,18 +184,34 @@ const AreaTag = () => {
   });
 
   useEffect(() => {
-    if (selectedAreaMax && filteredMaxOptions.length) {
+    if (selectedAreaMax === null) {
+      // Reset only if the current selectedPriceMaxButton is not already null
+      if (selectedAreaMaxButton !== null) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          selectedAreaMaxButton: null,
+        }));
+        saveToLocalStorage("selectedAreaMaxButton", null);
+      }
+    } else if (filteredMaxOptions.length) {
       const newIndex = filteredMaxOptions.indexOf(selectedAreaMax);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedAreaMaxButton: newIndex !== -1 ? newIndex : null,
-      }));
-      saveToLocalStorage(
-        "selectedAreaMaxButton",
-        newIndex !== -1 ? newIndex : null
-      );
+      const updatedIndex = newIndex !== -1 ? newIndex : null;
+
+      // Only update state if the new index is different from the current state
+      if (selectedAreaMaxButton !== updatedIndex) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          selectedAreaMaxButton: updatedIndex,
+        }));
+        saveToLocalStorage("selectedAreaMaxButton", updatedIndex);
+      }
     }
-  }, [filteredMaxOptions, selectedAreaMax]);
+  }, [
+    filteredMaxOptions,
+    selectedAreaMax,
+    selectedAreaMaxButton,
+    simpleContext.setAppState,
+  ]);
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 dark:bg-gray-800 text-white" : "";

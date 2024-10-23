@@ -59,6 +59,8 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
       selectedSuggestions: [],
       selectedAreaMin: "",
       selectedAreaMax: null,
+      selectedAmountMin: "",
+      selectedAmountMax: "",
       selectedCity: "islamabad",
       selectedPriceMinButton: null,
       selectedPriceMaxButton: null,
