@@ -38,13 +38,13 @@ const AreaTag = () => {
     }
   }, []);
 
-  useEffect(() => {
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAreaMinButton: selectedAreaMinButton,
-      selectedAreaMaxButton: selectedAreaMaxButton,
-    }));
-  }, [selectedAreaMinButton, selectedAreaMaxButton]);
+  // useEffect(() => {
+  //   simpleContext.setAppState((s) => ({
+  //     ...s,
+  //     selectedAreaMinButton: selectedAreaMinButton,
+  //     selectedAreaMaxButton: selectedAreaMaxButton,
+  //   }));
+  // }, [selectedAreaMinButton, selectedAreaMaxButton]);
 
   const areaOptions = ["2", "3", "5", "8", "10", "15", "20", "30", "40"];
 

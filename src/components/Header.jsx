@@ -57,7 +57,7 @@ const Header = ({ propertyCategory, setPropertyCategory }) => {
     simpleContext.setAppState((s) => ({
       ...s,
       selectedSuggestions: [],
-      selectedAreaMin: "",
+      selectedAreaMin: null,
       selectedAreaMax: null,
       selectedAmountMin: "",
       selectedAmountMax: "",
