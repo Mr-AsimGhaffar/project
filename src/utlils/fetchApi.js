@@ -93,6 +93,16 @@ async function fetchPropertyDetails(id) {
 
 let searchCityDataController = null;
 
+// Getter for the controller
+export function getSearchCityDataController() {
+  return searchCityDataController;
+}
+
+// Setter for the controller
+export function setSearchCityDataController(controller) {
+  searchCityDataController = controller;
+}
+
 async function searchCityData(
   city,
   queries = [],
@@ -113,7 +123,7 @@ async function searchCityData(
 
   // Create a new AbortController for the current request
   const controller = new AbortController();
-  searchCityDataController = controller;
+  setSearchCityDataController(controller);
 
   try {
     const {
@@ -170,7 +180,7 @@ async function searchCityData(
   } finally {
     // Reset the controller after the request completes
     if (controller === searchCityDataController) {
-      searchCityDataController = null; // Reset the controller only if it matches the current one
+      setSearchCityDataController(null); // Reset the controller only if it matches the current one
     }
   }
 }
