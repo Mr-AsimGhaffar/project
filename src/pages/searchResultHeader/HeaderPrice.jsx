@@ -30,28 +30,12 @@ const HeaderPrice = () => {
     simpleContext.appState;
 
   useEffect(() => {
-    const savedMinButton = getFromLocalStorage("selectedPriceMinButton");
-    const savedMaxButton = getFromLocalStorage("selectedPriceMaxButton");
-
-    if (savedMinButton !== null) {
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedPriceMinButton: savedMinButton,
-      }));
-    }
-    if (savedMaxButton !== null) {
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedPriceMaxButton: savedMaxButton,
-      }));
-    }
-
-    setSelectedAmountMin(simpleContext.appState.selectedAmountMin);
-    setSelectedAmountMax(simpleContext.appState.selectedAmountMax);
-  }, [
-    simpleContext.appState.selectedAmountMin,
-    simpleContext.appState.selectedAmountMax,
-  ]);
+    simpleContext.setAppState((s) => ({
+      ...s,
+      selectedAmountMax: selectedAmountMax,
+      selectedAmountMin: selectedAmountMin,
+    }));
+  }, [selectedAmountMax, selectedAmountMin]);
 
   const priceOptions = [
     "0",
@@ -79,6 +63,30 @@ const HeaderPrice = () => {
   ];
 
   useEffect(() => {
+    const savedMinButton = getFromLocalStorage("selectedPriceMinButton");
+    const savedMaxButton = getFromLocalStorage("selectedPriceMaxButton");
+
+    if (savedMinButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMinButton: savedMinButton,
+      }));
+    }
+    if (savedMaxButton !== null) {
+      simpleContext.setAppState((s) => ({
+        ...s,
+        selectedPriceMaxButton: savedMaxButton,
+      }));
+    }
+
+    setSelectedAmountMin(simpleContext.appState.selectedAmountMin);
+    setSelectedAmountMax(simpleContext.appState.selectedAmountMax);
+  }, [
+    simpleContext.appState.selectedAmountMin,
+    simpleContext.appState.selectedAmountMax,
+  ]);
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const minPriceFromUrl = params.get("price_min");
     const maxPriceFromUrl = params.get("price_max");
@@ -98,14 +106,6 @@ const HeaderPrice = () => {
       }));
     }
   }, []);
-
-  useEffect(() => {
-    simpleContext.setAppState((s) => ({
-      ...s,
-      selectedAmountMax: selectedAmountMax,
-      selectedAmountMin: selectedAmountMin,
-    }));
-  }, [selectedAmountMax, selectedAmountMin]);
 
   const handleSelectMax = (amount, buttonIndex) => {
     const newValue = amount === "Any" ? null : amount;
@@ -169,6 +169,10 @@ const HeaderPrice = () => {
       selectedPriceMinButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMin", newValue);
+    saveToLocalStorage(
+      "selectedPriceMinButton",
+      buttonIndex === -1 ? null : buttonIndex
+    );
   };
 
   const handleMaxChange = (e) => {
@@ -189,15 +193,23 @@ const HeaderPrice = () => {
       selectedPriceMaxButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
+    saveToLocalStorage(
+      "selectedPriceMaxButton",
+      buttonIndex === -1 ? null : buttonIndex
+    );
   };
   const handleReset = () => {
     setSelectedAmountMin(null);
     setSelectedAmountMax(null);
     simpleContext.setAppState((s) => ({
       ...s,
+      selectedAmountMin: null,
+      selectedAmountMax: null,
       selectedPriceMinButton: null,
       selectedPriceMaxButton: null,
     }));
+    saveToLocalStorage("selectedAmountMin", null);
+    saveToLocalStorage("selectedAmountMax", null);
     saveToLocalStorage("selectedPriceMinButton", null);
     saveToLocalStorage("selectedPriceMaxButton", null);
   };
@@ -207,7 +219,9 @@ const HeaderPrice = () => {
     if (!selectedAmountMax) return true; // No Max selected, show all Min
     return (
       parseInt(price.replace(/,/g, "")) <=
-      parseInt(selectedAmountMax.replace(/,/g, ""))
+      (typeof selectedAmountMax === "string"
+        ? parseInt(selectedAmountMax.replace(/,/g, ""))
+        : selectedAmountMax)
     );
   });
 
@@ -215,23 +229,41 @@ const HeaderPrice = () => {
     if (!selectedAmountMin) return true; // No Min selected, show all Max
     return (
       parseInt(price.replace(/,/g, "")) >=
-      parseInt(selectedAmountMin.replace(/,/g, ""))
+      (typeof selectedAmountMin === "string"
+        ? parseInt(selectedAmountMin.replace(/,/g, ""))
+        : selectedAmountMin)
     );
   });
 
   useEffect(() => {
-    if (selectedAmountMax && filteredMaxOptions.length) {
+    if (selectedAmountMax === null) {
+      // Reset only if the current selectedPriceMaxButton is not already null
+      if (selectedPriceMaxButton !== null) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          selectedPriceMaxButton: null,
+        }));
+        saveToLocalStorage("selectedPriceMaxButton", null);
+      }
+    } else if (filteredMaxOptions.length) {
       const newIndex = filteredMaxOptions.indexOf(selectedAmountMax);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedPriceMaxButton: newIndex !== -1 ? newIndex : null,
-      }));
-      saveToLocalStorage(
-        "selectedPriceMaxButton",
-        newIndex !== -1 ? newIndex : null
-      );
+      const updatedIndex = newIndex !== -1 ? newIndex : null;
+
+      // Only update state if the new index is different from the current state
+      if (updatedIndex !== selectedPriceMaxButton && updatedIndex !== null) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          selectedPriceMaxButton: updatedIndex,
+        }));
+        saveToLocalStorage("selectedPriceMaxButton", updatedIndex);
+      }
     }
-  }, [filteredMaxOptions, selectedAmountMax]);
+  }, [
+    filteredMaxOptions,
+    selectedAmountMax,
+    selectedPriceMaxButton,
+    simpleContext.setAppState,
+  ]);
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 dark:bg-gray-800 text-white" : "";

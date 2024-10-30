@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useCallback, useMemo, useState } from "react";
 import { appContext } from "./contexts/Context";
 import Navbar from "./components/navbar/Navbar";
@@ -13,14 +13,18 @@ import { priceConversion } from "./utlils/priceConversion";
 import { countConversion } from "./utlils/countConversion";
 import { ThemeProvider } from "./components/theme/themeProvider";
 import PropertyRecommendations from "./pages/propertyRecommendations/PropertyRecommendations";
+import {
+  getSearchCityDataController,
+  setSearchCityDataController,
+} from "./utlils/fetchApi";
 
 function App() {
   const initialState = {
     cardData: [],
     pageData: {},
-    selectedAmountMin: "",
-    selectedAmountMax: "",
-    selectedAreaMin: "",
+    selectedAmountMin: null,
+    selectedAmountMax: null,
+    selectedAreaMin: null,
     selectedAreaMax: null,
     selectBeds: "All",
     propertyState: {
@@ -71,8 +75,16 @@ function App() {
     [appState]
   );
   const handleDashboardClick = useCallback(() => {
+    // Abort the ongoing API request if it exists
+    const controller = getSearchCityDataController();
+    if (controller) {
+      controller.abort();
+      setSearchCityDataController(null); // Reset after aborting
+    }
+    // Proceed with showing the dashboard
     setAppState((prevState) => ({ ...prevState, showDashboard: true }));
-  }, []);
+    Navigate("/dashboard");
+  }, [Navigate]);
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">

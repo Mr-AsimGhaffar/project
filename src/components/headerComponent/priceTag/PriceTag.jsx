@@ -137,6 +137,10 @@ const PriceTag = () => {
       selectedPriceMinButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMin", newValue);
+    saveToLocalStorage(
+      "selectedPriceMinButton",
+      buttonIndex === -1 ? null : buttonIndex
+    );
   };
 
   const handleMaxChange = (e) => {
@@ -154,9 +158,13 @@ const PriceTag = () => {
     simpleContext.setAppState((s) => ({
       ...s,
       selectedAmountMax: newValue,
-      selectedPriceMaxButton: buttonIndex === -1 ? null : buttonIndex,
+      selectedPriceMaxButton: buttonIndex == -1 ? null : buttonIndex,
     }));
     saveToLocalStorage("selectedAmountMax", newValue);
+    saveToLocalStorage(
+      "selectedPriceMaxButton",
+      buttonIndex === -1 ? null : buttonIndex
+    );
   };
   const handleReset = () => {
     setSelectedAmountMin(null);
@@ -187,20 +195,35 @@ const PriceTag = () => {
     );
   });
 
-  // Update selectedPriceMaxButton index when filteredMaxOptions change
   useEffect(() => {
-    if (selectedAmountMax && filteredMaxOptions.length) {
+    if (selectedAmountMax === null) {
+      // Reset only if the current selectedPriceMaxButton is not already null
+      if (selectedPriceMaxButton !== null) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          selectedPriceMaxButton: null,
+        }));
+        saveToLocalStorage("selectedPriceMaxButton", null);
+      }
+    } else if (filteredMaxOptions.length) {
       const newIndex = filteredMaxOptions.indexOf(selectedAmountMax);
-      simpleContext.setAppState((s) => ({
-        ...s,
-        selectedPriceMaxButton: newIndex !== -1 ? newIndex : null,
-      }));
-      saveToLocalStorage(
-        "selectedPriceMaxButton",
-        newIndex !== -1 ? newIndex : null
-      );
+      const updatedIndex = newIndex !== -1 ? newIndex : null;
+
+      // Only update state if the new index is different from the current state
+      if (selectedPriceMaxButton !== updatedIndex) {
+        simpleContext.setAppState((s) => ({
+          ...s,
+          selectedPriceMaxButton: updatedIndex,
+        }));
+        saveToLocalStorage("selectedPriceMaxButton", updatedIndex);
+      }
     }
-  }, [filteredMaxOptions, selectedAmountMax]);
+  }, [
+    filteredMaxOptions,
+    selectedAmountMax,
+    selectedPriceMaxButton,
+    simpleContext.setAppState,
+  ]);
 
   const buttonStyles = (isSelected) =>
     isSelected ? "bg-gray-800 dark:bg-black text-white" : "";
