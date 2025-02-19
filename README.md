@@ -54,9 +54,9 @@ Github Actions:
 7. User can also see the price Index graph and Trends graph.
 8. Map functionality is also added to view the pinpoint location of the property.
 
-# Contribution
+# Demo
 
-Thank you for considering contributing to this project!
+https://www.loom.com/share/60db501edfd84ed1913722578427ddac?sid=fa9a361e-6d49-440f-905e-f0495c7a347d
 
 ## How to contribute
 
