@@ -10,6 +10,10 @@ Zameen Dashboard is a property listing application that allows users to explore 
 4. Similar Properties: Find properties similar to a selected one.
 5. Search Filters: 6. Select City 7. Search Bar 8. Price Range 9. Area 10. Number of Beds 11. Property Type (home, plots, commercial, etc.)
 
+## 📷  Demo  
+
+📌 https://www.loom.com/share/b25d489613a94a54a9b27b8964a3fc81?sid=9d0c1767-bcf4-42bb-b13b-2edbf7f60d74
+
 # Prerequisites
 
 - [Node.js](https://nodejs.org/)
